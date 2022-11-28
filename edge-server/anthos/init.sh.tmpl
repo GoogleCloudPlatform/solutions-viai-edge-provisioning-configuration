@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+## This file contains GCP Project specific configuration
+## Update configuration values accordingly
+
+# Do not declare and assign variables in same line: https://github.com/koalaman/shellcheck/wiki/SC2155
+# This is a template file, variables will be updated by scripts
+
+# shellcheck disable=SC2269
+GOOGLE_CLOUD_DEFAULT_PROJECT="${GOOGLE_CLOUD_DEFAULT_PROJECT}"
+# shellcheck disable=SC2269
+GOOGLE_CLOUD_DEFAULT_REGION="${GOOGLE_CLOUD_DEFAULT_REGION}"
+export GOOGLE_CLOUD_DEFAULT_PROJECT
+export GOOGLE_CLOUD_DEFAULT_REGION
+
+# Should not be changed
+SETUP_DIR=/var/lib/viai
+export SETUP_DIR
+
+# Should not be changed
+GOOGLE_APPLICATION_CREDENTIALS=/var/lib/viai/edge-server/anthos-service-account-key.json
+export GOOGLE_APPLICATION_CREDENTIALS
+
+gcloud config set project "${GOOGLE_CLOUD_DEFAULT_PROJECT}"

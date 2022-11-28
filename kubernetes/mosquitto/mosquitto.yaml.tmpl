@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  namespace: viai-edge
+spec:
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - image: ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}/${VIAI_CAMERA_APP_IMAGE_TAG}
+        imagePullPolicy: Always
+        name: mosquitto
+        ports:
+        - containerPort: 1883
+        - containerPort: 8883
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: viai-edge
+  name: mosquitto
+spec:
+  selector:
+    app: mosquitto
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    name: notls
+    port: 1883
+    targetPort: 1883
+---

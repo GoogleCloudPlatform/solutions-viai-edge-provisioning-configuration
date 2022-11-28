@@ -1,0 +1,74 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+gcrKeyPath: ${SETUP_DIR}/edge-server/gcr-service-account-key.json
+sshPrivateKeyPath: /root/.ssh/id_rsa_viai_abm
+gkeConnectAgentServiceAccountKeyPath: ${SETUP_DIR}/edge-server/gke-connect-angent-account-key.json
+gkeConnectRegisterServiceAccountKeyPath: ${SETUP_DIR}/edge-server/gke-connect-register-account-key.json
+cloudOperationsServiceAccountKeyPath: ${SETUP_DIR}/edge-server/cloud-ops-account-key.json
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cluster-${ANTHOS_MEMBERSHIP_NAME}
+---
+apiVersion: baremetal.cluster.gke.io/v1
+kind: Cluster
+metadata:
+  name: ${ANTHOS_MEMBERSHIP_NAME}
+  namespace: cluster-${ANTHOS_MEMBERSHIP_NAME}
+spec:
+  type: standalone
+  profile: edge
+  anthosBareMetalVersion: 1.12.3
+  gkeConnect:
+    projectID: ${GOOGLE_CLOUD_DEFAULT_PROJECT}
+  controlPlane:
+    nodePoolSpec:
+      nodes:
+      - address: ${CONTROL_PLANE_VIP}
+  clusterNetwork:
+    pods:
+      cidrBlocks:
+      - 172.16.100.0/18
+    services:
+      cidrBlocks:
+      - 172.16.200.0/24
+  loadBalancer:
+    mode: bundled
+    ports:
+      controlPlaneLBPort: 443
+    vips:
+      controlPlaneVIP: ${LOAD_BALANCER_VIP} # MUST be in ${CP_VIP}/24 and NOT pingable
+      ingressVIP: ${INGRESS_VIP}            # MUST be in ${CP_VIP}/24 and NOT pingable
+    addressPools:
+    - name: pool1
+      addresses:
+      - ${LOAD_BALANCER_VIP_RANGE}          # should not be pingable
+  clusterOperations:
+    projectID: ${GOOGLE_CLOUD_DEFAULT_PROJECT}
+    location: ${GOOGLE_CLOUD_DEFAULT_REGION}
+    enableApplication: true
+  storage:
+    lvpNodeMounts:
+      path: /mnt/localpv-disk
+      storageClassName: local-disks
+    lvpShare:
+      path: /mnt/localpv-share
+      storageClassName: local-shared
+      numPVUnderSharedPath: 5
+  nodeConfig:
+    podDensity:
+      maxPodsPerNode: 250
+    containerRuntime: containerd

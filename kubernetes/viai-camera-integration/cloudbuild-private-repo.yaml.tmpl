@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker login ${_REGISTRY_HOST} --username=''${_USERNAME}'' --password=${_PASSWORD}']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker build -t ${_REGISTRY_HOST}/${_REGISTRY_NAME}/viai-camera-integration:${_TAG} .']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker push ${_REGISTRY_HOST}/${_REGISTRY_NAME}/viai-camera-integration:${_TAG}']
+substitutions:
+    _PASSWORD: ${CONTAINER_REPO_PASSWORD}
+    _USERNAME: '${CONTAINER_REPO_USERNAME}'
+    _REGISTRY_HOST: ${CONTAINER_REPO_HOST}
+    _REGISTRY_NAME: ${CONTAINER_REPO_REPOSITORY_NAME}
+    _TAG: ${TAG}

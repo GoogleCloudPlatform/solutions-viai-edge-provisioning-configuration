@@ -1,0 +1,54 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Ignore the Terraform state directory
+*/**/.terraform
+
+# Ignore the tfvars files because it's dynamically generated and might contain sensitive information
+terraform.tfvars
+
+# Ignore local Terraform state
+*.tfstate*
+
+# Ignore user-provided Terraform variables values
+terraform.tfvars
+
+# Ignore artifacts that we generate or download
+*.iso
+SHA256SUMS
+
+# Ignore public key files
+*.pub
+
+# Ignore PEM-formatted keys
+terraform/files/*.pem
+
+# Ignore log files
+*.log
+logs/
+
+# Ignore generated tokens
+*.token
+
+# Deployment / Temp
+tmp/
+temp/
+
+# Terraform: terraform state backup
+terraform/terraform.tfvars
+.terraform/
+.terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

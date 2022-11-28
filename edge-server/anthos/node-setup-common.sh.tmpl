@@ -1,0 +1,138 @@
+#!/usr/bin/env sh
+
+print_separator() {
+  echo "-----------------------------------------------------------------"
+}
+
+setup_ssh() {
+  print_separator
+  echo 'Creating SSH key...'
+
+  SSH_KEY_PATH=/root/.ssh
+  mkdir -p ${SSH_KEY_PATH}
+
+  if [ ! -f "${SSH_KEY_PATH}/id_rsa_viai_abm" ]; then
+    # Create new ssh key only if it does not exists.
+    echo "${SSH_KEY_PATH}/id_rsa_viai_abm does not exists, creating new ssh key..."
+    ssh-keygen -b 4096 -t rsa -N "" -f ${SSH_KEY_PATH}/id_rsa_viai_abm
+  else
+    echo "${SSH_KEY_PATH}/id_rsa_viai_abm exists, use existing ssh key..."
+  fi
+  chmod 700 ${SSH_KEY_PATH}/
+  chmod 600 ${SSH_KEY_PATH}/id_rsa_viai_abm
+  chmod 644 ${SSH_KEY_PATH}/id_rsa_viai_abm.pub
+
+  grep -qxF 'PubkeyAuthentication yes' /etc/ssh/sshd_config || echo 'PubkeyAuthentication yes' >>/etc/ssh/sshd_config
+
+  echo "Copying id_rsa.pub to authorized_keys..."
+  # echo is required here, otherwise this line may failed with bad command as the content of the file is not shell command.
+  # shellcheck disable=SC2005
+  grep -qxF "$(cat ${SSH_KEY_PATH}/id_rsa_viai_abm.pub)" "${SSH_KEY_PATH}/authorized_keys" || echo "$(cat ${SSH_KEY_PATH}/id_rsa_viai_abm.pub)" >>"${SSH_KEY_PATH}/authorized_keys"
+  chmod 644 "${SSH_KEY_PATH}/authorized_keys"
+}
+
+install_packages() {
+  if ! command -v "docker" >/dev/null 2>&1; then
+    # https://docs.docker.com/engine/install/ubuntu/
+    echo "Installing docker.io..."
+    apt-get update -y
+    apt-get install -y \
+      ca-certificates \
+      curl \
+      gnupg \
+      lsb-release
+    mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list >/dev/null
+
+    apt-get update
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+
+  else
+    echo "docker already been installed, skip..."
+  fi
+
+  # This file will be copied to output folder and runs on the target host.
+  # shellcheck disable=SC1091
+  . "$(dirname "$0")"/machine-install-prerequisites.sh
+}
+
+setup_workstation() {
+  print_separator
+  echo "setup_workstation..."
+
+  gcloud config set project "$GOOGLE_CLOUD_DEFAULT_PROJECT"
+
+  echo "Downloading BMCL..."
+  gsutil cp gs://anthos-baremetal-release/bmctl/1.12.3/linux-amd64/bmctl "$SETUP_DIR"/
+
+  if [ ! -f "/.ssh/id_rsa" ]; then
+    setup_ssh
+  fi
+
+  cd "$SETUP_DIR"/ || exit
+
+  echo "Creating Standlone cluster configuration..."
+  chmod -R 777 "$SETUP_DIR"/bmctl
+  # if the cluster configuration file already exist, backup the file. Otherwise BMCTL failed with file exists error
+  if [ -f "bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}.yaml" ]; then
+    mv "bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}.yaml" "bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}.backup-$(date "+%F-%H%M%S")"
+  fi
+  "$SETUP_DIR"/bmctl create config -c "$ANTHOS_MEMBERSHIP_NAME"
+
+  echo "Upadting cluster configuration yaml file..."
+  rm -rf "$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME.yaml"
+  envsubst <"$SETUP_DIR/edge-server/bmctl-physical-template.yaml" >"$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME.yaml"
+}
+
+activate_service_account() {
+  gcloud auth activate-service-account --key-file="$SETUP_DIR/edge-server/anthos-service-account-key.json"
+  gcloud config set project "${GOOGLE_CLOUD_DEFAULT_PROJECT}"
+}
+
+stop_firewall() {
+  systemctl stop ufw
+}
+
+setup_baremetal() {
+  print_separator
+  echo "setup_baremetal..."
+
+  "$SETUP_DIR"/bmctl create cluster -c "$ANTHOS_MEMBERSHIP_NAME"
+
+  # The only reason this function is invoked, is the customer wants to setup Anthos on a empty machine.
+  # In which case, we use `local-shared` as default storage for PVCs.
+  # Otherwise, the customer must either update .yaml to specify storage class they want to use, Or
+  # set a default storage class on the cluster.
+  echo "Updating default storage class for Anthos"
+  kubectl patch storageclass local-shared -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig"
+}
+
+# To workaround IP address reservation challenges.
+# Set up vxlan and use it for Ingress and Control Plane.
+setup_vlan_control_plane() {
+  apt-get install -y network-manager
+
+  LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
+  LOCAL_NIC=$(ip -br -4 a sh | grep "${LOCAL_IP}" | awk '{print $1}')
+  echo "** Local IP: ${LOCAL_IP}, NIC: ${LOCAL_NIC}"
+
+  VXLAN_ID=104
+  VXLAN_NAME=vxlan104
+
+  # Ubuntu sets almost all devices unmanaged by default, this causes vxlan fails to start
+  # So we add vxlan related devices to the configuration file and restart network manager
+  if [ ! -f "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf" ]; then
+    touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+  else
+    sed -i 's/unmanaged-devices=*/unmanaged-devices=except:type:ethernet,except:type:vlan,except:type:vxlan,*/g' "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf"
+  fi
+
+  systemctl restart NetworkManager
+
+  nmcli connection add type vxlan id "${VXLAN_ID}" remote "${LOCAL_IP}" ipv4.addresses "${CONTROL_PLANE_VIP}"/24 ipv4.method manual ifname "${VXLAN_NAME}" connection.id "${VXLAN_NAME}" vxlan.parent "${LOCAL_NIC}"
+  nmcli conn up "${VXLAN_NAME}"
+}

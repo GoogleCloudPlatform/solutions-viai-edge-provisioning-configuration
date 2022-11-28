@@ -1,0 +1,7 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${CONTAINER_REPO_HOST}/${_REGISTRY_NAME}/viai-camera-integration:${_TAG}', '.']
+images: ['${CONTAINER_REPO_HOST}/${_REGISTRY_NAME}/viai-camera-integration:${_TAG}']
+substitutions:
+    _REGISTRY_NAME: ${GOOGLE_CLOUD_PROJECT}
+    _TAG: ${TAG}

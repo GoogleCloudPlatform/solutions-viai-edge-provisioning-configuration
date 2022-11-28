@@ -1,0 +1,22 @@
+[
+    {
+        "name": "device_id",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "ts",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "file_id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "results",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    }
+]
