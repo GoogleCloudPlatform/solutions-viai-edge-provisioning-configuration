@@ -1,0 +1,36 @@
+---
+name: Validate Terraform
+
+# Controls when the workflow will run
+on: # yamllint disable-line rule:truthy
+  # Triggers the workflow on pull request events but only for the main branch
+  pull_request:
+    branches: [main]
+  push: null
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: null
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
+  ci:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        id: init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform validate
+        id: lint
+        working-directory: terraform
+        run: terraform validate
+...

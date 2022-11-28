@@ -1,0 +1,7 @@
+{
+    "ignore": [
+        "**/user-data*.yaml",
+        "**/meta-data*.yaml",
+        "**/*.md"
+    ]
+}

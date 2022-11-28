@@ -1,0 +1,43 @@
+---
+name: Validate shell scripts
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    paths:
+      - "scripts/**"
+
+  pull_request:
+    paths:
+      - "scripts/**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: null
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+  validate-shell-scripts:
+    needs:
+      - lint
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: "Generate Edge server configuration assets and ISO file"
+        run: |
+          set -o errexit
+          set -o nounset
+
+          ./tests/test-shell-scripts.sh
+      - uses: actions/upload-artifact@v3
+        name: "Upload ${{ env.CUSTOMIZED_COMPRESSED_IMAGE_FILE_NAME }}"
+        with:
+          if-no-files-found: error
+          name: ${{ env.CUSTOMIZED_COMPRESSED_IMAGE_FILE_NAME }}
+          path: |
+            ${{ env.CUSTOMIZED_COMPRESSED_IMAGE_FILE_PATH }}
+...
