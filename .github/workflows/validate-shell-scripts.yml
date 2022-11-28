@@ -33,11 +33,4 @@ jobs:
           set -o nounset
 
           ./tests/test-shell-scripts.sh
-      - uses: actions/upload-artifact@v3
-        name: "Upload ${{ env.CUSTOMIZED_COMPRESSED_IMAGE_FILE_NAME }}"
-        with:
-          if-no-files-found: error
-          name: ${{ env.CUSTOMIZED_COMPRESSED_IMAGE_FILE_NAME }}
-          path: |
-            ${{ env.CUSTOMIZED_COMPRESSED_IMAGE_FILE_PATH }}
 ...
