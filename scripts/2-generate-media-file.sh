@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -123,4 +123,4 @@ if [ ! -f "${WORKING_DIRECTORY}/media/${MEDIA_TYPE}/generate-media-file.sh" ]; t
 fi
 
 # shellcheck disable=SC1090,SC2240
-. "${WORKING_DIRECTORY}/media/${MEDIA_TYPE}/generate-media-file.sh" --edge-config-directory-path "${EDGE_CONFIG_DIRECTORY_PATH}" --k8s-runtime "${K8S_RUNTIME}"
+"${WORKING_DIRECTORY}/media/${MEDIA_TYPE}/generate-media-file.sh" --edge-config-directory-path "${EDGE_CONFIG_DIRECTORY_PATH}" --k8s-runtime "${K8S_RUNTIME}"

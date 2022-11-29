@@ -25,8 +25,6 @@ export DEFAULT_REGION=us-central1
 export DEFAULT_ZONE=us-central1-a
 export VIAI_STORAGE_BUCKET_LOCATION=US
 export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=my-user@my-org.com
-export VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=<VIAI Edge Camera Application source repository>
-export VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH=<VIAI Edge Camera Application source branch>
 
 scripts/provisioning-terraform.sh \
   -a \
@@ -36,8 +34,6 @@ scripts/provisioning-terraform.sh \
   -r "${DEFAULT_REGION}" \
   -z "${DEFAULT_ZONE}" \
   -m "${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}" \
-  —c "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
-  —b "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
   -x
 
 

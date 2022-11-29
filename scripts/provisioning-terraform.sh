@@ -34,8 +34,6 @@ GOOGLE_CLOUD_DEFAULT_REGION_DESCRIPTION="ID of the default Google Cloud Region t
 GOOGLE_CLOUD_DEFAULT_ZONE_DESCRIPTION="ID of the default Google Cloud Zone to use"
 GOOGLE_CLOUD_VIAI_STORAGE_BUCKET_LOCATION_DESCRIPTION="Location where to create VIAI storage buckets"
 TERRAFORM_SUBCOMMAND_DESCRIPTION="Terraform subcommand to run, along with arguments. Defaults to apply."
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL_DESCRIPTION="the url of VIAI Camera application source repository"
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH_DESCRIPTION="the branch name of VIAI Camera application source"
 SANDBOX_DESCRIPTION="Enable provisioning of a GCE VM to use as a sandbox?"
 
 usage() {
@@ -52,8 +50,6 @@ usage() {
   echo "  -z $(is_linux && echo "| --default-zone"): ${GOOGLE_CLOUD_DEFAULT_ZONE_DESCRIPTION}"
   echo "  -m $(is_linux && echo "| --default-email"): ${GOOGLE_CLOUD_DEFAULT_USER_EMAIL_DESCRIPTION}"
   echo "  -g $(is_linux && echo "| --generate-tfvars"): ${GENERATE_TFVARS_FILE_DESCRIPTION}"
-  echo "  -c $(is_linux && echo "| --git-repo-url"): ${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL_DESCRIPTION}"
-  echo "  -b $(is_linux && echo "| --git-repo-branch"): ${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH_DESCRIPTION}"
   echo "  -h $(is_linux && echo "| --help"): ${HELP_DESCRIPTION}"
   echo "  -e $(is_linux && echo "| --membership"): ${ANTHOS_TARGET_CLUSTER_MEMBERSHIP_DESCRIPTION}"
   echo "  -x $(is_linux && echo "| --sandbox"): ${SANDBOX_DESCRIPTION}"
@@ -69,7 +65,7 @@ usage() {
 }
 
 LONG_OPTIONS="authenticate-google-cloud,default-project:,default-region:,default-zone:,default-email:,generate-tfvars,git-repo-url:,git-repo-branch:,help,membership:,sandbox,storage-bucket-location:,terraform-subcommand:"
-SHORT_OPTIONS="aghxb:c:e:l:p:r:s:m:z:"
+SHORT_OPTIONS="aghxe:l:p:r:s:m:z:"
 
 echo "Checking if the necessary dependencies are available..."
 check_exec_dependency "docker"
@@ -101,8 +97,6 @@ GOOGLE_CLOUD_DEFAULT_REGION=
 GOOGLE_CLOUD_DEFAULT_ZONE=
 GOOGLE_CLOUD_VIAI_STORAGE_BUCKET_LOCATION=
 GOOGLE_CLOUD_DEFAULT_USER_EMAIL=
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=sso://cloudsolutionsarchitects/viai-edge-camera-integration
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH=dev
 TERRAFORM_SUBCOMMAND="apply"
 SANDBOX="false"
 
@@ -131,14 +125,6 @@ while true; do
   -g | --generate-tfvars)
     GENERATE_TFVARS_FILE="true"
     shift
-    ;;
-  -b | --git-repo-branch)
-    VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH="${2}"
-    shift 2
-    ;;
-  -c | --git-repo-url)
-    VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL="${2}"
-    shift 2
     ;;
   -e | --membership)
     ANTHOS_TARGET_CLUSTER_MEMBERSHIP="${2}"
@@ -176,13 +162,6 @@ check_optional_argument "${GENERATE_TFVARS_FILE}" "${GENERATE_TFVARS_FILE_DESCRI
 
 gcloud_auth
 
-if [ -z "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" ] || [ -z "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" ]; then
-  echo "[ERROR] Must specify —-git-repo-url and —-git-repo-branch"
-  # Ignoring because those are defined in common.sh, and don't need quotes
-  # shellcheck disable=SC2086
-  exit $ERR_VARIABLE_NOT_DEFINED
-fi
-
 CURRENT_WORKING_DIRECTORY="$(pwd)"
 TERRAFORM_ENVIRONMENT_DIR="${CURRENT_WORKING_DIRECTORY}/terraform"
 TERRAFORM_TFVARS_PATH="${TERRAFORM_ENVIRONMENT_DIR}/terraform.tfvars"
@@ -192,18 +171,17 @@ GOOGLE_APPLICATION_CREDENTIALS_PATH="/root/.config/gcloud/application_default_cr
 
 ###### Cloud Functions ######
 VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH="$(mktemp -d)"
+mkdir -p "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/gcf"
 
 if [ "${TERRAFORM_SUBCOMMAND}" != "destroy" ]; then
 
   ZIP_FILE_NAME="cloudfunction-$(date +%Y%m%d-%H%M%S).zip"
 
-  echo "Cloning VIAI Camera..."
-  clone_git_repository_if_not_cloned_already "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/viai-edge-camera-integration"
-  git -C "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/viai-edge-camera-integration" pull origin "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}"
+  echo "Copy Cloud Functions code..."
+  cp -rf "${WORKING_DIRECTORY}/terraform/files/gcf-pubsub-to-bq/" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/gcf"
 
   echo "Archiving source codes..."
-  rm -rf "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/viai-edge-camera-integration/cf/.env.yaml"
-  zip -r -j "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/${ZIP_FILE_NAME}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/viai-edge-camera-integration/cf/"
+  zip -r -j "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/${ZIP_FILE_NAME}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/gcf"
   VIAI_CAMERA_INTEGRATION_FILE_PATH="/packages/${ZIP_FILE_NAME}" # Containerized Terraform working directory
   echo "Containerized Zip file path: ${VIAI_CAMERA_INTEGRATION_FILE_PATH}"
 

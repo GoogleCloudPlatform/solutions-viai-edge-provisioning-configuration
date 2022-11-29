@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -236,4 +236,4 @@ check_argument "${USERS_EMAILS}" "${USER_EMAILS_DESCRIPTION}"
 check_argument "${OUTPUT_FOLDER}" "${OUTPUT_FOLDER_DESCRIPTION}"
 
 # shellcheck disable=SC2240,SC1090,SC2086
-. "${WORKING_DIRECTORY}"/edge-server/"${K8S_RUNTIME}"/generate-script.sh ${ARGUMENTS}
+"${WORKING_DIRECTORY}"/edge-server/"${K8S_RUNTIME}"/generate-script.sh ${ARGUMENTS}

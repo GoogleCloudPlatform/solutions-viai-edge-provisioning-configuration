@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,6 +35,14 @@ export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=kalschi@google.com
 export K8S_RUNTIME=anthos
 export MEMBERSHIP="${K8S_RUNTIME}-server-dummy"
 
+echo "Generating Edge Server assets with the following values for options..."
+echo "OUTPUT_FOLDER=${OUTPUT_FOLDER}"
+echo "DEFAULT_PROJECT=${DEFAULT_PROJECT}"
+echo "DEFAULT_REGION=${DEFAULT_REGION}"
+echo "GOOGLE_CLOUD_DEFAULT_USER_EMAIL=${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}"
+echo "K8S_RUNTIME=${K8S_RUNTIME}"
+echo "MEMBERSHIP=${MEMBERSHIP}"
+
 scripts/1-generate-edge-server-assets.sh \
   -G tmp/service-account-key.json \
   -A tmp/service-account-key.json \
@@ -54,6 +62,10 @@ export MEDIA_TYPE="USB"
 export K8S_RUNTIME="anthos"
 
 cp tmp/service-account-key.json "${OUTPUT_FOLDER}/"
+
+echo "Generating Media ISO file with the following values for options..."
+echo "MEDIA_TYPE=${MEDIA_TYPE}"
+echo "K8S_RUNTIME=${K8S_RUNTIME}"
 
 scripts/2-generate-media-file.sh \
   --edge-config-directory-path "${OUTPUT_FOLDER}" \
