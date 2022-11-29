@@ -236,4 +236,4 @@ check_argument "${USERS_EMAILS}" "${USER_EMAILS_DESCRIPTION}"
 check_argument "${OUTPUT_FOLDER}" "${OUTPUT_FOLDER_DESCRIPTION}"
 
 # shellcheck disable=SC2240,SC1090,SC2086
-. "${WORKING_DIRECTORY}"/edge-server/"${K8S_RUNTIME}"/generate-script.sh ${ARGUMENTS}
+"${WORKING_DIRECTORY}"/edge-server/"${K8S_RUNTIME}"/generate-script.sh ${ARGUMENTS}

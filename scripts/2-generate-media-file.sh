@@ -123,4 +123,4 @@ if [ ! -f "${WORKING_DIRECTORY}/media/${MEDIA_TYPE}/generate-media-file.sh" ]; t
 fi
 
 # shellcheck disable=SC1090,SC2240
-. "${WORKING_DIRECTORY}/media/${MEDIA_TYPE}/generate-media-file.sh" --edge-config-directory-path "${EDGE_CONFIG_DIRECTORY_PATH}" --k8s-runtime "${K8S_RUNTIME}"
+"${WORKING_DIRECTORY}/media/${MEDIA_TYPE}/generate-media-file.sh" --edge-config-directory-path "${EDGE_CONFIG_DIRECTORY_PATH}" --k8s-runtime "${K8S_RUNTIME}"
