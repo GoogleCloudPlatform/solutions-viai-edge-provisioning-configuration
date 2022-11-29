@@ -35,7 +35,7 @@ export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=kalschi@google.com
 export K8S_RUNTIME=anthos
 export MEMBERSHIP="${K8S_RUNTIME}-server-dummy"
 
-echo "Running the 1-generate-edge-server-assets.sh with the following values for options..."
+echo "Generating Edge Server assets with the following values for options..."
 echo "OUTPUT_FOLDER=${OUTPUT_FOLDER}"
 echo "DEFAULT_PROJECT=${DEFAULT_PROJECT}"
 echo "DEFAULT_REGION=${DEFAULT_REGION}"
@@ -63,7 +63,7 @@ export K8S_RUNTIME="anthos"
 
 cp tmp/service-account-key.json "${OUTPUT_FOLDER}/"
 
-echo "Running the 2-generate-media-file.sh with the following values for options..."
+echo "Generating Media ISO file with the following values for options..."
 echo "MEDIA_TYPE=${MEDIA_TYPE}"
 echo "K8S_RUNTIME=${K8S_RUNTIME}"
 
