@@ -23,7 +23,7 @@ spaces_around_brackets = false
 [LICENSE]
 indent_size = unset
 
-[*.{rb,sh,tf,tfvars,yml,yaml,yaml.tmpl,sh.tmpl,md,lock.hcl}]
+[*.{rb,sh,tf,tfvars,yml,yaml,yaml.tmpl,sh.tmpl,md,lock.hcl,toml}]
 indent_size = 2
 
 [{Makefile}]
