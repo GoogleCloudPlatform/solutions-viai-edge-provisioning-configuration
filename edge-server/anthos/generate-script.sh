@@ -294,8 +294,10 @@ else
   cat "${WORKING_DIRECTORY}/edge-server/anthos/node-setup.sh.tmpl" >>"$OUTPUT_FOLDER/edge-server/node-setup.sh"
 fi
 
-echo "Copying Anthos Bare Metal template file..."
 cp "${WORKING_DIRECTORY}/edge-server/anthos/bmctl-physical-template.yaml" "$OUTPUT_FOLDER/edge-server/bmctl-physical-template.yaml"
+
+echo "Copying Anthos Bare Metal template file..."
+cp "${WORKING_DIRECTORY}/edge-server/anthos/config-section.toml" "$OUTPUT_FOLDER/edge-server/config-section.toml"
 
 echo "Copy dependecies installation scripts..."
 cp "${WORKING_DIRECTORY}/scripts/machine-install-prerequisites.sh" "$OUTPUT_FOLDER/edge-server/machine-install-prerequisites.sh"

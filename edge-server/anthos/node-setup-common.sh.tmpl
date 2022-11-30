@@ -136,3 +136,58 @@ setup_vlan_control_plane() {
   nmcli connection add type vxlan id "${VXLAN_ID}" remote "${LOCAL_IP}" ipv4.addresses "${CONTROL_PLANE_VIP}"/24 ipv4.method manual ifname "${VXLAN_NAME}" connection.id "${VXLAN_NAME}" vxlan.parent "${LOCAL_NIC}"
   nmcli conn up "${VXLAN_NAME}"
 }
+
+setup_nvidia_container_runtime() {
+  # Starting from Anthos Bare Metal 1.13, Containerd is the only supported container runtime
+  CONTAINERD_TOML_PATH="/etc/containerd/config.toml"
+  if [ -f "${CONTAINERD_TOML_PATH}" ]; then
+    ## Backup original config.toml
+    CONTAINERD_TOML_BACKUP_PATH="${CONTAINERD_TOML_PATH}.backup.$(date +%Y%m%d-%H%M%S)"
+    echo "Backing up ${CONTAINERD_TOML_PATH} to ${CONTAINERD_TOML_BACKUP_PATH}"
+    cp "${CONTAINERD_TOML_PATH}" "${CONTAINERD_TOML_BACKUP_PATH}"
+
+    ## Install NVIDIA-Container-Toolkit
+    distribution=$(
+      . /etc/os-release
+      echo $ID$VERSION_ID
+    )
+
+    curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | apt-key add -
+    curl -s -L https://nvidia.github.io/libnvidia-container/"$distribution"/libnvidia-container.list | tee /etc/apt/sources.list.d/libnvidia-container.list
+
+    apt-get update && apt-get install -y nvidia-container-toolkit
+
+    ## update toml file
+    if ! cat ${CONTAINERD_TOML_PATH} | grep -q 'default_runtime_name = "nvidia"'; then
+      echo "config.toml does not contains Nvidia runtime, updating..."
+
+      sed -i 's/default_runtime_name = "runc"/default_runtime_name = "nvidia"/g' "${CONTAINERD_TOML_PATH}"
+    else
+      echo "config.toml already been updated with Nvidia runtime, skip..."
+    fi
+
+    if ! cat ${CONTAINERD_TOML_PATH} | grep -q 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia'; then
+      echo "config.toml does not contains Nvidia containerd runtime configuration, updating..."
+      cat "${SETUP_DIR}/edge-server/config-section.toml" >>"${CONTAINERD_TOML_PATH}"
+      # sed -i '/\[plugins."io.containerd.grpc.v1.cri".containerd.runtimes\]/r '"${SETUP_DIR}/edge-server/config-section.toml"'' "${CONTAINERD_TOML_PATH}"
+    else
+      echo "config.toml already been updated with Nvidia runtime, skip..."
+    fi
+    ## Restart containerd
+    systemctl restart containerd
+
+    # Install Nvidia Device Pligin
+    if kubectl get ds -n kube-system --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig" | grep -q "nvidia-device-plugin-daemonset"; then
+      echo "nvidia-device-plugin-daemonset exists, deleting"
+      kubectl delete ds nvidia-device-plugin-daemonset \
+        --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig" \
+        -n kube-system
+    fi
+    echo "Creating nvidia-device-plugin-daemonset"
+    kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml \
+      --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig"
+
+  else
+    echo "[Error]File:/etc/containerd/config.toml not found, can not update /etc/containerd/config.toml"
+  fi
+}
