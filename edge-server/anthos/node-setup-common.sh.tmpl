@@ -152,9 +152,11 @@ setup_nvidia_container_runtime() {
     distribution=""
 
     if [ -f "/etc/os-release" ]; then
-      source "/etc/os-release"
-    elif [  -f "/usr/lib/os-release" ]; then
-      source "/usr/lib/os-release"
+      # shellcheck disable=SC1091
+      . "/etc/os-release"
+    elif [ -f "/usr/lib/os-release" ]; then
+      # shellcheck disable=SC1091
+      . "/usr/lib/os-release"
     else
       echo "[Error]Neither [/etc/os-release] nor [/usr/lib/os-release] exists, exit..."
       exit 1
@@ -179,7 +181,7 @@ setup_nvidia_container_runtime() {
     ## Update to use Nvidia runtime.
     ## Update default runtime to nvidia only if the Nvidia runtime configuration section exists.
     if ! grep -q 'default_runtime_name = "nvidia"' "${CONTAINERD_TOML_PATH}" &&
-        grep -q 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia' "${CONTAINERD_TOML_PATH}"; then
+      grep -q 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia' "${CONTAINERD_TOML_PATH}"; then
       echo "config.toml does not use Nvidia runtime, updating..."
       sed -i 's/default_runtime_name = "runc"/default_runtime_name = "nvidia"/g' "${CONTAINERD_TOML_PATH}"
     else
@@ -187,9 +189,28 @@ setup_nvidia_container_runtime() {
     fi
 
     ## Restart containerd
+    echo "Restarting Containerd service..."
     systemctl restart containerd
+    echo "Restarting Containerd service...Done"
 
     # Install Nvidia Device Pligin
+    ## Wait untill containerd is running.
+    COUNTER=0
+
+    while [ $COUNTER -lt 30 ]; do
+      COUNTER=$((COUNTER + 1))
+      sleep 1s
+      if systemctl status containerd | grep -q "Active: active (running)"; then
+        echo "Containerd is in running state."
+        break
+      elif [ $COUNTER -lt 30 ]; then
+        echo "Containerd is not in running state, waiting..."
+      else
+        echo "Containerd is not in running state after ${COUNTER} seconrs, exit..."
+        exit 1
+      fi
+    done
+
     if kubectl get ds -n kube-system --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig" | grep -q "nvidia-device-plugin-daemonset"; then
       echo "nvidia-device-plugin-daemonset exists, deleting"
       kubectl delete ds nvidia-device-plugin-daemonset \
