@@ -175,7 +175,7 @@ setup_nvidia_container_runtime() {
       echo "config.toml does not contains Nvidia containerd runtime configuration, updating..."
       cat "${SETUP_DIR}/edge-server/config-section.toml" >>"${CONTAINERD_TOML_PATH}"
     else
-      echo "config.toml already been updated with Nvidia runtime configuration, skip..."
+      echo "config.toml has already been configured with Nvidia runtime as the default one, skip..."
     fi
 
     ## Update to use Nvidia runtime.
@@ -206,7 +206,7 @@ setup_nvidia_container_runtime() {
       elif [ $COUNTER -lt 30 ]; then
         echo "Containerd is not in running state, waiting..."
       else
-        echo "Containerd is not in running state after ${COUNTER} seconrs, exit..."
+        echo "Containerd is not in running state after ${COUNTER} seconds, exit..."
         exit 1
       fi
     done

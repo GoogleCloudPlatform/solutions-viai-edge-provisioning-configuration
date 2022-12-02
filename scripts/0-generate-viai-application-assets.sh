@@ -88,8 +88,8 @@ CONTAINER_REPO_TYPE=""
 GOOGLE_CLOUD_PROJECT=
 K8S_RUNTIME=
 VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH=
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=sso://cloudsolutionsarchitects/viai-edge-camera-integration
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH=dev
+VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=https://github.com/GoogleCloudPlatform/solutions-viai-edge-camera-integration
+VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH=main
 
 # BSD getopt (bundled in MacOS) doesn't support long options, and has different parameters than GNU getopt
 if is_linux; then
