@@ -217,10 +217,12 @@ if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" 
   echo "Artifacts Registry: ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}"
 fi
 
-if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] && [ -z "${CONTAINER_REPO_HOST}" ]; then
-  echo "No container host specified, use gcr.io"
-  CONTAINER_REPO_HOST="gcr.io"
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
   CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}"
+  if [ -z "${CONTAINER_REPO_HOST}" ]; then
+    echo "No container host specified, use gcr.io"
+    CONTAINER_REPO_HOST="gcr.io"
+  fi
 fi
 
 if [ -z "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" ] && [ -z "${ANTHOS_SERVICE_ACCOUNT_EMAIL}" ]; then
