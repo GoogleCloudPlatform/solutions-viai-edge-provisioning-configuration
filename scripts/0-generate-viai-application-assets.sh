@@ -274,7 +274,6 @@ else
   cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/viai-camera-integration-private-repo.yaml.tmpl" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
 fi
 # Copy namespace yaml and update viai app yaml
-cp "${WORKING_DIRECTORY}/kubernetes/viai-model/viai-model.yaml.tmpl" "$DEPLOYMENT_TEMP_FOLDER/viai-model.yaml"
 cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/namespace.yaml" "$DEPLOYMENT_TEMP_FOLDER/namespace.yaml"
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
