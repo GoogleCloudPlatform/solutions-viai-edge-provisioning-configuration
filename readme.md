@@ -36,22 +36,24 @@ scripts/provisioning-terraform.sh \
   -m "${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}" \
   -x
 
-
 ```
 
 ## Anthos Setup
 
-### Create `anthos` VIAI application assets use `GCR` and `Cloud Build`, and create a `.ISO` file for Anthos Bare Metal set up
+### Create `anthos` VIAI application assets use `Artifacts Registry` and `Cloud Build`, and create a `.ISO` file for Anthos Bare Metal set up
 
 ```shell
 # Generate Kubernete yaml files and scripts to installl required packages and drivers.
+# Application container images are pushed to Artifacts Registry
+
 export ANTHOS_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/service-account-key.json
-export CONTAINER_REPO_HOST="gcr.io"
+export VIAI_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/viai-camera-integration-client_service_account_key-service-account-key.json
+export CONTAINER_REPO_HOST="${DEFAULT_REGION}-docker.pkg.dev"
+export CONTAINER_REG_NAME="${DEFAULT_REGION}-viai-applications"
 export CONTAINER_BUILD_METHOD="GCP"
 export K8S_RUNTIME="anthos"
-export MEMBERSHIP=${K8S_RUNTIME}-server
-export REPO_TYPE="GCR"
-export VIAI_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/viai-camera-integration-client_service_account_key-service-account-key.json
+export MEMBERSHIP=${K8S_RUNTIME}-server-kalschi
+export REPO_TYPE="ArtifactRegistry"
 
 bash ./scripts/0-generate-viai-application-assets.sh \
     -M ${CONTAINER_BUILD_METHOD} \
@@ -59,30 +61,40 @@ bash ./scripts/0-generate-viai-application-assets.sh \
     -k "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
     -m ${MEMBERSHIP} \
     -H "${CONTAINER_REPO_HOST}" \
+    -N "${CONTAINER_REG_NAME}" \
     -i ${K8S_RUNTIME} \
     -Y ${REPO_TYPE} \
+    -b "main" \
+    -l "sso://cloudsolutionsarchitects/viai-edge-camera-integration" \
     -p "${DEFAULT_PROJECT}"
 
-# Generate scripts to install and configure Anthos Bare Metal cluster with vxlan.
-export OUTPUT_FOLDER="<OUTPUT_FOLDER of previous script>"
-export ANTHOS_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/service-account-key.json
+```
+
+
+### Generste Edge Server setup scripts
+
+This script cresta VXLAN on the host and install Anthos.
+
+```shell
+export OUTPUT_FOLDER="<OUTPUT_FOLDER of previous step>"
 export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=my-user@my-org.com
 export K8S_RUNTIME=anthos
-export MEMBERSHIP=${K8S_RUNTIME}-server
+export MEMBERSHIP=${K8S_RUNTIME}-server-kalschi
 export DEFAULT_REGION=us-central1
+export ANTHOS_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/test-2-viai-abm.key
 
 bash ./scripts/1-generate-edge-server-assets.sh \
-    -G $(pwd)/tmp/service-account-key.json \
-    -A $(pwd)/tmp/service-account-key.json \
-    -S $(pwd)/tmp/service-account-key.json \
-    -C $(pwd)/tmp/service-account-key.json \
+    -G ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
+    -A ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
+    -S ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
+    -C ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
     -p ${DEFAULT_PROJECT} \
-    -k  $(pwd)/tmp/service-account-key.json \
+    -k ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
     -r ${DEFAULT_REGION} \
     -m ${MEMBERSHIP} \
     -o ${OUTPUT_FOLDER} \
     -i ${K8S_RUNTIME} \
-    -u ${GOOGLE_CLOUD_DEFAULT_USER_EMAIL} 2>&1 | tee log-1.log
+    -u ${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}
 
 ```
 
@@ -92,6 +104,7 @@ bash ./scripts/1-generate-edge-server-assets.sh \
 
 export MEDIA_TYPE="USB"
 export K8S_RUNTIME="anthos"
+
 bash ./scripts/2-generate-media-file.sh \
     --edge-config-directory-path ${OUTPUT_FOLDER} \
     --media-type ${MEDIA_TYPE} \

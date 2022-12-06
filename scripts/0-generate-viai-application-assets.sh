@@ -30,7 +30,7 @@ CONTAINER_IMAGE_BUILD_METHOD_DESCRIPTION="method of building container images, c
 CONTAINER_REPO_HOST_DESCRIPTION="private container repo host name, ex, repo.private.com"
 CONTAINER_REPO_USERNAME_DESCRIPTION="private container repo user name"
 CONTAINER_REPO_PASSWORD_DESCRIPTION="passowrd of the private container repo user"
-CONTAINER_REPO_REPOSITORY_NAME_DESCRIPITON="name of private repo registry"
+CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION="name of the container repo registry"
 DEPLOYMENT_TEMP_FOLDER_DESCRIPTION="output folder path"
 GOOGLE_CLOUD_DEFAULT_PROJECT_DESCRIPTION="name of the default Google Cloud Project to use"
 K8S_RUNTIME_DESCRIPTION="name of kubernetes runtime."
@@ -51,7 +51,7 @@ usage() {
   echo "  -M $(is_linux && echo "| --container-image-build-method"): ${CONTAINER_IMAGE_BUILD_METHOD_DESCRIPTION}"
   echo "  -H $(is_linux && echo "| --container-repo-host"): ${CONTAINER_REPO_HOST_DESCRIPTION}"
   echo "  -W $(is_linux && echo "| --container-repo-password"): ${CONTAINER_REPO_PASSWORD_DESCRIPTION}"
-  echo "  -N $(is_linux && echo "| --container-repo-reg-name"): ${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPITON}"
+  echo "  -N $(is_linux && echo "| --container-repo-reg-name"): ${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
   echo "  -U $(is_linux && echo "| --container-repo-user"): ${CONTAINER_REPO_USERNAME_DESCRIPTION}"
   echo "  -p $(is_linux && echo "| --default-project"): ${GOOGLE_CLOUD_DEFAULT_PROJECT_DESCRIPTION}"
   echo "  -b $(is_linux && echo "| --git-repo-branch"): ${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH_DESCRIPTION}"
@@ -188,21 +188,36 @@ VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH=$DEPLOYMENT_TEMP_FOLDER
 ###################################################
 # Verify
 ###################################################
-if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "KANIKO" ] && [ "${CONTAINER_REPO_TYPE}" = "GCR" ]; then
+if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "KANIKO" ] && [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
   echo "[Error] Kaniko build only supports Repo Type [Private]"
   # Ignoring because those are defined in common.sh, and don't need quotes
   # shellcheck disable=SC2086
   exit $EXIT_GENERIC_ERR
 fi
 
-if [ "${CONTAINER_REPO_TYPE}" != "GCR" ]; then
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
   check_argument "${CONTAINER_REPO_HOST}" "${CONTAINER_REPO_HOST_DESCRIPTION}"
   check_argument "${CONTAINER_REPO_USERNAME}" "${CONTAINER_REPO_USERNAME_DESCRIPTION}"
   check_argument "${CONTAINER_REPO_PASSWORD}" "${CONTAINER_REPO_PASSWORD_DESCRIPTION}"
-  check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPITON}"
+  check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
 fi
 
-if [ "${CONTAINER_REPO_TYPE}" = "GCR" ] && [ -z "${CONTAINER_REPO_HOST}" ]; then
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
+  check_argument "${CONTAINER_REPO_HOST}" "${CONTAINER_REPO_HOST_DESCRIPTION}"
+  check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
+
+  ARTIFACTS_REGISTRY_DEFAULT_REG_NAME="$(echo ${CONTAINER_REPO_HOST} | sed 's/-docker.pkg.dev//g')-viai-applications"
+  echo "ARTIFACTS_REGISTRY_DEFAULT_REG_NAME=${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}"
+  if ! check_optional_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}" "Use default name:${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}."; then
+    CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}"
+  else
+    CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${CONTAINER_REPO_REPOSITORY_NAME}"
+  fi
+
+  echo "Artifacts Registry: ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}"
+fi
+
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] && [ -z "${CONTAINER_REPO_HOST}" ]; then
   echo "No container host specified, use gcr.io"
   CONTAINER_REPO_HOST="gcr.io"
 fi
@@ -268,7 +283,7 @@ bash "${BUILD_SCRIPT_FILE}" \
   --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
   --repo-type "${CONTAINER_REPO_TYPE}"
 
-if [ "${CONTAINER_REPO_TYPE}" = "GCR" ]; then
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
   cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/viai-camera-integration-gcp.yaml.tmpl" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
 else
   cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/viai-camera-integration-private-repo.yaml.tmpl" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
@@ -279,9 +294,13 @@ cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/namespace.yaml" "$DE
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
 sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
+
+escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
-sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${CONTAINER_REPO_REPOSITORY_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
+sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
+unset ESCAPED_NAME
+
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
 sed -i 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
@@ -293,23 +312,23 @@ sed -i 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$DEPLOYMENT_TE
 echo "[Generating Assets] Updating VIAI Client Application Secrets"
 
 # shellcheck disable=SC2240
-. "${WORKING_DIRECTORY}"/scripts/application-create-secrets-viai-client.sh \
+"${WORKING_DIRECTORY}"/scripts/application-create-secrets-viai-client.sh \
   --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
   --service-account-key-path "${VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH}"
 
 # Update Image Pull Secrets
-if [ "${CONTAINER_REPO_TYPE}" = "GCR" ]; then
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] || [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
   echo "[Generating Assets] Updating Image Pull Secrets for GCR: ${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
 
   # shellcheck disable=SC2240
-  . ./scripts/application-create-secrets-gcr.sh \
+  ./scripts/application-create-secrets-gcr.sh \
     --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
     --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" \
     --container-repo-host "${CONTAINER_REPO_HOST}"
 else
   echo "[Generating Assets] Updating Image Pull Secrets for Private Repo"
   # shellcheck disable=SC2240
-  . ./scripts/application-create-secrets-private-repo.sh \
+  ./scripts/application-create-secrets-private-repo.sh \
     --container-repo-host "${CONTAINER_REPO_HOST}" \
     --container-repo-user "${CONTAINER_REPO_USERNAME}" \
     --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
@@ -317,18 +336,18 @@ else
     --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
     --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
 fi
+
 ###### Push Dependencies images such as Mosquitto to Private Repo and Update dependencies yaml files
 # Mosquitto: starting from mosquitto:2.0.0, by default it only allows connections from localhost,
 #           unless explictly edit mosquitto.config `bind_interface device`` or `bind_address ip_address`
 
 SOURCE_IMAGE="eclipse-mosquitto:1.6.15"
 TARGET_IMAGE=${SOURCE_IMAGE##*/}
-
-if [ "${CONTAINER_REPO_TYPE}" != "GCR" ]; then
+if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
   # If edge server cannot connect to the internet, they must pull images from private repo.
   echo "[Generating Assets] Pushing Dependencies images such as Mosquitto to Private Repo and Updating dependencies yaml files"
   # shellcheck disable=SC2240
-  . ./scripts/application-prepare-dependency-yaml.sh \
+  ./scripts/application-prepare-dependency-yaml.sh \
     --container-repo-host "${CONTAINER_REPO_HOST}" \
     --container-repo-user "${CONTAINER_REPO_USERNAME}" \
     --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
@@ -339,12 +358,12 @@ if [ "${CONTAINER_REPO_TYPE}" != "GCR" ]; then
     --target-image "${TARGET_IMAGE}"
 else
   echo "[Generating Assets] Pushing Dependencies images such as Mosquitto to GCR and Updating dependencies yaml files"
-  CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}"
   # shellcheck disable=SC2240
-  . ./scripts/application-prepare-dependency-yaml.sh \
+  echo "CONTAINER_REPO_REPOSITORY_NAME=${CONTAINER_REPO_REPOSITORY_NAME}"
+  ./scripts/application-prepare-dependency-yaml.sh \
     --container-repo-host "${CONTAINER_REPO_HOST}" \
     --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-    --container-repo-reg-name "${GOOGLE_CLOUD_PROJECT}" \
+    --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
     --repo-type "${CONTAINER_REPO_TYPE}" \
     --source-image "${SOURCE_IMAGE}" \
     --target-image "${TARGET_IMAGE}"
@@ -356,9 +375,13 @@ cp "${WORKING_DIRECTORY}/kubernetes/mosquitto/mosquitto.yaml.tmpl" "$DEPLOYMENT_
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
 sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
+
+escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
-sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${CONTAINER_REPO_REPOSITORY_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
+sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
+unset ESCAPED_NAME
+
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016
 sed -i 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${TARGET_IMAGE}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"

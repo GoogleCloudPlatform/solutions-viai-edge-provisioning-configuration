@@ -141,7 +141,7 @@ if [ -z "${SOURCE_IMAGE}" ] || [ -z "${TARGET_IMAGE_NAME}" ] || [ -z "${DEPLOYME
   exit ${EXIT_GENERIC_ERR}
 fi
 
-if [ "$CONTAINER_REPO_TYPE" != "GCR" ]; then
+if [ "$CONTAINER_REPO_TYPE" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
   echo "Pushing Mosquitto image to private repo..."
   docker build -t private_repo_pull_tool:1.0.0 "${WORKING_DIRECTORY}"/docker/copy-images
   # DOCKER_HOST to fix "Cannot connect to the Docker daemon at tcp://docker:2375. Is the docker daemon running?" issue
@@ -158,18 +158,17 @@ if [ "$CONTAINER_REPO_TYPE" != "GCR" ]; then
     -e DOCKER_HOST="tcp://127.0.0.1:2375" \
     "private_repo_pull_tool:1.0.0"
 else
-  echo "Pushing Mosquitto image to GCR..."
+  echo "Pushing Mosquitto image to GCR:${CONTAINER_REPO_REPOSITORY_NAME}"
   GOOGLE_APPLICATION_CREDENTIALS_PATH="/root/.config/gcloud/application_default_credentials.json"
   docker build -t gcr_pull_tool:1.0.0 "${WORKING_DIRECTORY}"/docker/copy-images
 
-  CONTAINER_REPO_REPOSITORY_NAME="${DEFAULT_PROJECT}"
   docker run -it --rm \
     --privileged \
     -e SOURCE_IMAGE="${SOURCE_IMAGE}" \
     -e TARGET_IMAGE_NAME="${TARGET_IMAGE_NAME}" \
     -e REGISTRY_TYPE="${CONTAINER_REPO_TYPE}" \
     -e CONTAINER_REPO_HOST="${CONTAINER_REPO_HOST}" \
-    -e CONTAINER_REPO_REPOSITORY_NAME="${DEFAULT_PROJECT}" \
+    -e CONTAINER_REPO_REPOSITORY_NAME="${CONTAINER_REPO_REPOSITORY_NAME}" \
     -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
     -v /etc/localtime:/etc/localtime:ro \
     --volumes-from "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
