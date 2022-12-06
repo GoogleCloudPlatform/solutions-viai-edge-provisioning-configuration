@@ -52,3 +52,6 @@ terraform/terraform.tfvars
 terraform.tfstate
 terraform.tfstate.backup
 terraform.tfvars
+
+# Ignore python cache
+.mypy_cache/
