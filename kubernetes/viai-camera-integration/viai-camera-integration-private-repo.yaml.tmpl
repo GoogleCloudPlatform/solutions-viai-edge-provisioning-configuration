@@ -64,6 +64,7 @@ spec:
   imagePullSecrets:
     - name: regcred
   hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
   volumes:
     - name: google-cloud-service-account-credentials-volume
       secret:
