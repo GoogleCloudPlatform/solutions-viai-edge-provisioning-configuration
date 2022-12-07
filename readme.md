@@ -79,7 +79,7 @@ This script cresta VXLAN on the host and install Anthos.
 export OUTPUT_FOLDER="<OUTPUT_FOLDER of previous step>"
 export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=my-user@my-org.com
 export K8S_RUNTIME=anthos
-export MEMBERSHIP="${K8S_RUNTIME}-server-kalschi"
+export MEMBERSHIP="${K8S_RUNTIME}-server"
 export DEFAULT_REGION=us-central1
 export ANTHOS_SVC_ACCOUNT_KEY_PATH="$(pwd)/tmp/test-2-viai-abm.key"
 
