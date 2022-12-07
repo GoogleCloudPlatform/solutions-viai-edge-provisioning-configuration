@@ -28,4 +28,8 @@ resource "google_artifact_registry_repository" "viai-application-repository" {
   repository_id = "${var.google_default_region}-viai-applications"
   description   = "Visual Inspection AI applications container Registiry"
   format        = "DOCKER"
+
+  depends_on = [
+    google_project_service.google-cloud-apis
+  ]
 }
