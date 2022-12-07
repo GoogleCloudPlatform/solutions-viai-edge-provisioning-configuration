@@ -22,3 +22,14 @@ resource "google_artifact_registry_repository" "viai-mode-repository" {
     google_project_service.google-cloud-apis
   ]
 }
+
+resource "google_artifact_registry_repository" "viai-application-repository" {
+  location      = var.google_default_region
+  repository_id = "${var.google_default_region}-viai-applications"
+  description   = "Visual Inspection AI applications container image registry"
+  format        = "DOCKER"
+
+  depends_on = [
+    google_project_service.google-cloud-apis
+  ]
+}

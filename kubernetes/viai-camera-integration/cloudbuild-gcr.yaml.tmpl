@@ -3,5 +3,5 @@ steps:
     args: ['build', '-t', '${CONTAINER_REPO_HOST}/${_REGISTRY_NAME}/viai-camera-integration:${_TAG}', '.']
 images: ['${CONTAINER_REPO_HOST}/${_REGISTRY_NAME}/viai-camera-integration:${_TAG}']
 substitutions:
-    _REGISTRY_NAME: ${GOOGLE_CLOUD_PROJECT}
+    _REGISTRY_NAME: ${CONTAINER_REPO_REPOSITORY_NAME}
     _TAG: ${TAG}

@@ -28,8 +28,8 @@ docker pull "${SOURCE_IMAGE}"
 echo "Tagging ${SOURCE_IMAGE} to ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}/${TARGET_IMAGE_NAME}..."
 docker tag "${SOURCE_IMAGE}" "${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}/${TARGET_IMAGE_NAME}"
 
-if [ "${REGISTRY_TYPE}" = "GCR" ]; then
-  gcloud auth configure-docker --quiet
+if [ "${REGISTRY_TYPE}" != "Private" ]; then
+  gcloud auth configure-docker "${CONTAINER_REPO_HOST}" --quiet
 else
   docker login "${CONTAINER_REPO_HOST}" --username="${CONTAINER_REPO_USERNAME}" --password="${CONTAINER_REPO_PASSWORD}"
 fi

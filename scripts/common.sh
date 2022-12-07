@@ -19,6 +19,12 @@ set -o errexit
 
 # Ignoring SC2034 because this variable is used in other scripts
 # shellcheck disable=SC2034
+CONST_CONTAINER_REPO_TYPE_GCR="GCR"
+# shellcheck disable=SC2034
+CONST_CONTAINER_REPO_TYPE_PRIVATE="Private"
+# shellcheck disable=SC2034
+CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY="ArtifactRegistry"
+# shellcheck disable=SC2034
 EXIT_OK=0
 # shellcheck disable=SC2034
 EXIT_GENERIC_ERR=1
