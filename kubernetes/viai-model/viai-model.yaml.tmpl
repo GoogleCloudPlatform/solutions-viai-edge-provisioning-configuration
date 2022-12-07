@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${SERVICE_NAME}-deployment
+  name: ${SERVICE_NAME}
   namespace: viai-edge
   labels:
+    app: ${SERVICE_NAME}
     gcp-managed-by: ${SERVICE_NAME}
   annotations:
     mledge-deployment: ${SERVICE_NAME}
@@ -38,20 +39,3 @@ spec:
   - protocol: TCP
     port: 8602
     targetPort: 8602
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  namespace: viai-edge
-  name: viai-model-${SERVICE_NAME}-ingress
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: ${SERVICE_NAME}
-            port:
-              number: 8602

@@ -41,6 +41,7 @@ spec:
         app: viai-camera-integration
     spec:
       hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred
