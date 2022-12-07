@@ -46,26 +46,26 @@ scripts/provisioning-terraform.sh \
 # Generate Kubernete yaml files and scripts to installl required packages and drivers.
 # Application container images are pushed to Artifacts Registry
 
-export ANTHOS_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/service-account-key.json
-export VIAI_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/viai-camera-integration-client_service_account_key-service-account-key.json
+export ANTHOS_SVC_ACCOUNT_KEY_PATH="$(pwd)/tmp/service-account-key.json"
+export VIAI_SVC_ACCOUNT_KEY_PATH="$(pwd)/tmp/viai-camera-integration-client_service_account_key-service-account-key.json"
 export CONTAINER_REPO_HOST="${DEFAULT_REGION}-docker.pkg.dev"
 export CONTAINER_REG_NAME="${DEFAULT_REGION}-viai-applications"
 export CONTAINER_BUILD_METHOD="GCP"
 export K8S_RUNTIME="anthos"
-export MEMBERSHIP=${K8S_RUNTIME}-server-kalschi
+export MEMBERSHIP="${K8S_RUNTIME}-server"
 export REPO_TYPE="ArtifactRegistry"
 
 bash ./scripts/0-generate-viai-application-assets.sh \
-    -M ${CONTAINER_BUILD_METHOD} \
+    -M "${CONTAINER_BUILD_METHOD}" \
     -v "${VIAI_SVC_ACCOUNT_KEY_PATH}" \
     -k "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
-    -m ${MEMBERSHIP} \
+    -m "${MEMBERSHIP}" \
     -H "${CONTAINER_REPO_HOST}" \
     -N "${CONTAINER_REG_NAME}" \
-    -i ${K8S_RUNTIME} \
-    -Y ${REPO_TYPE} \
+    -i "${K8S_RUNTIME}" \
+    -Y "${REPO_TYPE}" \
     -b "main" \
-    -l "sso://cloudsolutionsarchitects/viai-edge-camera-integration" \
+    -l "<Camera Application Git URL>" \
     -p "${DEFAULT_PROJECT}"
 
 ```
@@ -79,22 +79,22 @@ This script cresta VXLAN on the host and install Anthos.
 export OUTPUT_FOLDER="<OUTPUT_FOLDER of previous step>"
 export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=my-user@my-org.com
 export K8S_RUNTIME=anthos
-export MEMBERSHIP=${K8S_RUNTIME}-server-kalschi
+export MEMBERSHIP="${K8S_RUNTIME}-server-kalschi"
 export DEFAULT_REGION=us-central1
-export ANTHOS_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/test-2-viai-abm.key
+export ANTHOS_SVC_ACCOUNT_KEY_PATH="$(pwd)/tmp/test-2-viai-abm.key"
 
 bash ./scripts/1-generate-edge-server-assets.sh \
-    -G ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
-    -A ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
-    -S ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
-    -C ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
-    -p ${DEFAULT_PROJECT} \
-    -k ${ANTHOS_SVC_ACCOUNT_KEY_PATH} \
-    -r ${DEFAULT_REGION} \
-    -m ${MEMBERSHIP} \
-    -o ${OUTPUT_FOLDER} \
-    -i ${K8S_RUNTIME} \
-    -u ${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}
+    -G "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
+    -A "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
+    -S "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
+    -C "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
+    -p "${DEFAULT_PROJECT}" \
+    -k "${ANTHOS_SVC_ACCOUNT_KEY_PATH}" \
+    -r "${DEFAULT_REGION}" \
+    -m "${MEMBERSHIP}" \
+    -o "${OUTPUT_FOLDER}" \
+    -i "${K8S_RUNTIME}" \
+    -u "${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}"
 
 ```
 
@@ -106,8 +106,8 @@ export MEDIA_TYPE="USB"
 export K8S_RUNTIME="anthos"
 
 bash ./scripts/2-generate-media-file.sh \
-    --edge-config-directory-path ${OUTPUT_FOLDER} \
-    --media-type ${MEDIA_TYPE} \
-    --k8s-runtime ${K8S_RUNTIME}
+    --edge-config-directory-path "${OUTPUT_FOLDER}" \
+    --media-type "${MEDIA_TYPE}" \
+    --k8s-runtime "${K8S_RUNTIME}"
 
 ```

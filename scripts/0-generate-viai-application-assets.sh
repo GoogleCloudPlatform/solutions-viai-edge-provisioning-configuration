@@ -30,7 +30,7 @@ CONTAINER_IMAGE_BUILD_METHOD_DESCRIPTION="method of building container images, c
 CONTAINER_REPO_HOST_DESCRIPTION="private container repo host name, ex, repo.private.com"
 CONTAINER_REPO_USERNAME_DESCRIPTION="private container repo user name"
 CONTAINER_REPO_PASSWORD_DESCRIPTION="passowrd of the private container repo user"
-CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION="name of the container repo registry"
+CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION="name of the container repo registry. For GCR, this can be ignored. For Artifacts Registry, this defaults to <CLOUD-REGION>-viai-applications"
 GOOGLE_CLOUD_DEFAULT_PROJECT_DESCRIPTION="name of the default Google Cloud Project to use"
 K8S_RUNTIME_DESCRIPTION="name of kubernetes runtime."
 REPO_TYPE_DESCRIPTION="Container Registry type, can be [GCR] or [Private]"
@@ -201,9 +201,15 @@ if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
   check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
 fi
 
+# If the customer choose to use Artifact Registry to store container images.
+# The Artiffact Registry uses the url format: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REGISTRY_NAME}/${IMAGE_NAME}:${TAG}
+# Terraform automatically generated a default Artifact Registy with the namimg format: <REGION>-docker.pkg.dev/<PROJECT>/<REGION>-viai-applications
+# Here we assemble correct Artifact Registry name:
+# - If the use specified a Artifact Registry repo name, use the name.
+# - If the user does not specify a Artifact Registry repo name, use default.
 if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
   check_argument "${CONTAINER_REPO_HOST}" "${CONTAINER_REPO_HOST_DESCRIPTION}"
-  check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
+  # check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
 
   ARTIFACTS_REGISTRY_DEFAULT_REG_NAME=$(echo "${CONTAINER_REPO_HOST}" | sed 's/-docker.pkg.dev//g')-viai-applications
   echo "ARTIFACTS_REGISTRY_DEFAULT_REG_NAME=${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}"
@@ -212,8 +218,7 @@ if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" 
   else
     CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${CONTAINER_REPO_REPOSITORY_NAME}"
   fi
-
-  echo "Artifacts Registry: ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}"
+  echo "Using Artifact Registry: ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}"
 fi
 
 if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
