@@ -19,6 +19,16 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: viai-edge
+                operator: In
+                values:
+                - camera-application
+            topologyKey: kubernetes.io/hostname
       containers:
       - image: viai-inference-module
         imagePullPolicy: Always

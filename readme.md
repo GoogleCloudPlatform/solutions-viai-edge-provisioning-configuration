@@ -111,3 +111,28 @@ bash ./scripts/2-generate-media-file.sh \
     --k8s-runtime "${K8S_RUNTIME}"
 
 ```
+
+### Customizing the application
+
+* CPU / GPU Nodes
+
+    The Visual Inspection AI model performs better with GPU, to schedule PODs to Kubernetes nodes with GPU installed, we use Pod Affinity to ensure PODs run on GPU node. If your cluster does not have GPU installed, remove the POD affinity configuration in [mosquitto.yaml.tmpl](kubernetes/mosquitto/mosquitto.yaml.tmpl), [viai-camera-integration-gcp.yaml.tmpl](kubernetes/viai-camera-integration/viai-camera-integration-gcp.yaml.tmpl) and [viai-camera-integration-private-repo.yaml.tmpl](kubernetes/viai-camera-integration/viai-camera-integration-private-repo.yaml.tmpl).
+
+```yaml
+    # ...
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: viai-edge
+                operator: In
+                values:
+                - camera-application
+            topologyKey: kubernetes.io/hostname
+      imagePullSecrets:
+        - name: regcred
+    # ...
+```
+
