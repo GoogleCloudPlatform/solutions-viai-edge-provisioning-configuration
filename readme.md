@@ -111,3 +111,33 @@ bash ./scripts/2-generate-media-file.sh \
     --k8s-runtime "${K8S_RUNTIME}"
 
 ```
+
+### Customizing the application
+
+* CPU / GPU Nodes
+
+  By default we use Pod Affinity to ensure PODs run on GPU node.
+  If your cluster does not have GPU installed, remove the POD affinity configuration in files listed below.
+
+  * [mosquitto.yaml.tmpl](kubernetes/mosquitto/mosquitto.yaml.tmpl)
+  * [viai-camera-integration-gcp.yaml.tmpl](kubernetes/viai-camera-integration/viai-camera-integration-gcp.yaml.tmpl)
+  * [viai-camera-integration-private-repo.yaml.tmpl](kubernetes/viai-camera-integration/viai-camera-integration-private-repo.yaml.tmpl).
+
+```yaml
+    # ...
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: viai-edge
+                operator: In
+                values:
+                - camera-application
+            topologyKey: kubernetes.io/hostname
+      imagePullSecrets:
+        - name: regcred
+    # ...
+```
+

@@ -32,6 +32,9 @@ kind: Pod
 metadata:
   namespace: viai-edge
   name: viai-camera-integration
+  labels:
+    app: viai-camera-integration
+    viai-edge: camera-application
 spec:
   containers:
     - name: viai-camera-integration-operations

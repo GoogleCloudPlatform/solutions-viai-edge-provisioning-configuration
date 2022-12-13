@@ -12,6 +12,16 @@ spec:
       labels:
         app: mosquitto
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: viai-edge
+                operator: In
+                values:
+                - camera-application
+            topologyKey: kubernetes.io/hostname
       imagePullSecrets:
         - name: regcred
       containers:
