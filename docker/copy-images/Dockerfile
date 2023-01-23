@@ -1,4 +1,4 @@
-FROM docker:20.10.18-dind
+FROM docker:20.10.23-dind
 
 RUN apk add --no-cache curl bash python3 tar
 WORKDIR /root
