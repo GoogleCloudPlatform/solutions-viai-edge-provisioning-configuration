@@ -216,6 +216,23 @@ gcloud_auth() {
     gcloud auth login --update-adc
 }
 
+gcloud_exec_scripts() {
+  GOOGLE_APPLICATION_CREDENTIALS_PATH="${1}"
+  shift
+  RUNTIME_SCRIPT_FOLDER="${1}"
+  shift
+  SCRIPT_FILE_NAME="${1}"
+  shift
+  # shecllcheck disable=SC2068
+  docker run -it --rm \
+    -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
+    -v "${RUNTIME_SCRIPT_FOLDER}":/workspace \
+    -v /etc/localtime:/etc/localtime:ro \
+    --volumes-from gcloud-config \
+    --name gcloud_exec_command \
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" "bash" "/workspace/${SCRIPT_FILE_NAME}"
+}
+
 cleanup_gcloud_auth() {
   if docker ps -a -f status=exited -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" ||
     docker ps -a -f status=created -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"; then

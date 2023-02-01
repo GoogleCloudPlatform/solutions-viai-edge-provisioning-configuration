@@ -168,6 +168,17 @@ TERRAFORM_TFVARS_PATH="${TERRAFORM_ENVIRONMENT_DIR}/terraform.tfvars"
 
 # "${HOME}"/.config/gcloud/application_default_credentials.json is a well-known location for application-default credentials
 GOOGLE_APPLICATION_CREDENTIALS_PATH="/root/.config/gcloud/application_default_credentials.json"
+RUNTIME_SCRIPT_FOLDER="$(mktemp -d)"
+
+cat <<EOF >"${RUNTIME_SCRIPT_FOLDER}/run.sh"
+if ! gsutil list -p "${DEFAULT_PROJECT}" | grep "gs://tf-state-${DEFAULT_PROJECT}/" ; then
+  echo "Terraform backend storage does not exists, creating..."
+  gsutil mb -p ${DEFAULT_PROJECT} gs://tf-state-${DEFAULT_PROJECT}
+else
+  echo "Terraform backend exists, skip..."
+fi
+EOF
+gcloud_exec_scripts "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${RUNTIME_SCRIPT_FOLDER}" "run.sh"
 
 ###### Cloud Functions ######
 VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH="$(mktemp -d)"
@@ -238,11 +249,11 @@ fi
 mkdir -p "$(pwd)"/tmp
 
 run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" version
-run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" init
+run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" init -backend-config="bucket=tf-state-${DEFAULT_PROJECT}"
 run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" validate
 run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" "${TERRAFORM_SUBCOMMAND}"
 
 echo "Clean up ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}..."
 rm -rf "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"
 
-trap 'echo "Cleaning up..."; rm -fr "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"; ' EXIT
+trap 'echo "Cleaning up..."; rm -fr "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"; rm -fr "${RUNTIME_SCRIPT_FOLDER}"' EXIT
