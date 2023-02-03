@@ -223,14 +223,19 @@ gcloud_exec_scripts() {
   shift
   SCRIPT_FILE_NAME="${1}"
   shift
+
+  WORKSPACE_FOLDER="/workspace"
   # shecllcheck disable=SC2068
   docker run -it --rm \
     -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
-    -v "${RUNTIME_SCRIPT_FOLDER}":/workspace \
+    -v "${RUNTIME_SCRIPT_FOLDER}":"${WORKSPACE_FOLDER}" \
     -v /etc/localtime:/etc/localtime:ro \
+    -w "${WORKSPACE_FOLDER}" \
     --volumes-from gcloud-config \
     --name gcloud_exec_command \
-    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" "bash" "/workspace/${SCRIPT_FILE_NAME}"
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" "bash" "${SCRIPT_FILE_NAME}"
+
+    unset WORKSPACE_FOLDER
 }
 
 cleanup_gcloud_auth() {
