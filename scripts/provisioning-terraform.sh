@@ -180,7 +180,7 @@ if [ "${TERRAFORM_SUBCOMMAND}" != "destroy" ]; then
   cat <<EOF >"${RUNTIME_SCRIPT_FOLDER}/run.sh"
 if ! gsutil list -p "${DEFAULT_PROJECT}" | grep "gs://tf-state-${DEFAULT_PROJECT}/" ; then
   echo "Terraform backend storage does not exists, creating..."
-  gsutil mb -p ${DEFAULT_PROJECT} gs://tf-state-${DEFAULT_PROJECT}
+  gsutil mb -p ${DEFAULT_PROJECT} --pap enforced -b on gs://tf-state-${DEFAULT_PROJECT}
 else
   echo "Terraform backend exists, skip..."
 fi
