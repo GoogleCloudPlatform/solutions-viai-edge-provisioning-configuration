@@ -223,7 +223,6 @@ gcloud_exec_scripts() {
   shift
   SCRIPT_FILE_NAME="${1}"
   shift
-
   WORKSPACE_FOLDER="/workspace"
   # shecllcheck disable=SC2068
   docker run -it --rm \
@@ -233,9 +232,9 @@ gcloud_exec_scripts() {
     -w "${WORKSPACE_FOLDER}" \
     --volumes-from gcloud-config \
     --name gcloud_exec_command \
-    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" "bash" "${SCRIPT_FILE_NAME}"
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" "bash" "./${SCRIPT_FILE_NAME}"
 
-    unset WORKSPACE_FOLDER
+  unset WORKSPACE_FOLDER
 }
 
 cleanup_gcloud_auth() {
