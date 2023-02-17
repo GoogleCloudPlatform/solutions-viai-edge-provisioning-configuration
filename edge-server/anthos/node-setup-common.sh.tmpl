@@ -97,13 +97,6 @@ stop_firewall() {
   systemctl stop ufw
 }
 
-export_KUBECONFIG_path() {
-  if [ -f "$SETUP_DIR/bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}-kubeconfig" ]; then
-    grep -qxF "$(echo export KUBECONFIG=$SETUP_DIR/bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}-kubeconfig)" "${HOME}/.bashrc" || echo "export KUBECONFIG=$SETUP_DIR/bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}-kubeconfig" >>"${HOME}/.bashrc"
-    source "${HOME}/.bashrc"
-  fi
-}
-
 setup_baremetal() {
   print_separator
   echo "setup_baremetal..."

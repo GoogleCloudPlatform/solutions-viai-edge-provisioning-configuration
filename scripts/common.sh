@@ -261,15 +261,17 @@ gcloud_exec_cmds() {
   COMMAND_LINE="${1}"
   shift
   WORKSPACE_FOLDER="/workspace"
-  # shecllcheck disable=SC2068,SC2155,SC2046
-  export DOCKER_RUN_OUTPUT=$(docker run -it --rm \
-    -e GCP_CREDENTIALS_PATH="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
+  # shecllcheck disable=SC2155,SC2046
+  DOCKER_RUN_OUTPUT=$(docker run -it --rm \
+    -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     -v "${RUNTIME_SCRIPT_FOLDER}":"${WORKSPACE_FOLDER}" \
     -v /etc/localtime:/etc/localtime:ro \
     -w "${WORKSPACE_FOLDER}" \
     --volumes-from gcloud-config \
     --name gcloud_exec_command \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" sh -c "${COMMAND_LINE}")
+
+  export DOCKER_RUN_OUTPUT
 
   unset WORKSPACE_FOLDER
   unset RUNTIME_SCRIPT_FOLDER
