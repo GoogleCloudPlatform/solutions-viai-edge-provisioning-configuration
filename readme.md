@@ -113,5 +113,6 @@ bash ./scripts/2-generate-media-file.sh \
 
 ### Notes
 
-* The `provision-terraform.sh -a` command creates a Storage Bucket to store Terraform state that is not managed by Terraform. This is intentionaly to ensure the state will be always available when create / update resources. The Bucket will be deleted if you run `provision-terraform.sh -s "destroy"` to delete generated resources.
+* The `provision-terraform.sh -a` command creates a Storage Bucket `gs://tf-state-${DEFAULT_PROJECT}/` to store Terraform state that is not managed by Terraform. This is intentionaly to ensure the state will be always available when create / update resources.
 
+The Bucket will be deleted if you run `provision-terraform.sh -s "destroy"` to delete generated resources.
