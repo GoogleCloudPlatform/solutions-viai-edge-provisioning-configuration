@@ -174,18 +174,8 @@ VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH="$(mktemp -d)"
 mkdir -p "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/gcf"
 
 if [ "${TERRAFORM_SUBCOMMAND}" != "destroy" ]; then
-  # Create Storage Bucket for Terraform states
-  RUNTIME_SCRIPT_FOLDER="$(mktemp -d)"
 
-  cat <<EOF >"${RUNTIME_SCRIPT_FOLDER}/run.sh"
-if ! gsutil list -p "${DEFAULT_PROJECT}" | grep "gs://tf-state-${DEFAULT_PROJECT}/" ; then
-  echo "Terraform backend storage does not exists, creating..."
-  gsutil mb -p ${DEFAULT_PROJECT} --pap enforced -b on -l ${DEFAULT_REGION} gs://tf-state-${DEFAULT_PROJECT}
-else
-  echo "Terraform backend exists, skip..."
-fi
-EOF
-  gcloud_exec_scripts "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${RUNTIME_SCRIPT_FOLDER}" "run.sh"
+  ensure_tf_backend "${GOOGLE_APPLICATION_CREDENTIALS_PATH}"
 
   # Download and build Cloud Functions source codes
   ZIP_FILE_NAME="cloudfunction-$(date +%Y%m%d-%H%M%S).zip"
@@ -210,8 +200,8 @@ EOF
         TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES="\"$MEMBERSHIP\",${TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES}"
       fi
     done
-
   fi
+
   if [ -n "${TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES}" ]; then
     TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES="[${TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES}]"
   else
@@ -257,20 +247,9 @@ run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAM
 
 if [ "${TERRAFORM_SUBCOMMAND}" = "destroy" ]; then
   # Destroy Cloud Resources
-  RUNTIME_SCRIPT_FOLDER="$(mktemp -d)"
-
-  cat <<EOF >"${RUNTIME_SCRIPT_FOLDER}/destroy.sh"
-if gsutil list -p "${DEFAULT_PROJECT}" | grep "gs://tf-state-${DEFAULT_PROJECT}/" ; then
-  echo "Terraform backend storage exists, deleting..."
-  gsutil rm -r gs://tf-state-${DEFAULT_PROJECT}
-else
-  echo "Terraform backend does not exists, skip..."
+  destroy_tf_backend "${GOOGLE_APPLICATION_CREDENTIALS_PATH}"
 fi
-EOF
-  gcloud_exec_scripts "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${RUNTIME_SCRIPT_FOLDER}" "destroy.sh"
-fi
-
 echo "Clean up ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}..."
 rm -rf "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"
 
-trap 'echo "Cleaning up..."; rm -fr "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"; rm -fr "${RUNTIME_SCRIPT_FOLDER}"' EXIT
+trap 'echo "Cleaning up..."; rm -fr "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}";' EXIT

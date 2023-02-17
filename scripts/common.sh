@@ -206,7 +206,6 @@ clone_viai_camera_app() {
 }
 
 gcloud_auth() {
-
   cleanup_gcloud_auth
 
   docker run \
@@ -216,25 +215,55 @@ gcloud_auth() {
     gcloud auth login --update-adc
 }
 
-gcloud_exec_scripts() {
-  GOOGLE_APPLICATION_CREDENTIALS_PATH="${1}"
+ensure_tf_backend() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+  gcloud_exec_cmds "${GCP_CREDENTIALS_PATH}" $(pwd) "gsutil list -p ${DEFAULT_PROJECT} | grep gs://tf-state-${DEFAULT_PROJECT}/"
+  if [ -z "${DOCKER_RUN_OUTPUT}" ] ; then
+    echo "Terraform backend storage does not exists, creating..."
+    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" $(pwd) "gsutil mb -p ${DEFAULT_PROJECT} --pap enforced -b on -l ${DEFAULT_REGION} gs://tf-state-${DEFAULT_PROJECT}"
+  else
+    echo "Terraform backend exists, skip..."
+  fi
+  unset DOCKER_RUN_OUTPUT
+}
+
+destroy_tf_backend() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+
+  gcloud_exec_cmds "${GCP_CREDENTIALS_PATH}" "$(pwd)" "gsutil list -p ${DEFAULT_PROJECT} | grep gs://tf-state-${DEFAULT_PROJECT}/"
+  if [ -n "${DOCKER_RUN_OUTPUT}" ] ; then
+    echo "Terraform backend storage exists, deleting..."
+    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "$(pwd)" "gsutil rm -r gs://tf-state-${DEFAULT_PROJECT}"
+  else
+    echo "Terraform backend does not exists, skip..."
+  fi
+  unset DOCKER_RUN_OUTPUT
+}
+
+gcloud_exec_cmds() {
+  GCP_CREDENTIALS_PATH="${1}"
   shift
   RUNTIME_SCRIPT_FOLDER="${1}"
   shift
-  SCRIPT_FILE_NAME="${1}"
+  COMMAND_LINE="${1}"
   shift
   WORKSPACE_FOLDER="/workspace"
   # shecllcheck disable=SC2068
-  docker run -it --rm \
-    -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
+  export DOCKER_RUN_OUTPUT=$(docker run -it --rm \
+    -e GCP_CREDENTIALS_PATH="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
     -v "${RUNTIME_SCRIPT_FOLDER}":"${WORKSPACE_FOLDER}" \
     -v /etc/localtime:/etc/localtime:ro \
     -w "${WORKSPACE_FOLDER}" \
     --volumes-from gcloud-config \
     --name gcloud_exec_command \
-    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" "bash" "./${SCRIPT_FILE_NAME}"
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" sh -c "${COMMAND_LINE}")
 
   unset WORKSPACE_FOLDER
+  unset GCP_CREDENTIALS_PATH
+  unset RUNTIME_SCRIPT_FOLDER
+  unset COMMAND_LINE
 }
 
 cleanup_gcloud_auth() {
