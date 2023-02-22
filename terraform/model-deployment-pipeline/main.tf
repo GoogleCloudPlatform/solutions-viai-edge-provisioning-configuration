@@ -69,18 +69,6 @@ main:
             - time_string: $${text.replace_all(text.replace_all(text.split(time.format(sys.now()), ".")[0], "-", ""), ":", "")}
             - tag_string: $${text.split(image_tag, "@")[0]}
             - requestId: $${text.to_lower(tag_string) + text.to_lower(time_string)}
-    # - log_variables_action:
-    #     call: sys.log
-    #     args: [$${null}, "INFO", $${action}]
-    # - log_variables_image_tag:
-    #     call: sys.log
-    #     args: [$${null}, "INFO", $${image_tag}]
-    # - log_variables_requestid:
-    #     call: sys.log
-    #     args: [$${null}, "INFO", $${requestId}]
-    # - log_variables_image_location:
-    #     call: sys.log
-    #     args: [$${null}, "INFO", $${image_location}]
     - cloud_deploy:
         call: http.post
         args:

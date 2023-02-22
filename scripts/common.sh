@@ -226,7 +226,7 @@ ensure_tf_backend() {
   fi
 
   if ! is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
-    echo "Unable to creat backend storage bucket, exit..."
+    echo "Unable to create backend storage bucket, exit..."
     exit $EXIT_GENERIC_ERR
   fi
 
