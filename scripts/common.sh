@@ -185,7 +185,7 @@ run_containerized_terraform() {
   echo "Running: terraform $*"
   echo "Using VIAI Camera application source codes path: ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"
 
-  # shecllcheck disable=SC2068
+  # shellcheck disable=SC2068
   docker run -it --rm \
     -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
     -v "$(pwd)":/workspace \
@@ -220,17 +220,12 @@ ensure_tf_backend() {
   GCP_CREDENTIALS_PATH="${1}"
   shift
   TF_STATA_BUCKET_NAME="gs://tf-state-${DEFAULT_PROJECT}/"
-  gcloud_exec_cmds "${GCP_CREDENTIALS_PATH}" "$(pwd)" "gsutil list -p ${DEFAULT_PROJECT} | grep ${TF_STATA_BUCKET_NAME}"
-  if [ -z "${DOCKER_RUN_OUTPUT}" ]; then
-    echo "Terraform backend storage does not exists, creating..."
-    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "$(pwd)" "gsutil mb -p ${DEFAULT_PROJECT} --pap enforced -b on -l ${DEFAULT_REGION} ${TF_STATA_BUCKET_NAME}"
-  else
-    echo "Terraform backend exists, skip..."
+  if ! is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
+    echo "Creating..."
+    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "gsutil mb -p ${DEFAULT_PROJECT} --pap enforced -b on -l ${DEFAULT_REGION} ${TF_STATA_BUCKET_NAME}"
   fi
 
-  # If the bucket still not exists
-  gcloud_exec_cmds "${GCP_CREDENTIALS_PATH}" "$(pwd)" "gsutil list -p ${DEFAULT_PROJECT} | grep ${TF_STATA_BUCKET_NAME}"
-  if [ -z "${DOCKER_RUN_OUTPUT}" ]; then
+  if ! is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
     echo "Unable to creat backend storage bucket, exit..."
     exit $EXIT_GENERIC_ERR
   fi
@@ -242,40 +237,46 @@ destroy_tf_backend() {
   GCP_CREDENTIALS_PATH="${1}"
   shift
   TF_STATA_BUCKET_NAME="gs://tf-state-${DEFAULT_PROJECT}/"
-  gcloud_exec_cmds "${GCP_CREDENTIALS_PATH}" "$(pwd)" "gsutil list -p ${DEFAULT_PROJECT} | grep ${TF_STATA_BUCKET_NAME}"
-  if [ -n "${DOCKER_RUN_OUTPUT}" ]; then
-    echo "Terraform backend storage exists, deleting..."
-    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "$(pwd)" "gsutil rm -r ${TF_STATA_BUCKET_NAME}"
-  else
-    echo "Terraform backend does not exists, skip..."
+  if is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
+    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "gsutil rm -r ${TF_STATA_BUCKET_NAME}"
   fi
+
   unset DOCKER_RUN_OUTPUT
   unset TF_STATA_BUCKET_NAME
 }
 
+is_tf_state_bucket_exists() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+  TF_STATE_BUCKET="gs://tf-state-${DEFAULT_PROJECT}/"
+
+  # shellcheck disable=SC2155,SC2046
+  DOCKER_RUN_OUTPUT=$(docker run --rm -it \
+    -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
+    --volumes-from gcloud-config \
+    --name gcloud_exec_command \
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" sh -c "gsutil list -p ${DEFAULT_PROJECT} | grep ${TF_STATE_BUCKET}")
+
+  if echo "${DOCKER_RUN_OUTPUT}" | grep "${TF_STATE_BUCKET}"; then
+    echo "Terraform backend storage exists..."
+    RET_CODE=0
+  else
+    echo "Terraform backend does not exist..."
+    RET_CODE=1
+  fi
+  unset TF_STATE_BUCKET
+  unset DOCKER_RUN_OUTPUT
+
+  return $RET_CODE
+}
 gcloud_exec_cmds() {
   GCP_CREDENTIALS_PATH="${1}"
   shift
-  RUNTIME_SCRIPT_FOLDER="${1}"
-  shift
-  COMMAND_LINE="${1}"
-  shift
-  WORKSPACE_FOLDER="/workspace"
-  # shecllcheck disable=SC2155,SC2046
-  DOCKER_RUN_OUTPUT=$(docker run -it --rm \
+  # shellcheck disable=SC2068
+  docker run --rm \
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
-    -v "${RUNTIME_SCRIPT_FOLDER}":"${WORKSPACE_FOLDER}" \
-    -v /etc/localtime:/etc/localtime:ro \
-    -w "${WORKSPACE_FOLDER}" \
     --volumes-from gcloud-config \
-    --name gcloud_exec_command \
-    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" sh -c "${COMMAND_LINE}")
-
-  export DOCKER_RUN_OUTPUT
-
-  unset WORKSPACE_FOLDER
-  unset RUNTIME_SCRIPT_FOLDER
-  unset COMMAND_LINE
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" $@
 }
 
 cleanup_gcloud_auth() {
