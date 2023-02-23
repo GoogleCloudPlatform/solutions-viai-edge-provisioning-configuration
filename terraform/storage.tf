@@ -26,7 +26,7 @@ module "cloud_build_gcs_buckets" {
   prefix           = ""
   randomize_suffix = false
   source           = "terraform-google-modules/cloud-storage/google"
-  version          = "3.4.0"
+  version          = "3.4.1"
   force_destroy    = {
     ("${var.google_viai_project_id}_cloudbuild") = true
   }
@@ -42,7 +42,7 @@ module "viai_gcs_buckets" {
   prefix           = ""
   randomize_suffix = true
   source           = "terraform-google-modules/cloud-storage/google"
-  version          = "3.4.0"
+  version          = "3.4.1"
 
   force_destroy = {
     (local.viai_model_training_data_bucket_name) = true
@@ -63,7 +63,7 @@ module "viai_cloud_functions_source_gcs_buckets" {
   prefix           = ""
   randomize_suffix = true
   source           = "terraform-google-modules/cloud-storage/google"
-  version          = "3.4.0"
+  version          = "3.4.1"
   force_destroy = {
     (local.cloud_function_source_bucket_name) = true
   }
