@@ -30,6 +30,7 @@ resource "google_cloudfunctions_function" "function" {
   available_memory_mb   = 512
   source_archive_bucket = module.viai_cloud_functions_source_gcs_buckets.name
   source_archive_object = google_storage_bucket_object.archive.name
+  ingress_settings      = "ALLOW_INTERNAL_ONLY"
   event_trigger {
     event_type = "providers/cloud.pubsub/eventTypes/topic.publish"
     resource   = module.camera_integration_telemetry_pubsub.topic

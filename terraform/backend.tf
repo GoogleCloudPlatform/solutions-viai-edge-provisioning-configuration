@@ -13,6 +13,7 @@
 # limitations under the License.
 
 terraform {
-  backend "local" {
+  backend "gcs" {
+    prefix  = "terraform/state"
   }
 }

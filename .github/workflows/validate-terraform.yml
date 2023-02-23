@@ -27,7 +27,8 @@ jobs:
       - name: Terraform Init
         id: init
         working-directory: terraform
-        run: terraform init
+        # Do not initialize backend
+        run: terraform init -backend=false -input=false
 
       - name: Terraform validate
         id: lint
