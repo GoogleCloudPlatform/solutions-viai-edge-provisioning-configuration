@@ -311,3 +311,42 @@ escape_slash() {
     ESCAPED_NAME="${ORIGINAL_NAME}"
   fi
 }
+
+update_camera_app_yaml_template() {
+  UPDATE_YAML_ONLY="${1}"
+
+  if [ "${UPDATE_YAML_ONLY}" = "true" ]; then
+    YAML_FILE_PATH="${2}"
+    CAMERA_APPLICATION_CONTAIMER_IMAGE_URL="${3}"
+    INDEX="${8}"
+    escape_slash "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}"
+    sed -i 's/${CONTAINER_REPO_HOST}\/${GOOGLE_CLOUD_PROJECT}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    sed -i 's/${CONTAINER_REPO_HOST}\/${CONTAINER_REPO_REPOSITORY_NAME}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    sed -i 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    unset ESCAPED_NAME
+  else
+    YAML_FILE_PATH="${2}"
+    CAMERA_APPLICATION_CONTAIMER_IMAGE_URL="${3}"
+    CONTAINER_REPO_HOST="${4}"
+    CONTAINER_REPO_REPOSITORY_NAME="${5}"
+    VIAI_CAMERA_APP_IMAGE_TAG="${6}"
+    GOOGLE_CLOUD_PROJECT="${7}"
+    INDEX="${8}"
+
+    sed -i 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$YAML_FILE_PATH"
+
+    escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
+    # This is an environment variable and a template variable, use single quota to avoid replacment
+    # shellcheck disable=SC2016
+    sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    unset ESCAPED_NAME
+
+    # This is an environment variable and a template variable, use single quota to avoid replacment
+    # shellcheck disable=SC2016
+    sed -i 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$YAML_FILE_PATH"
+    # This is an environment variable and a template variable, use single quota to avoid replacment
+    # shellcheck disable=SC2016
+    sed -i 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$YAML_FILE_PATH"
+  fi
+}

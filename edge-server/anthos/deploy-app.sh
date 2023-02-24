@@ -125,5 +125,9 @@ apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/namespace.yaml" "${KUBECONFIG
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/secret_image_pull.yaml" "${KUBECONFIG_PATH}"
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/secret_pubsub.yaml" "${KUBECONFIG_PATH}"
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/mosquitto.yaml" "${KUBECONFIG_PATH}"
-apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/viai-camera-integration.yaml" "${KUBECONFIG_PATH}"
+
+for FILE in "${KUBE_MENIFEST_FOLDER}/viai-camera-integration*.yaml"; do
+  kubectl apply -f "$FILE"
+done
+
 echo "[Installation] Completed."

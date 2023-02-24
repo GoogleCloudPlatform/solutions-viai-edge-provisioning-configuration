@@ -95,6 +95,7 @@ CONTAINER_REPO_TYPE=""
 GENERATE_YAML_ONLY="false"
 GOOGLE_CLOUD_PROJECT=
 K8S_RUNTIME=
+VIAI_CAMERA_APP_IMAGE_TAG=
 VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH=
 VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=https://github.com/GoogleCloudPlatform/solutions-viai-edge-camera-integration
 VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH=main
@@ -254,14 +255,14 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
     fi
 
     if [ -z "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" ] && [ -z "${ANTHOS_SERVICE_ACCOUNT_EMAIL}" ]; then
-    echo "[ERROR] One of ANTHOS_SERVICE_ACCOUNT_KEY_PATH or ANTHOS_SERVICE_ACCOUNT_EMAIL must be specified."
-    # Ignoring because those are defined in common.sh, and don't need quotes
-    # shellcheck disable=SC2086
-    exit $EXIT_GENERIC_ERR
+      echo "[ERROR] One of ANTHOS_SERVICE_ACCOUNT_KEY_PATH or ANTHOS_SERVICE_ACCOUNT_EMAIL must be specified."
+      # Ignoring because those are defined in common.sh, and don't need quotes
+      # shellcheck disable=SC2086
+      exit $EXIT_GENERIC_ERR
     fi
 else
     # Generate YAML files only.
-    check_optional_argument "${CAMERA_ID_RANGE}" "${CAMERA_ID_RANGE_DESCRIPTION}" "Use default application yaml file."; then
+    check_optional_argument "${CAMERA_ID_RANGE}" "${CAMERA_ID_RANGE_DESCRIPTION}" "Use default application yaml file."
     check_argument "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL_DESCRIPTION}"
 fi
 
@@ -272,13 +273,13 @@ CAMERA_ID_START=
 CAMERA_ID_END=
 
 if [ -n "${CAMERA_ID_RANGE}" ]; then
-    set -f
     IFS='-'
-    set -- "${CAMERA_ID_RANGE}"
-    CAMERA_ID_START=$1
-    CAMERA_ID_END=$2
-    set +f
+    IFS='-' read -ra elements <<< $CAMERA_ID_RANGE
+    CAMERA_ID_START="${elements[0]}"
+    CAMERA_ID_END="${elements[1]}"
     unset IFS
+
+    echo "Camera ID: ${CAMERA_ID_START} to ${CAMERA_ID_END}"
 fi
 
 ###################################################
@@ -319,25 +320,25 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
     BUILD_SCRIPT_FILE=
 
     if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "GCP" ]; then
-    echo "[Generating Assets] Build container image with Cloud Build"
-    BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-cloud-viai-camera-app.sh
+      echo "[Generating Assets] Build container image with Cloud Build"
+      BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-cloud-viai-camera-app.sh
     else
-    echo "[Generating Assets] Build container image with Kaniko"
-    BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-kaniko-viai-camera-app.sh
+      echo "[Generating Assets] Build container image with Kaniko"
+      BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-kaniko-viai-camera-app.sh
     fi
     echo "** Running build script:${BUILD_SCRIPT_FILE}."
     bash "${BUILD_SCRIPT_FILE}" \
-    --container-repo-host "${CONTAINER_REPO_HOST}" \
-    --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-    --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-    --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-    --default-project "${GOOGLE_CLOUD_PROJECT}" \
-    --git-repo-url "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
-    --git-repo-branch "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
-    --image-tag "${VIAI_CAMERA_APP_IMAGE_TAG}" \
-    --input-path "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" \
-    --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-    --repo-type "${CONTAINER_REPO_TYPE}"
+      --container-repo-host "${CONTAINER_REPO_HOST}" \
+      --container-repo-user "${CONTAINER_REPO_USERNAME}" \
+      --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
+      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      --default-project "${GOOGLE_CLOUD_PROJECT}" \
+      --git-repo-url "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
+      --git-repo-branch "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
+      --image-tag "${VIAI_CAMERA_APP_IMAGE_TAG}" \
+      --input-path "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" \
+      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
+      --repo-type "${CONTAINER_REPO_TYPE}"
 fi
 
 ########################
@@ -353,21 +354,33 @@ fi
 cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/namespace.yaml" "$DEPLOYMENT_TEMP_FOLDER/namespace.yaml"
 
 if [ -z "${CAMERA_ID_START}" ] && [ -z "${CAMERA_ID_END}" ]; then
-    # Update VIAI Client Application Secrets
-    ${WORKING_DIRECTORY}/scripts/update-camera-app-template.sh \
-        -t "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" \
-        -y "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
+  # Update VIAI Client Application Yaml file
+  update_camera_app_yaml_template "${GENERATE_YAML_ONLY}" \
+    "${DEPLOYMENT_TEMP_FOLDER}/viai-camera-integration.yaml" \
+    "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" \
+    "${CONTAINER_REPO_HOST}" \
+    "${CONTAINER_REPO_REPOSITORY_NAME}" \
+    "${VIAI_CAMERA_APP_IMAGE_TAG}" \
+    "${GOOGLE_CLOUD_PROJECT}" \
+    "0"
     echo "[Generating Assets] Updating VIAI Client Application Secrets"
 else
-    CAMERA_ID_INDEX=${CAMERA_ID_START}
-    while [ $CAMERA_ID_INDEX -le ${CAMERA_ID_END} ]; do
-        cp "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration-${CAMERA_ID_INDEX}.yaml"
-        ${WORKING_DIRECTORY}/scripts/update-camera-app-template.sh \
-            -t "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" \
-            -y "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration-${CAMERA_ID_INDEX}.yaml"
-        echo "[Generating Assets] Updating VIAI Client Application Secrets: viai-camera-integration-${CAMERA_ID_INDEX}.yaml"
-        CAMERA_ID_INDEX=$(( CAMERA_ID_INDEX + 1 ))
-    done
+  # Create and Update VIAI Client Application Yaml files
+  CAMERA_ID_INDEX=${CAMERA_ID_START}
+  while [ $CAMERA_ID_INDEX -le ${CAMERA_ID_END} ]; do
+      cp "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration-${CAMERA_ID_INDEX}.yaml"
+      update_camera_app_yaml_template "${GENERATE_YAML_ONLY}" \
+        "${DEPLOYMENT_TEMP_FOLDER}/viai-camera-integration-${CAMERA_ID_INDEX}.yaml" \
+        "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" \
+        "${CONTAINER_REPO_HOST}" \
+        "${CONTAINER_REPO_REPOSITORY_NAME}" \
+        "${VIAI_CAMERA_APP_IMAGE_TAG}" \
+        "${GOOGLE_CLOUD_PROJECT}" \
+        "${CAMERA_ID_INDEX}"
+      CAMERA_ID_INDEX=$(( CAMERA_ID_INDEX + 1 ))
+  done
+  echo "Deleting template file: $DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml..."
+  rm "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
 fi
 
 echo "[Generating Assets] Updating VIAI Client Application Secrets"
@@ -397,59 +410,58 @@ else
     --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
     --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
 fi
-if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
-    # Create required assets, including container images.
-    ###### Push Dependencies images such as Mosquitto to Private Repo and Update dependencies yaml files
-    # Mosquitto: starting from mosquitto:2.0.0, by default it only allows connections from localhost,
-    #           unless explictly edit mosquitto.config `bind_interface device`` or `bind_address ip_address`
 
-    SOURCE_IMAGE="eclipse-mosquitto:1.6.15"
-    TARGET_IMAGE=${SOURCE_IMAGE##*/}
-    if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
+if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
+  # Create required assets, including container images.
+  ###### Push Dependencies images such as Mosquitto to Private Repo and Update dependencies yaml files
+  # Mosquitto: starting from mosquitto:2.0.0, by default it only allows connections from localhost,
+  #           unless explictly edit mosquitto.config `bind_interface device`` or `bind_address ip_address`
+  SOURCE_IMAGE="eclipse-mosquitto:1.6.15"
+  TARGET_IMAGE=${SOURCE_IMAGE##*/}
+
+  if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
     # If edge server cannot connect to the internet, they must pull images from private repo.
     echo "[Generating Assets] Pushing Dependencies images such as Mosquitto to Private Repo and Updating dependencies yaml files"
     # shellcheck disable=SC2240
     ./scripts/application-prepare-dependency-yaml.sh \
-        --container-repo-host "${CONTAINER_REPO_HOST}" \
-        --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-        --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-        --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-        --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-        --repo-type "${CONTAINER_REPO_TYPE}" \
-        --source-image "${SOURCE_IMAGE}" \
-        --target-image "${TARGET_IMAGE}"
-    else
+      --container-repo-host "${CONTAINER_REPO_HOST}" \
+      --container-repo-user "${CONTAINER_REPO_USERNAME}" \
+      --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
+      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
+      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      --repo-type "${CONTAINER_REPO_TYPE}" \
+      --source-image "${SOURCE_IMAGE}" \
+      --target-image "${TARGET_IMAGE}"
+  else
     echo "[Generating Assets] Pushing Dependencies images such as Mosquitto to GCR and Updating dependencies yaml files"
     # shellcheck disable=SC2240
     echo "CONTAINER_REPO_REPOSITORY_NAME=${CONTAINER_REPO_REPOSITORY_NAME}"
     ./scripts/application-prepare-dependency-yaml.sh \
-        --container-repo-host "${CONTAINER_REPO_HOST}" \
-        --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-        --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-        --repo-type "${CONTAINER_REPO_TYPE}" \
-        --source-image "${SOURCE_IMAGE}" \
-        --target-image "${TARGET_IMAGE}"
-    fi
+      --container-repo-host "${CONTAINER_REPO_HOST}" \
+      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
+      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      --repo-type "${CONTAINER_REPO_TYPE}" \
+      --source-image "${SOURCE_IMAGE}" \
+      --target-image "${TARGET_IMAGE}"
+  fi
 
-    echo "Push ${SOURCE_IMAGE} to ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}/${TARGET_IMAGE}"
+  echo "Push ${SOURCE_IMAGE} to ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}/${TARGET_IMAGE}"
 
-    cp "${WORKING_DIRECTORY}/kubernetes/mosquitto/mosquitto.yaml.tmpl" "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
+  cp "${WORKING_DIRECTORY}/kubernetes/mosquitto/mosquitto.yaml.tmpl" "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
 
-    # This is an environment variable and a template variable, use single quota to avoid replacment
-    # shellcheck disable=SC2016
-    sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
+  # This is an environment variable and a template variable, use single quota to avoid replacment
+  # shellcheck disable=SC2016
+  sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
 
-    escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
-    # This is an environment variable and a template variable, use single quota to avoid replacment
-    # shellcheck disable=SC2016
-    sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
-    unset ESCAPED_NAME
+  escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
+  # This is an environment variable and a template variable, use single quota to avoid replacment
+  # shellcheck disable=SC2016
+  sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
+  unset ESCAPED_NAME
 
-    # This is an environment variable and a template variable, use single quota to avoid replacment
-    # shellcheck disable=SC2016
-    sed -i 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${TARGET_IMAGE}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
-else
-    ## TODO: What about mosquitto ?
+  # This is an environment variable and a template variable, use single quota to avoid replacment
+  # shellcheck disable=SC2016
+  sed -i 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${TARGET_IMAGE}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
 fi
 
 # Copy files
