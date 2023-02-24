@@ -103,6 +103,7 @@ check_exec_dependency() {
   EXECUTABLE_NAME="${1}"
 
   if ! command -v "${EXECUTABLE_NAME}" >/dev/null 2>&1; then
+    # shellcheck disable=SC2116,SC2086,SC2086,SC2086
     echo "[ERROR]: ${EXECUTABLE_NAME} command is not available, but it's needed. Make it available in PATH and try again. Terminating..."
     exit ${ERR_MISSING_DEPENDENCY}
   else
@@ -184,7 +185,7 @@ run_containerized_terraform() {
   echo "Running: terraform $*"
   echo "Using VIAI Camera application source codes path: ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"
 
-  # shecllcheck disable=SC2068
+  # shellcheck disable=SC2068
   docker run -it --rm \
     -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
     -v "$(pwd)":/workspace \
@@ -206,7 +207,6 @@ clone_viai_camera_app() {
 }
 
 gcloud_auth() {
-
   cleanup_gcloud_auth
 
   docker run \
@@ -214,6 +214,69 @@ gcloud_auth() {
     --name "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" \
     gcloud auth login --update-adc
+}
+
+ensure_tf_backend() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+  TF_STATA_BUCKET_NAME="gs://tf-state-${DEFAULT_PROJECT}/"
+  if ! is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
+    echo "Creating..."
+    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "gsutil mb -p ${DEFAULT_PROJECT} --pap enforced -b on -l ${DEFAULT_REGION} ${TF_STATA_BUCKET_NAME}"
+  fi
+
+  if ! is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
+    echo "Unable to create backend storage bucket, exit..."
+    exit $EXIT_GENERIC_ERR
+  fi
+
+  unset DOCKER_RUN_OUTPUT
+}
+
+destroy_tf_backend() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+  TF_STATA_BUCKET_NAME="gs://tf-state-${DEFAULT_PROJECT}/"
+  if is_tf_state_bucket_exists "${GCP_CREDENTIALS_PATH}"; then
+    gcloud_exec_cmds "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "gsutil rm -r ${TF_STATA_BUCKET_NAME}"
+  fi
+
+  unset DOCKER_RUN_OUTPUT
+  unset TF_STATA_BUCKET_NAME
+}
+
+is_tf_state_bucket_exists() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+  TF_STATE_BUCKET="gs://tf-state-${DEFAULT_PROJECT}/"
+
+  # shellcheck disable=SC2155,SC2046
+  DOCKER_RUN_OUTPUT=$(docker run --rm -it \
+    -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
+    --volumes-from gcloud-config \
+    --name gcloud_exec_command \
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" sh -c "gsutil list -p ${DEFAULT_PROJECT} | grep ${TF_STATE_BUCKET}")
+
+  if echo "${DOCKER_RUN_OUTPUT}" | grep "${TF_STATE_BUCKET}"; then
+    echo "Terraform backend storage exists..."
+    RET_CODE=0
+  else
+    echo "Terraform backend does not exist..."
+    RET_CODE=1
+  fi
+  unset TF_STATE_BUCKET
+  unset DOCKER_RUN_OUTPUT
+
+  return $RET_CODE
+}
+gcloud_exec_cmds() {
+  GCP_CREDENTIALS_PATH="${1}"
+  shift
+  # shellcheck disable=SC2068
+  docker run --rm \
+    -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
+    --volumes-from gcloud-config \
+    "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" $@
 }
 
 cleanup_gcloud_auth() {

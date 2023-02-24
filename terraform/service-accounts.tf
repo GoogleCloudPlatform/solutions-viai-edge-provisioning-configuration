@@ -234,12 +234,18 @@ resource "google_service_account" "viai-mode-deploy_service_account" {
   project = var.google_viai_project_id
 }
 
+# Permissions for Workflows
+# https://cloud.google.com/workflows/docs/authentication#sa-permissions
+# https://cloud.google.com/deploy/docs/iam-roles-permissions
 resource "google_project_iam_member" "viai-mode-deploy" {
   project = var.google_viai_project_id
   for_each = toset([
     "roles/eventarc.eventReceiver",
     "roles/workflows.invoker",
-    "roles/eventarc.serviceAgent"
+    "roles/eventarc.serviceAgent",
+    "roles/iam.serviceAccountUser",
+    "roles/logging.logWriter",
+    "roles/clouddeploy.releaser"
   ])
   role = each.key
   member = "serviceAccount:${google_service_account.viai-mode-deploy_service_account.email}"

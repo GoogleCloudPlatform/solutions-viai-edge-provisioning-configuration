@@ -175,6 +175,9 @@ mkdir -p "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}/gcf"
 
 if [ "${TERRAFORM_SUBCOMMAND}" != "destroy" ]; then
 
+  ensure_tf_backend "${GOOGLE_APPLICATION_CREDENTIALS_PATH}"
+
+  # Download and build Cloud Functions source codes
   ZIP_FILE_NAME="cloudfunction-$(date +%Y%m%d-%H%M%S).zip"
 
   echo "Copy Cloud Functions code..."
@@ -197,8 +200,8 @@ if [ "${TERRAFORM_SUBCOMMAND}" != "destroy" ]; then
         TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES="\"$MEMBERSHIP\",${TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES}"
       fi
     done
-
   fi
+
   if [ -n "${TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES}" ]; then
     TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES="[${TF_VAR_ANTHOS_TARGET_CLUSTER_MEMBERSHIP_NAMES}]"
   else
@@ -238,11 +241,15 @@ fi
 mkdir -p "$(pwd)"/tmp
 
 run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" version
-run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" init
+run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" init -backend-config="bucket=tf-state-${DEFAULT_PROJECT}"
 run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" validate
 run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" "${TERRAFORM_SUBCOMMAND}"
 
+if [ "${TERRAFORM_SUBCOMMAND}" = "destroy" ]; then
+  # Destroy Cloud Resources
+  destroy_tf_backend "${GOOGLE_APPLICATION_CREDENTIALS_PATH}"
+fi
 echo "Clean up ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}..."
 rm -rf "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"
 
-trap 'echo "Cleaning up..."; rm -fr "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"; ' EXIT
+trap 'echo "Cleaning up..."; rm -fr "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}";' EXIT

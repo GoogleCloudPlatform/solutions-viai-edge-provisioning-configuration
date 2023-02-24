@@ -13,7 +13,6 @@
 
 Below is a table of Long options and Short options mapping that are used in this solution. Please run `<script.sh> -h` or `<scrip.sh> --help` to see a full option list and description.
 
-
 ## Samples
 
 ### Provision Cloud Resources
@@ -111,3 +110,9 @@ bash ./scripts/2-generate-media-file.sh \
     --k8s-runtime "${K8S_RUNTIME}"
 
 ```
+
+### Notes
+
+* The `provision-terraform.sh -a` command creates a Storage Bucket `gs://tf-state-${DEFAULT_PROJECT}/` to store Terraform state that is not managed by Terraform. This is intentionaly to ensure the state will be always available when create / update resources.
+
+The Bucket will be deleted if you run `provision-terraform.sh -s "destroy"` to delete generated resources.
