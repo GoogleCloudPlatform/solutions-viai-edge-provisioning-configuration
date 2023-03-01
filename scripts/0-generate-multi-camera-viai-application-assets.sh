@@ -383,32 +383,34 @@ else
   rm "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"
 fi
 
-echo "[Generating Assets] Updating VIAI Client Application Secrets"
-
-# shellcheck disable=SC2240
-"${WORKING_DIRECTORY}"/scripts/application-create-secrets-viai-client.sh \
-  --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-  --service-account-key-path "${VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH}"
-
-# Update Image Pull Secrets
-if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] || [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
-  echo "[Generating Assets] Updating Image Pull Secrets for GCR: ${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
+if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
+  echo "[Generating Assets] Updating VIAI Client Application Secrets"
 
   # shellcheck disable=SC2240
-  ./scripts/application-create-secrets-gcr.sh \
+  "${WORKING_DIRECTORY}"/scripts/application-create-secrets-viai-client.sh \
     --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-    --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" \
-    --container-repo-host "${CONTAINER_REPO_HOST}"
-else
-  echo "[Generating Assets] Updating Image Pull Secrets for Private Repo"
-  # shellcheck disable=SC2240
-  ./scripts/application-create-secrets-private-repo.sh \
-    --container-repo-host "${CONTAINER_REPO_HOST}" \
-    --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-    --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-    --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-    --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-    --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
+    --service-account-key-path "${VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH}"
+
+  # Update Image Pull Secrets
+  if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] || [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
+    echo "[Generating Assets] Updating Image Pull Secrets for GCR: ${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
+
+    # shellcheck disable=SC2240
+    ./scripts/application-create-secrets-gcr.sh \
+      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
+      --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" \
+      --container-repo-host "${CONTAINER_REPO_HOST}"
+  else
+    echo "[Generating Assets] Updating Image Pull Secrets for Private Repo"
+    # shellcheck disable=SC2240
+    ./scripts/application-create-secrets-private-repo.sh \
+      --container-repo-host "${CONTAINER_REPO_HOST}" \
+      --container-repo-user "${CONTAINER_REPO_USERNAME}" \
+      --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
+      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
+      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
+  fi
 fi
 
 if [ "${GENERATE_YAML_ONLY}" = "false" ]; then

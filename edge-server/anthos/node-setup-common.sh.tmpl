@@ -225,3 +225,7 @@ setup_nvidia_container_runtime() {
   fi
 
 }
+
+export-kubeconfig-path(){
+  echo "export KUBECONFIG=$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig" >> "${HOME}"/.bashrc
+}
