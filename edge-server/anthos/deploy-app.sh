@@ -126,6 +126,8 @@ apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/secret_image_pull.yaml" "${KU
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/secret_pubsub.yaml" "${KUBECONFIG_PATH}"
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/mosquitto.yaml" "${KUBECONFIG_PATH}"
 
+# It's iterate through files in a directory, not string elements in an array
+# shellcheck disable=SC2066
 for FILE in "${KUBE_MENIFEST_FOLDER}/viai-camera-integration*.yaml"; do
   kubectl apply -f "$FILE"
 done

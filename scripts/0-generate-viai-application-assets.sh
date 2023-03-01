@@ -210,60 +210,60 @@ VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH=$DEPLOYMENT_TEMP_FOLDER
 # Verify
 ###################################################
 if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
-    # Create required assets, including container images.
+  # Create required assets, including container images.
 
-    if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "KANIKO" ] && [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
+  if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "KANIKO" ] && [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
     echo "[Error] Kaniko build only supports Repo Type [Private]"
     # Ignoring because those are defined in common.sh, and don't need quotes
     # shellcheck disable=SC2086
     exit $EXIT_GENERIC_ERR
-    fi
+  fi
 
-    if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
-        check_argument "${CONTAINER_REPO_HOST}" "${CONTAINER_REPO_HOST_DESCRIPTION}"
-        check_argument "${CONTAINER_REPO_USERNAME}" "${CONTAINER_REPO_USERNAME_DESCRIPTION}"
-        check_argument "${CONTAINER_REPO_PASSWORD}" "${CONTAINER_REPO_PASSWORD_DESCRIPTION}"
-        check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
-    fi
+  if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
+    check_argument "${CONTAINER_REPO_HOST}" "${CONTAINER_REPO_HOST_DESCRIPTION}"
+    check_argument "${CONTAINER_REPO_USERNAME}" "${CONTAINER_REPO_USERNAME_DESCRIPTION}"
+    check_argument "${CONTAINER_REPO_PASSWORD}" "${CONTAINER_REPO_PASSWORD_DESCRIPTION}"
+    check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
+  fi
 
-    # If the customer choose to use Artifact Registry to store container images.
-    # The Artiffact Registry uses the url format: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REGISTRY_NAME}/${IMAGE_NAME}:${TAG}
-    # Terraform automatically generated a default Artifact Registy with the namimg format: <REGION>-docker.pkg.dev/<PROJECT>/<REGION>-viai-applications
-    # Here we assemble correct Artifact Registry name:
-    # - If the use specified a Artifact Registry repo name, use the name.
-    # - If the user does not specify a Artifact Registry repo name, use default.
-    if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
+  # If the customer choose to use Artifact Registry to store container images.
+  # The Artiffact Registry uses the url format: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REGISTRY_NAME}/${IMAGE_NAME}:${TAG}
+  # Terraform automatically generated a default Artifact Registy with the namimg format: <REGION>-docker.pkg.dev/<PROJECT>/<REGION>-viai-applications
+  # Here we assemble correct Artifact Registry name:
+  # - If the use specified a Artifact Registry repo name, use the name.
+  # - If the user does not specify a Artifact Registry repo name, use default.
+  if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
     check_argument "${CONTAINER_REPO_HOST}" "${CONTAINER_REPO_HOST_DESCRIPTION}"
     # check_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}"
 
     ARTIFACTS_REGISTRY_DEFAULT_REG_NAME=$(echo "${CONTAINER_REPO_HOST}" | sed 's/-docker.pkg.dev//g')-viai-applications
     echo "ARTIFACTS_REGISTRY_DEFAULT_REG_NAME=${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}"
     if ! check_optional_argument "${CONTAINER_REPO_REPOSITORY_NAME}" "${CONTAINER_REPO_REPOSITORY_NAME_DESCRIPTION}" "Use default name:${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}."; then
-        CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}"
+      CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${ARTIFACTS_REGISTRY_DEFAULT_REG_NAME}"
     else
-        CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${CONTAINER_REPO_REPOSITORY_NAME}"
+      CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}/${CONTAINER_REPO_REPOSITORY_NAME}"
     fi
     echo "Using Artifact Registry: ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}"
-    fi
+  fi
 
-    if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
+  if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ]; then
     CONTAINER_REPO_REPOSITORY_NAME="${GOOGLE_CLOUD_PROJECT}"
     if [ -z "${CONTAINER_REPO_HOST}" ]; then
-        echo "No container host specified, use gcr.io"
-        CONTAINER_REPO_HOST="gcr.io"
+      echo "No container host specified, use gcr.io"
+      CONTAINER_REPO_HOST="gcr.io"
     fi
-    fi
+  fi
 
-    if [ -z "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" ] && [ -z "${ANTHOS_SERVICE_ACCOUNT_EMAIL}" ]; then
-      echo "[ERROR] One of ANTHOS_SERVICE_ACCOUNT_KEY_PATH or ANTHOS_SERVICE_ACCOUNT_EMAIL must be specified."
-      # Ignoring because those are defined in common.sh, and don't need quotes
-      # shellcheck disable=SC2086
-      exit $EXIT_GENERIC_ERR
-    fi
+  if [ -z "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" ] && [ -z "${ANTHOS_SERVICE_ACCOUNT_EMAIL}" ]; then
+    echo "[ERROR] One of ANTHOS_SERVICE_ACCOUNT_KEY_PATH or ANTHOS_SERVICE_ACCOUNT_EMAIL must be specified."
+    # Ignoring because those are defined in common.sh, and don't need quotes
+    # shellcheck disable=SC2086
+    exit $EXIT_GENERIC_ERR
+  fi
 else
-    # Generate YAML files only.
-    check_optional_argument "${CAMERA_ID_RANGE}" "${CAMERA_ID_RANGE_DESCRIPTION}" "Use default application yaml file."
-    check_argument "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL_DESCRIPTION}"
+  # Generate YAML files only.
+  check_optional_argument "${CAMERA_ID_RANGE}" "${CAMERA_ID_RANGE_DESCRIPTION}" "Use default application yaml file."
+  check_argument "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL_DESCRIPTION}"
 fi
 
 ###################################################
@@ -273,23 +273,25 @@ CAMERA_ID_START=
 CAMERA_ID_END=
 
 if [ -n "${CAMERA_ID_RANGE}" ]; then
-    IFS='-'
-    IFS='-' read -ra elements <<< $CAMERA_ID_RANGE
-    CAMERA_ID_START="${elements[0]}"
-    CAMERA_ID_END="${elements[1]}"
-    unset IFS
+  IFS='-'
+  # We need to original value, so do not double quote the string. Otherwise we are unable to split it into an array
+  # shellcheck disable=SC2086
+  set -- $CAMERA_ID_RANGE""
+  CAMERA_ID_START=$1
+  CAMERA_ID_END=$2
+  unset IFS
 
-    echo "Camera ID: ${CAMERA_ID_START} to ${CAMERA_ID_END}"
+  echo "Camera ID: ${CAMERA_ID_START} to ${CAMERA_ID_END}"
 fi
 
 ###################################################
 # Edge Server Set up
 ###################################################
 if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
-    # Create required assets, including container images.
-    echo "Setting up server..."
+  # Create required assets, including container images.
+  echo "Setting up server..."
 
-    if [ -z "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" ]; then
+  if [ -z "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" ]; then
     echo "[Generating Assets] Generating service account key file..."
 
     cleanup_gcloud_auth
@@ -297,48 +299,48 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
     GOOGLE_APPLICATION_CREDENTIALS_PATH="/root/.config/gcloud/application_default_credentials.json"
 
     docker run -it --rm \
-        -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v "${DEPLOYMENT_TEMP_FOLDER}":/data \
-        --volumes-from "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
-        "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" \
-        gcloud iam service-accounts keys create /data/service-account-key.json --iam-account="${ANTHOS_SERVICE_ACCOUNT_EMAIL}"
-    else
+      -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
+      -v /etc/localtime:/etc/localtime:ro \
+      -v "${DEPLOYMENT_TEMP_FOLDER}":/data \
+      --volumes-from "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
+      "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" \
+      gcloud iam service-accounts keys create /data/service-account-key.json --iam-account="${ANTHOS_SERVICE_ACCOUNT_EMAIL}"
+  else
     echo "[Generating Assets] cp ${ANTHOS_SERVICE_ACCOUNT_KEY_PATH} ${DEPLOYMENT_TEMP_FOLDER}/service-account-key.json..."
     cp "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" "${DEPLOYMENT_TEMP_FOLDER}/service-account-key.json"
-    fi
-    ANTHOS_SERVICE_ACCOUNT_KEY_PATH="${DEPLOYMENT_TEMP_FOLDER}/service-account-key.json"
+  fi
+  ANTHOS_SERVICE_ACCOUNT_KEY_PATH="${DEPLOYMENT_TEMP_FOLDER}/service-account-key.json"
 fi
 
 ###################################################
 # Application Set up
 ###################################################
 if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
-    # Create required assets, including container images.
-    # Build Application and Push to Container Repo
-    VIAI_CAMERA_APP_IMAGE_TAG=$(date "+%F-%H%M%S")
-    BUILD_SCRIPT_FILE=
+  # Create required assets, including container images.
+  # Build Application and Push to Container Repo
+  VIAI_CAMERA_APP_IMAGE_TAG=$(date "+%F-%H%M%S")
+  BUILD_SCRIPT_FILE=
 
-    if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "GCP" ]; then
-      echo "[Generating Assets] Build container image with Cloud Build"
-      BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-cloud-viai-camera-app.sh
-    else
-      echo "[Generating Assets] Build container image with Kaniko"
-      BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-kaniko-viai-camera-app.sh
-    fi
-    echo "** Running build script:${BUILD_SCRIPT_FILE}."
-    bash "${BUILD_SCRIPT_FILE}" \
-      --container-repo-host "${CONTAINER_REPO_HOST}" \
-      --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-      --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-      --default-project "${GOOGLE_CLOUD_PROJECT}" \
-      --git-repo-url "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
-      --git-repo-branch "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
-      --image-tag "${VIAI_CAMERA_APP_IMAGE_TAG}" \
-      --input-path "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" \
-      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-      --repo-type "${CONTAINER_REPO_TYPE}"
+  if [ "${CONTAINER_IMAGE_BUILD_METHOD}" = "GCP" ]; then
+    echo "[Generating Assets] Build container image with Cloud Build"
+    BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-cloud-viai-camera-app.sh
+  else
+    echo "[Generating Assets] Build container image with Kaniko"
+    BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-kaniko-viai-camera-app.sh
+  fi
+  echo "** Running build script:${BUILD_SCRIPT_FILE}."
+  bash "${BUILD_SCRIPT_FILE}" \
+    --container-repo-host "${CONTAINER_REPO_HOST}" \
+    --container-repo-user "${CONTAINER_REPO_USERNAME}" \
+    --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
+    --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
+    --default-project "${GOOGLE_CLOUD_PROJECT}" \
+    --git-repo-url "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
+    --git-repo-branch "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
+    --image-tag "${VIAI_CAMERA_APP_IMAGE_TAG}" \
+    --input-path "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" \
+    --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
+    --repo-type "${CONTAINER_REPO_TYPE}"
 fi
 
 ########################
@@ -363,21 +365,21 @@ if [ -z "${CAMERA_ID_START}" ] && [ -z "${CAMERA_ID_END}" ]; then
     "${VIAI_CAMERA_APP_IMAGE_TAG}" \
     "${GOOGLE_CLOUD_PROJECT}" \
     "0"
-    echo "[Generating Assets] Updating VIAI Client Application Secrets"
+  echo "[Generating Assets] Updating VIAI Client Application Secrets"
 else
   # Create and Update VIAI Client Application Yaml files
   CAMERA_ID_INDEX=${CAMERA_ID_START}
-  while [ $CAMERA_ID_INDEX -le ${CAMERA_ID_END} ]; do
-      cp "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration-${CAMERA_ID_INDEX}.yaml"
-      update_camera_app_yaml_template "${GENERATE_YAML_ONLY}" \
-        "${DEPLOYMENT_TEMP_FOLDER}/viai-camera-integration-${CAMERA_ID_INDEX}.yaml" \
-        "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" \
-        "${CONTAINER_REPO_HOST}" \
-        "${CONTAINER_REPO_REPOSITORY_NAME}" \
-        "${VIAI_CAMERA_APP_IMAGE_TAG}" \
-        "${GOOGLE_CLOUD_PROJECT}" \
-        "${CAMERA_ID_INDEX}"
-      CAMERA_ID_INDEX=$(( CAMERA_ID_INDEX + 1 ))
+  while [ "$CAMERA_ID_INDEX" -le "${CAMERA_ID_END}" ]; do
+    cp "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml" "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration-${CAMERA_ID_INDEX}.yaml"
+    update_camera_app_yaml_template "${GENERATE_YAML_ONLY}" \
+      "${DEPLOYMENT_TEMP_FOLDER}/viai-camera-integration-${CAMERA_ID_INDEX}.yaml" \
+      "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}" \
+      "${CONTAINER_REPO_HOST}" \
+      "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      "${VIAI_CAMERA_APP_IMAGE_TAG}" \
+      "${GOOGLE_CLOUD_PROJECT}" \
+      "${CAMERA_ID_INDEX}"
+    CAMERA_ID_INDEX=$((CAMERA_ID_INDEX + 1))
   done
   echo "Deleting template file: $DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml..."
   rm "$DEPLOYMENT_TEMP_FOLDER/viai-camera-integration.yaml"

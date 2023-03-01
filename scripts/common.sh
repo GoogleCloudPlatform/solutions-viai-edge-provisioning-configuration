@@ -320,8 +320,11 @@ update_camera_app_yaml_template() {
     CAMERA_APPLICATION_CONTAIMER_IMAGE_URL="${3}"
     INDEX="${8}"
     escape_slash "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}"
+    # shellcheck disable=SC2016
     sed -i 's/${CONTAINER_REPO_HOST}\/${GOOGLE_CLOUD_PROJECT}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    # shellcheck disable=SC2016
     sed -i 's/${CONTAINER_REPO_HOST}\/${CONTAINER_REPO_REPOSITORY_NAME}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    # shellcheck disable=SC2016
     sed -i 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
     unset ESCAPED_NAME
   else
@@ -333,7 +336,9 @@ update_camera_app_yaml_template() {
     GOOGLE_CLOUD_PROJECT="${7}"
     INDEX="${8}"
 
+    # shellcheck disable=SC2016
     sed -i 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    # shellcheck disable=SC2016
     sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$YAML_FILE_PATH"
 
     escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
