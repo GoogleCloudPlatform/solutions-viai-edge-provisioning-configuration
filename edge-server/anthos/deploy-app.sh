@@ -128,8 +128,8 @@ apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/mosquitto.yaml" "${KUBECONFIG
 
 # It's iterate through files in a directory, not string elements in an array
 # shellcheck disable=SC2066
-for FILE in "${KUBE_MENIFEST_FOLDER}/viai-camera-integration*.yaml"; do
-  kubectl apply -f "$FILE"
+for FILE in "${KUBE_MENIFEST_FOLDER}"/viai-camera-integration*.yaml; do
+  apply_kubernetes_menifest "$FILE"  "${KUBECONFIG_PATH}"
 done
 
 echo "[Installation] Completed."
