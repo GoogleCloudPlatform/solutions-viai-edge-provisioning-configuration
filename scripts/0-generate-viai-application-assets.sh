@@ -274,9 +274,9 @@ CAMERA_ID_END=
 
 if [ -n "${CAMERA_ID_RANGE}" ]; then
   IFS='-'
-  # We need to original value, so do not double quote the string. Otherwise we are unable to split it into an array
+  # We need the original value, so do not double quote the string. Otherwise we are unable to split it into an array
   # shellcheck disable=SC2086
-  set -- $CAMERA_ID_RANGE""
+  set -- $CAMERA_ID_RANGE
   CAMERA_ID_START=$1
   CAMERA_ID_END=$2
   unset IFS

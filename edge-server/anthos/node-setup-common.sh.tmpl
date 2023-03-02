@@ -225,8 +225,3 @@ setup_nvidia_container_runtime() {
   fi
 
 }
-
-export_kubeconfig_path() {
-  echo "Updating /root/.bashrc"
-  grep -qxF "export KUBECONFIG=$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig" /root/.bashrc || echo "export KUBECONFIG=$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig" >>"/root/.bashrc"
-}
