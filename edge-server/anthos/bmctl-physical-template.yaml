@@ -67,7 +67,7 @@ spec:
     lvpShare:
       path: /mnt/localpv-share
       storageClassName: local-shared
-      numPVUnderSharedPath: 5
+      numPVUnderSharedPath: 6 # We need 2 PVC for 1 Camera POD, 3 PODs requires 6 pv share.
   nodeConfig:
     podDensity:
       maxPodsPerNode: 250
