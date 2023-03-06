@@ -73,7 +73,7 @@ bash ./scripts/0-generate-viai-application-assets.sh \
 ```
 
 
-### Create VIAI application assets with three camera with camera Id from 1 to 3.
+### Create VIAI application assets with three camera with camera ID from 1 to 3
 
 If later you need to regenerate Kubernete yaml files to deploy camera application, use this script sample.
 
