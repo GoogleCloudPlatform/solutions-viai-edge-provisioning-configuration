@@ -82,7 +82,7 @@ If later you need to regenerate Kubernete yaml files to deploy camera applicatio
 
 ```shell
 # Generate Kubernete yaml files and scripts to installl required packages and drivers.
-# Application container images are pushed to Artifacts Registry
+# Application container images are pushed to Artifact Registry
 
 export ANTHOS_SVC_ACCOUNT_KEY_PATH="$(pwd)/tmp/service-account-key.json"
 export VIAI_SVC_ACCOUNT_KEY_PATH="$(pwd)/tmp/viai-camera-integration-client_service_account_key-service-account-key.json"
