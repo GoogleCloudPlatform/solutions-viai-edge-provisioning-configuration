@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: viai-camera-config
+  name: viai-camera-config-${INDEX}
   namespace: viai-edge
 spec:
   storageClassName: local-shared
@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: viai-camera-data
+  name: viai-camera-data-${INDEX}
   namespace: viai-edge
 spec:
   storageClassName: local-shared
@@ -31,7 +31,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   namespace: viai-edge
-  name: viai-camera-integration
+  name: viai-camera-integration-${INDEX}
 spec:
   containers:
     - name: viai-camera-integration-operations
@@ -74,10 +74,10 @@ spec:
           path: credentials.json
     - name: viai-camera-config-volume
       persistentVolumeClaim:
-        claimName: viai-camera-config
+        claimName: viai-camera-config-${INDEX}
     - name: viai-camera-data-volume
       persistentVolumeClaim:
-        claimName: viai-camera-data
+        claimName: viai-camera-data-${INDEX}
     - name: dev-video0
       hostPath:
         path: /dev/video0

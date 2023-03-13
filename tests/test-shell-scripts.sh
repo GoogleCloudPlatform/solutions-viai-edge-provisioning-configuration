@@ -58,6 +58,17 @@ scripts/1-generate-edge-server-assets.sh \
 
 echo "VIAI Application assets generate completed."
 
+export CONTAIMER_IMAGE_URL="gcr.io/my-project/my-image:tag"
+./scripts/0-generate-viai-application-assets.sh \
+  -m "${MEMBERSHIP}" \
+  -p "${DEFAULT_PROJECT}" \
+  -m "${MEMBERSHIP}" \
+  -i "${K8S_RUNTIME}" \
+  -r "1-2" \
+  -t "${CONTAIMER_IMAGE_URL}" \
+  -x
+echo "Multiple Camera VIAI Application assets generate completed."
+
 export MEDIA_TYPE="USB"
 export K8S_RUNTIME="anthos"
 

@@ -21,6 +21,11 @@ spec:
         - name: regcred
       containers:
       - image: viai-inference-module
+        resources:
+          requests:
+            nvidia.com/gpu: 1
+          limits:
+            nvidia.com/gpu: 1
         imagePullPolicy: Always
         name: viai-${SERVICE_NAME}-module
         ports:
@@ -40,3 +45,8 @@ spec:
   - protocol: TCP
     port: 8602
     targetPort: 8602
+    name: inference-port
+  - protocol: TCP
+    port: 8603
+    targetPort: 8603
+    name: statistics-port

@@ -125,5 +125,11 @@ apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/namespace.yaml" "${KUBECONFIG
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/secret_image_pull.yaml" "${KUBECONFIG_PATH}"
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/secret_pubsub.yaml" "${KUBECONFIG_PATH}"
 apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/mosquitto.yaml" "${KUBECONFIG_PATH}"
-apply_kubernetes_menifest "${KUBE_MENIFEST_FOLDER}/viai-camera-integration.yaml" "${KUBECONFIG_PATH}"
+
+# Iterate through files in a directory, not string elements in an array
+# shellcheck disable=SC2066
+for FILE in "${KUBE_MENIFEST_FOLDER}"/viai-camera-integration*.yaml; do
+  apply_kubernetes_menifest "$FILE" "${KUBECONFIG_PATH}"
+done
+
 echo "[Installation] Completed."
