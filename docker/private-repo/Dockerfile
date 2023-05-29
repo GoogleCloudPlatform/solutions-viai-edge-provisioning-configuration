@@ -1,4 +1,4 @@
-FROM docker:20.10.18-dind
+FROM docker:24.0.2-dind
 
 WORKDIR /app
 
