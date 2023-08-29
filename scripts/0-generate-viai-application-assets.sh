@@ -97,7 +97,7 @@ GOOGLE_CLOUD_PROJECT=
 K8S_RUNTIME=
 VIAI_CAMERA_APP_IMAGE_TAG=
 VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH=
-VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=https://github.com/GoogleCloudPlatform/solutions-viai-edge-camera-integration
+VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL=https://source.developers.google.com/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration
 VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH=main
 
 # BSD getopt (bundled in MacOS) doesn't support long options, and has different parameters than GNU getopt
