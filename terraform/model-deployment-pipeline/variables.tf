@@ -13,7 +13,7 @@
 # limitations under the License.
 
 variable "anthos_target_cluster_membership" {
-  type        = list
+  type        = list(any)
   description = "Anthos Membership name of the target environment."
 }
 
