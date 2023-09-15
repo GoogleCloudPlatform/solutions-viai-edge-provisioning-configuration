@@ -13,16 +13,16 @@
 # limitations under the License.
 
 variable "anthos_target_cluster_membership" {
-  type = list
+  type        = list
   description = "Anthos Membership name of the target environment."
 }
 
 variable "google_default_region" {
-  type = string
+  type        = string
   description = "The default Google Cloud region."
 }
 
 variable "google_viai_project_id" {
-  type = string
+  type        = string
   description = "Google Cloud project ID."
 }

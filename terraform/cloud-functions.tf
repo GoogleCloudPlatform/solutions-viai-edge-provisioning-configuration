@@ -35,10 +35,10 @@ resource "google_cloudfunctions_function" "function" {
     event_type = "providers/cloud.pubsub/eventTypes/topic.publish"
     resource   = module.camera_integration_telemetry_pubsub.topic
   }
-  entry_point           = "pubsub_bigquery_inference_results"
+  entry_point = "pubsub_bigquery_inference_results"
   environment_variables = {
     BIGQUERY_DATASET = module.camera-integration-bigquery.bigquery_dataset.dataset_id
-    BIGQUERY_TABLE = "inference_results"
+    BIGQUERY_TABLE   = "inference_results"
   }
   depends_on = [
     google_project_service.google-cloud-apis,
