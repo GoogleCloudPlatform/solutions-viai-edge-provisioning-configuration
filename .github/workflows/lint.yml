@@ -33,6 +33,7 @@ jobs:
           ERROR_ON_MISSING_EXEC_BIT: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .
+          KUBERNETES_KUBECONFORM_OPTIONS: --strict --ignore-missing-schemas
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_KUBERNETES_KUBEVAL: false
 ...
