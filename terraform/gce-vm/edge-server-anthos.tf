@@ -15,34 +15,34 @@
 resource "google_compute_address" "edge-server-anthos-static-internal-ip" {
   address_type = "INTERNAL"
   subnetwork   = google_compute_network.anthos-bare-metal.name
-  name     = "edge-server-anthos-internal-ip"
-  project = var.google_viai_project_id
-  region  = var.google_default_region
+  name         = "edge-server-anthos-internal-ip"
+  project      = var.google_viai_project_id
+  region       = var.google_default_region
 }
 
 resource "google_compute_address" "edge-server-anthos-static-external-ip" {
   address_type = "EXTERNAL"
-  name     = "edge-server-anthos-external-ip"
-  project = var.google_viai_project_id
-  region  = var.google_default_region
+  name         = "edge-server-anthos-external-ip"
+  project      = var.google_viai_project_id
+  region       = var.google_default_region
 }
 
 resource "google_compute_instance" "edge-server-anthos-vm" {
   #ts:skip=AC_GCP_0041 https://github.com/tenable/terrascan/issues/1084
-  name     = "gce-server-anthos"
-  project = var.google_viai_project_id
+  name         = "gce-server-anthos"
+  project      = var.google_viai_project_id
   machine_type = "n1-standard-4"
   zone         = var.google_default_zone
 
   boot_disk {
     initialize_params {
       image = "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20221018"
-      size = 500
+      size  = 500
     }
   }
   tags = ["edge-server"]
   guest_accelerator {
-    type = "nvidia-tesla-t4"
+    type  = "nvidia-tesla-t4"
     count = 1
   }
 
@@ -51,10 +51,10 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
   }
 
   network_interface {
-    network = google_compute_network.anthos-bare-metal.name
+    network    = google_compute_network.anthos-bare-metal.name
     network_ip = google_compute_address.edge-server-anthos-static-internal-ip.address
     access_config {
-      nat_ip =  google_compute_address.edge-server-anthos-static-external-ip.address
+      nat_ip = google_compute_address.edge-server-anthos-static-external-ip.address
     }
   }
 
@@ -80,6 +80,6 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
   EOL
 
   depends_on = [
-      google_compute_address.edge-server-anthos-static-internal-ip
+    google_compute_address.edge-server-anthos-static-internal-ip
   ]
 }
