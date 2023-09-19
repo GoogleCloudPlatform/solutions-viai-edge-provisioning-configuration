@@ -118,7 +118,6 @@ while true; do
     # Ignoring because those are defined in common.sh, and don't need quotes
     # shellcheck disable=SC2086
     exit $EXIT_OK
-    break
     ;;
   esac
 done
