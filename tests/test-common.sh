@@ -17,7 +17,8 @@
 set -o errexit
 set -o nounset
 
-echo "Running containerized Terraform"
 # shellcheck disable=SC1094
 . scripts/common.sh
-run_containerized_terraform version
+
+echo "Running containerized Terraform: ${TERRAFORM_CONTAINER_IMAGE_ID}"
+docker run --rm "${TERRAFORM_CONTAINER_IMAGE_ID}" version
