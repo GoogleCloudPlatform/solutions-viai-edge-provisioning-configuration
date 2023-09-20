@@ -31,7 +31,7 @@ metadata:
 spec:
   type: standalone
   profile: edge
-  anthosBareMetalVersion: 1.16
+  anthosBareMetalVersion: 1.16.0
   gkeConnect:
     projectID: ${GOOGLE_CLOUD_DEFAULT_PROJECT}
   controlPlane:
@@ -59,7 +59,8 @@ spec:
   clusterOperations:
     projectID: ${GOOGLE_CLOUD_DEFAULT_PROJECT}
     location: ${GOOGLE_CLOUD_DEFAULT_REGION}
-    enableApplication: true
+    # https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/how-to/application-logging-monitoring
+    # enableApplication: true
   storage:
     lvpNodeMounts:
       path: /mnt/localpv-disk
