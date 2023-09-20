@@ -20,4 +20,6 @@ set -o nounset
 echo "Running containerized Terraform"
 # shellcheck disable=SC1094
 . scripts/common.sh
-run_containerized_terraform version
+
+# Pass two uninportant values as paths because we only want to run the version subcommand
+run_containerized_terraform "$(pwd)" "$(pwd)" version
