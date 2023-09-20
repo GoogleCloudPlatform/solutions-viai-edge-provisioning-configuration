@@ -20,6 +20,5 @@ set -o nounset
 # shellcheck disable=SC1094
 . scripts/common.sh
 
-echo "Running containerized Terraform"
-# Pass two uninportant values as paths because we only want to run the version subcommand
-run_containerized_terraform "$(pwd)" "$(pwd)" version
+echo "Running containerized Terraform: ${TERRAFORM_CONTAINER_IMAGE_ID}"
+docker run --rm "${TERRAFORM_CONTAINER_IMAGE_ID}" version
