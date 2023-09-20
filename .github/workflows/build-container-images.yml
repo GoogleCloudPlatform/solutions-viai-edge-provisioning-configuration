@@ -70,4 +70,5 @@ jobs:
           - copy-images
           - os-image-builder
           - private-repo
+          - terraform
 ...
