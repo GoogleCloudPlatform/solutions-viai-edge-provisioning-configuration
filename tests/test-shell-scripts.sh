@@ -84,3 +84,8 @@ scripts/2-generate-media-file.sh \
   --k8s-runtime "${K8S_RUNTIME}"
 
 echo ".ISO file generate completed."
+
+echo "Downlaod OS Image file..."
+scripts/download-os-images.sh
+
+echo "OS Image file download completed"
