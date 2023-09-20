@@ -89,6 +89,3 @@ echo "Downlaod OS Image file..."
 scripts/download-os-images.sh
 
 echo "OS Image file download completed"
-# shellcheck disable=SC1094
-. scripts/common.sh
-run_containerized_terraform version
