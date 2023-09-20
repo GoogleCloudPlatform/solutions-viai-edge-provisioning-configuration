@@ -43,7 +43,7 @@ HELP_DESCRIPTION="show this help message and exit"
 # shellcheck disable=SC2034
 GCLOUD_CLI_CONTAINER_IMAGE_ID="gcr.io/google.com/cloudsdktool/cloud-sdk:397.0.0"
 # shellcheck disable=SC2034
-TERRAFORM_CONTAINER_IMAGE_ID="hashicorp/terraform:1.1.3"
+TERRAFORM_CONTAINER_IMAGE_ID="$(grep <docker/terraform/Dockerfile "hashicorp/terraform" | awk -F ' ' '{print $2}')"
 # shellcheck disable=SC2034
 OS_INSTALLER_IMAGE_URL="https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso"
 # shellcheck disable=SC2034
@@ -57,6 +57,12 @@ OS_INSTALLER_IMAGE_PATH="${WORKING_DIRECTORY}/$(basename "${OS_INSTALLER_IMAGE_U
 # Gcloud auth container name, reused container volume when gcloud is required in later steps
 # shellcheck disable=SC2034
 GCLOUD_AUTHENTICATION_CONTAINER_NAME="gcloud-config"
+
+# Allocate a TTY and enable interactive mode only as needed
+DOCKER_FLAGS=
+if [ -t 0 ]; then
+  DOCKER_FLAGS="-it"
+fi
 
 check_argument() {
   ARGUMENT_VALUE="${1}"
@@ -186,7 +192,9 @@ run_containerized_terraform() {
   echo "Using VIAI Camera application source codes path: ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"
 
   # shellcheck disable=SC2068
-  docker run -it --rm \
+  docker run \
+    ${DOCKER_FLAGS} \
+    --rm \
     -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
     -v "$(pwd)":/workspace \
     -v /etc/localtime:/etc/localtime:ro \
@@ -210,7 +218,7 @@ gcloud_auth() {
   cleanup_gcloud_auth
 
   docker run \
-    -it \
+    ${DOCKER_FLAGS} \
     --name "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" \
     gcloud auth login --update-adc
@@ -251,7 +259,8 @@ is_tf_state_bucket_exists() {
   TF_STATE_BUCKET="gs://tf-state-${DEFAULT_PROJECT}/"
 
   # shellcheck disable=SC2155,SC2046
-  DOCKER_RUN_OUTPUT=$(docker run --rm -it \
+  DOCKER_RUN_OUTPUT=$(docker run --rm \
+    ${DOCKER_FLAGS} \
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     --volumes-from gcloud-config \
     --name gcloud_exec_command \
@@ -274,6 +283,7 @@ gcloud_exec_cmds() {
   shift
   # shellcheck disable=SC2068
   docker run --rm \
+    ${DOCKER_FLAGS} \
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     --volumes-from gcloud-config \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" $@
