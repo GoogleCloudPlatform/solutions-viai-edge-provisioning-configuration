@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# shellcheck disable=SC1094
+. "${SETUP_DIR}/edge-server/common.sh"
+
 print_separator() {
   echo "-----------------------------------------------------------------"
 }
@@ -67,7 +70,7 @@ setup_workstation() {
   gcloud config set project "$GOOGLE_CLOUD_DEFAULT_PROJECT"
 
   echo "Downloading BMCL..."
-  gsutil cp gs://anthos-baremetal-release/bmctl/1.16.0/linux-amd64/bmctl "$SETUP_DIR"/
+  gsutil cp gs://anthos-baremetal-release/bmctl/${ANTHOS_VERSION}/linux-amd64/bmctl "$SETUP_DIR"/
 
   if [ ! -f "/.ssh/id_rsa" ]; then
     setup_ssh

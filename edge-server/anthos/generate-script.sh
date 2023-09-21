@@ -264,6 +264,8 @@ sed -i 's/${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}/\/var\/lib\/viai\/setup\/edge-serve
 
 echo "Updating env.sh..."
 # shellcheck disable=SC2016
+sed -i 's/${ANTHOS_VERSION}/'"${ANTHOS_VERSION}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+# shellcheck disable=SC2016
 sed -i 's/${ANTHOS_MEMBERSHIP_NAME}/'"${ANTHOS_MEMBERSHIP_NAME}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
 # shellcheck disable=SC2016
 sed -i 's/${CONTROL_PLANE_VIP}/'"${CONTROL_PLANE_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
