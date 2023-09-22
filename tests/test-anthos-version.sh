@@ -22,12 +22,19 @@ set -o nounset
 
 ANTHOS_VERSION_COMMON=$ANTHOS_VERSION
 
-export OUTPUT_FOLDER="$(mktemp -d)"
-export DEFAULT_PROJECT=dummy
-export DEFAULT_REGION=dummy
-export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=kalschi@google.com
-export K8S_RUNTIME=anthos
-export MEMBERSHIP="${K8S_RUNTIME}-server-dummy"
+OUTPUT_FOLDER="$(mktemp -d)"
+DEFAULT_PROJECT=dummy
+DEFAULT_REGION=dummy
+GOOGLE_CLOUD_DEFAULT_USER_EMAIL=kalschi@google.com
+K8S_RUNTIME=anthos
+MEMBERSHIP="${K8S_RUNTIME}-server-dummy"
+
+export OUTPUT_FOLDER
+export DEFAULT_PROJECT
+export DEFAULT_REGION
+export GOOGLE_CLOUD_DEFAULT_USER_EMAIL
+export K8S_RUNTIME
+export MEMBERSHIP
 
 scripts/1-generate-edge-server-assets.sh \
   -G tmp/service-account-key.json \
@@ -42,15 +49,13 @@ scripts/1-generate-edge-server-assets.sh \
   -i "${K8S_RUNTIME}" \
   -u "${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}"
 
-ANTHOS_VERSION_GEN_SCRIPT=$ANTHOS_VERSION
+# # shellcheck disable=SC2046
+GEN_VERSION=$(awk -F= '/ANTHOS_VERSION=/{gsub(/["'\'']/, "", $2); print $2}' "$OUTPUT_FOLDER/edge-server/node-setup.sh")
 
-echo "ANTHOS_VERSION_GEN_SCRIPT=${ANTHOS_VERSION_GEN_SCRIPT}"
-echo "ANTHOS_VERSION_COMMON=${ANTHOS_VERSION_COMMON}"
-
-if [ "$ANTHOS_VERSION_GEN_SCRIPT" == "$ANTHOS_VERSION_COMMON" ]; then
-    echo "Versions are equal"
-    exit $EXIT_OK
+if [ "${GEN_VERSION}" = "${ANTHOS_VERSION_COMMON}" ]; then
+  echo "Anthos Version: ($GEN_VERSION) == ${ANTHOS_VERSION_COMMON}"
+  exit $EXIT_OK
 else
-    echo "Versions are not equal"
-    exit $EXIT_GENERIC_ERR
+  echo "Anthos Version: ($GEN_VERSION) != ${ANTHOS_VERSION_COMMON}"
+  exit $EXIT_GENERIC_ERR
 fi

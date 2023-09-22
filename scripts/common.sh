@@ -19,7 +19,7 @@ set -o errexit
 
 # Ignoring SC2034 because this variable is used in other scripts
 # shellcheck disable=SC2034
-ANTHOS_VERSION="1.16.2"
+ANTHOS_VERSION="1.16.0"
 # Ignoring SC2034 because this variable is used in other scripts
 # shellcheck disable=SC2034
 CONST_CONTAINER_REPO_TYPE_GCR="GCR"
