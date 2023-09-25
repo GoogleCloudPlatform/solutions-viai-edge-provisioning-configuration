@@ -148,7 +148,7 @@ if [ -f "$SERVICE_ACCOUNT_KEY_PATH" ]; then
   cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/secret_image_pull.yaml.tmpl" "${DEPLOYMENT_TEMP_FOLDER}/secret_image_pull.yaml"
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  sed -i='' 's/${IMAGE_PULL_SECRET}/'"${IMAGE_PULL_SECRET}"'/g' "${DEPLOYMENT_TEMP_FOLDER}/secret_image_pull.yaml"
+  replace_variables_in_template 's/${IMAGE_PULL_SECRET}/'"${IMAGE_PULL_SECRET}"'/g' "${DEPLOYMENT_TEMP_FOLDER}/secret_image_pull.yaml"
 
 else
   echo "${SERVICE_ACCOUNT_KEY_PATH} does not exists"

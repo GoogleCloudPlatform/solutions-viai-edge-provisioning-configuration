@@ -173,26 +173,26 @@ if [ "$CONTAINER_REPO_TYPE" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] || [ "$CONTAI
 fi
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
-sed -i='' 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
+replace_variables_in_template 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
-sed -i='' 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
+replace_variables_in_template 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
-sed -i='' 's/${CONTAINER_REPO_USERNAME}/'"${CONTAINER_REPO_USERNAME}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
+replace_variables_in_template 's/${CONTAINER_REPO_USERNAME}/'"${CONTAINER_REPO_USERNAME}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
-sed -i='' 's/${CONTAINER_REPO_PASSWORD}/'"${CONTAINER_REPO_PASSWORD}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
+replace_variables_in_template 's/${CONTAINER_REPO_PASSWORD}/'"${CONTAINER_REPO_PASSWORD}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 
 escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
-sed -i='' 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
+replace_variables_in_template 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 unset ESCAPED_NAME
 
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
-sed -i='' 's/${TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
+replace_variables_in_template 's/${TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 GOOGLE_APPLICATION_CREDENTIALS_PATH="/root/.config/gcloud/application_default_credentials.json"
 
 gcloud_auth
