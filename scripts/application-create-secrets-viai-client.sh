@@ -95,14 +95,19 @@ cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/secret_pubsub.yaml.t
 if [ -f "${SERVICE_ACCOUNT_KEY_PATH}" ]; then
   echo "Updating Pub/Sub credential..."
   SECRET_JSON_PATH="${SERVICE_ACCOUNT_KEY_PATH}"
-  base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH.tmp"
+  if is_linux; then
+    base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH.tmp"
+  fi
+  if is_macos; then
+    base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_PATH.tmp"
+  fi
   tr -d '\n' <"$SECRET_JSON_PATH.tmp" >"$SECRET_JSON_PATH.txt"
 
   GCLOUD_CREDENTIAL=$(cat "$SECRET_JSON_PATH.txt")
 
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  sed -i 's/${GCLOUD_CREDENTIAL}/'"${GCLOUD_CREDENTIAL}"'/g' "$DEPLOYMENT_TEMP_FOLDER/secret_pubsub.yaml"
+  sed -i='' 's/${GCLOUD_CREDENTIAL}/'"${GCLOUD_CREDENTIAL}"'/g' "$DEPLOYMENT_TEMP_FOLDER/secret_pubsub.yaml"
 
   rm -rf "$SECRET_JSON_PATH.txt"
   rm -rf "$SECRET_JSON_PATH.tmp"
