@@ -151,7 +151,7 @@ if [ -f "${SERVICE_ACCOUNT_KEY_PATH}" ]; then
 
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  sed -i='' 's/${IMAGE_PULL_SECRET}/'"${IMAGE_PULL_SECRET}"'/g' "$DEPLOYMENT_TEMP_FOLDER"/secret_image_pull.yaml
+  sed -i'' 's/${IMAGE_PULL_SECRET}/'"${IMAGE_PULL_SECRET}"'/g' "$DEPLOYMENT_TEMP_FOLDER"/secret_image_pull.yaml
 
   rm "$DEPLOYMENT_TEMP_FOLDER"/private-repo-config.txt
 else

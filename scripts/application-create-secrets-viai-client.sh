@@ -107,7 +107,7 @@ if [ -f "${SERVICE_ACCOUNT_KEY_PATH}" ]; then
 
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  sed -i='' 's/${GCLOUD_CREDENTIAL}/'"${GCLOUD_CREDENTIAL}"'/g' "$DEPLOYMENT_TEMP_FOLDER/secret_pubsub.yaml"
+  sed -i'' 's/${GCLOUD_CREDENTIAL}/'"${GCLOUD_CREDENTIAL}"'/g' "$DEPLOYMENT_TEMP_FOLDER/secret_pubsub.yaml"
 
   rm -rf "$SECRET_JSON_PATH.txt"
   rm -rf "$SECRET_JSON_PATH.tmp"
