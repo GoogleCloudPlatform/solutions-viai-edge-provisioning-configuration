@@ -328,18 +328,19 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
     BUILD_SCRIPT_FILE="$(pwd)"/scripts/application-build-kaniko-viai-camera-app.sh
   fi
   echo "** Running build script:${BUILD_SCRIPT_FILE}."
+
   bash "${BUILD_SCRIPT_FILE}" \
-    --container-repo-host "${CONTAINER_REPO_HOST}" \
-    --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-    --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-    --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-    --default-project "${GOOGLE_CLOUD_PROJECT}" \
-    --git-repo-url "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
-    --git-repo-branch "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
-    --image-tag "${VIAI_CAMERA_APP_IMAGE_TAG}" \
-    --input-path "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" \
-    --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-    --repo-type "${CONTAINER_REPO_TYPE}"
+    -H "${CONTAINER_REPO_HOST}" \
+    -U "${CONTAINER_REPO_USERNAME}" \
+    -W "${CONTAINER_REPO_PASSWORD}" \
+    -N "${CONTAINER_REPO_REPOSITORY_NAME}" \
+    -p "${GOOGLE_CLOUD_PROJECT}" \
+    -l "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_URL}" \
+    -b "${VIAI_CAMERA_INTEGRATION_SOURCE_REPO_BRANCH}" \
+    -T "${VIAI_CAMERA_APP_IMAGE_TAG}" \
+    -a "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}" \
+    -o "${DEPLOYMENT_TEMP_FOLDER}" \
+    -Y "${CONTAINER_REPO_TYPE}"
 fi
 
 ########################
@@ -389,8 +390,8 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
 
   # shellcheck disable=SC2240
   "${WORKING_DIRECTORY}"/scripts/application-create-secrets-viai-client.sh \
-    --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-    --service-account-key-path "${VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH}"
+    -o "${DEPLOYMENT_TEMP_FOLDER}" \
+    -k "${VIAI_CLIENT_INTEGRATION_SERVICE_ACCOUNT_KEY_PATH}"
 
   # Update Image Pull Secrets
   if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] || [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
@@ -398,19 +399,20 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
 
     # shellcheck disable=SC2240
     ./scripts/application-create-secrets-gcr.sh \
-      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-      --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" \
-      --container-repo-host "${CONTAINER_REPO_HOST}"
+      -o "${DEPLOYMENT_TEMP_FOLDER}" \
+      -k "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}" \
+      -H "${CONTAINER_REPO_HOST}"
   else
     echo "[Generating Assets] Updating Image Pull Secrets for Private Repo"
+
     # shellcheck disable=SC2240
     ./scripts/application-create-secrets-private-repo.sh \
-      --container-repo-host "${CONTAINER_REPO_HOST}" \
-      --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-      --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-      --service-account-key-path "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
+      -H "${CONTAINER_REPO_HOST}" \
+      -U "${CONTAINER_REPO_USERNAME}" \
+      -W "${CONTAINER_REPO_PASSWORD}" \
+      -o "${DEPLOYMENT_TEMP_FOLDER}" \
+      -N "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      -k "${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
   fi
 fi
 
@@ -427,25 +429,25 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
     echo "[Generating Assets] Pushing Dependencies images such as Mosquitto to Private Repo and Updating dependencies yaml files"
     # shellcheck disable=SC2240
     ./scripts/application-prepare-dependency-yaml.sh \
-      --container-repo-host "${CONTAINER_REPO_HOST}" \
-      --container-repo-user "${CONTAINER_REPO_USERNAME}" \
-      --container-repo-password "${CONTAINER_REPO_PASSWORD}" \
-      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-      --repo-type "${CONTAINER_REPO_TYPE}" \
-      --source-image "${SOURCE_IMAGE}" \
-      --target-image "${TARGET_IMAGE}"
+      -H "${CONTAINER_REPO_HOST}" \
+      -U "${CONTAINER_REPO_USERNAME}" \
+      -W "${CONTAINER_REPO_PASSWORD}" \
+      -o "${DEPLOYMENT_TEMP_FOLDER}" \
+      -N "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      -Y "${CONTAINER_REPO_TYPE}" \
+      -x "${SOURCE_IMAGE}" \
+      -X "${TARGET_IMAGE}"
   else
     echo "[Generating Assets] Pushing Dependencies images such as Mosquitto to GCR and Updating dependencies yaml files"
     # shellcheck disable=SC2240
     echo "CONTAINER_REPO_REPOSITORY_NAME=${CONTAINER_REPO_REPOSITORY_NAME}"
     ./scripts/application-prepare-dependency-yaml.sh \
-      --container-repo-host "${CONTAINER_REPO_HOST}" \
-      --output-path "${DEPLOYMENT_TEMP_FOLDER}" \
-      --container-repo-reg-name "${CONTAINER_REPO_REPOSITORY_NAME}" \
-      --repo-type "${CONTAINER_REPO_TYPE}" \
-      --source-image "${SOURCE_IMAGE}" \
-      --target-image "${TARGET_IMAGE}"
+      -H "${CONTAINER_REPO_HOST}" \
+      -o "${DEPLOYMENT_TEMP_FOLDER}" \
+      -N "${CONTAINER_REPO_REPOSITORY_NAME}" \
+      -Y "${CONTAINER_REPO_TYPE}" \
+      -x "${SOURCE_IMAGE}" \
+      -X "${TARGET_IMAGE}"
   fi
 
   echo "Push ${SOURCE_IMAGE} to ${CONTAINER_REPO_HOST}/${CONTAINER_REPO_REPOSITORY_NAME}/${TARGET_IMAGE}"
