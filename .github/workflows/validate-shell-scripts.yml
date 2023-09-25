@@ -43,4 +43,10 @@ jobs:
           set -o nounset
 
           ./tests/test-shell-scripts.sh
+      - name: "Verrify Anthos Version is configured in common.sh"
+        run: |
+          set -o errexit
+          set -o nounset
+
+          ./tests/test-anthos-version.sh
 ...
