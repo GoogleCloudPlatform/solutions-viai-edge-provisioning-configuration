@@ -31,7 +31,7 @@ metadata:
 spec:
   type: standalone
   profile: edge
-  anthosBareMetalVersion: 1.16.0
+  anthosBareMetalVersion: ${ANTHOS_VERSION}
   gkeConnect:
     projectID: ${GOOGLE_CLOUD_DEFAULT_PROJECT}
   controlPlane:
