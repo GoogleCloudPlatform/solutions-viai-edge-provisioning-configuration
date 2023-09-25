@@ -255,29 +255,49 @@ cp "${WORKING_DIRECTORY}/edge-server/anthos/init.sh.tmpl" "$OUTPUT_FOLDER/edge-s
 cp "${WORKING_DIRECTORY}/edge-server/anthos/env.sh.tmpl" "$OUTPUT_FOLDER/edge-server/env.sh"
 
 echo "Updating init.sh...${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}"
-# shellcheck disable=SC2016
-sed -i'' 's/${GOOGLE_CLOUD_DEFAULT_PROJECT}/'"${GOOGLE_CLOUD_DEFAULT_PROJECT}"'/g' "$OUTPUT_FOLDER/edge-server/init.sh"
-# shellcheck disable=SC2016
-sed -i'' 's/${GOOGLE_CLOUD_DEFAULT_REGION}/'"${GOOGLE_CLOUD_DEFAULT_REGION}"'/g' "$OUTPUT_FOLDER/edge-server/init.sh"
-# shellcheck disable=SC2016
-sed -i'' 's/${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}/\/var\/lib\/viai\/setup\/edge-server\/anthos-service-account-key.json/g' "$OUTPUT_FOLDER/edge-server/init.sh"
+if is_linux; then
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${GOOGLE_CLOUD_DEFAULT_PROJECT}/'"${GOOGLE_CLOUD_DEFAULT_PROJECT}"'/g' "$OUTPUT_FOLDER/edge-server/init.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${GOOGLE_CLOUD_DEFAULT_REGION}/'"${GOOGLE_CLOUD_DEFAULT_REGION}"'/g' "$OUTPUT_FOLDER/edge-server/init.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}/\/var\/lib\/viai\/setup\/edge-server\/anthos-service-account-key.json/g' "$OUTPUT_FOLDER/edge-server/init.sh"
 
-echo "Updating env.sh..."
-# shellcheck disable=SC2016
-sed -i'' 's/${ANTHOS_VERSION}/'"${ANTHOS_VERSION}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
-# shellcheck disable=SC2016
-sed -i'' 's/${ANTHOS_MEMBERSHIP_NAME}/'"${ANTHOS_MEMBERSHIP_NAME}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
-# shellcheck disable=SC2016
-sed -i'' 's/${CONTROL_PLANE_VIP}/'"${CONTROL_PLANE_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
-# shellcheck disable=SC2016
-sed -i'' 's/${INGRESS_VIP}/'"${INGRESS_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
-# shellcheck disable=SC2016
-sed -i'' 's/${LOAD_BALANCER_VIP}/'"${LOAD_BALANCER_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  echo "Updating env.sh..."
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${ANTHOS_VERSION}/'"${ANTHOS_VERSION}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${ANTHOS_MEMBERSHIP_NAME}/'"${ANTHOS_MEMBERSHIP_NAME}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${CONTROL_PLANE_VIP}/'"${CONTROL_PLANE_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${INGRESS_VIP}/'"${INGRESS_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${LOAD_BALANCER_VIP}/'"${LOAD_BALANCER_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+elif is_macos; then
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${GOOGLE_CLOUD_DEFAULT_PROJECT}/'"${GOOGLE_CLOUD_DEFAULT_PROJECT}"'/g' "$OUTPUT_FOLDER/edge-server/init.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${GOOGLE_CLOUD_DEFAULT_REGION}/'"${GOOGLE_CLOUD_DEFAULT_REGION}"'/g' "$OUTPUT_FOLDER/edge-server/init.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${ANTHOS_SERVICE_ACCOUNT_KEY_PATH}/\/var\/lib\/viai\/setup\/edge-server\/anthos-service-account-key.json/g' "$OUTPUT_FOLDER/edge-server/init.sh"
 
+  echo "Updating env.sh..."
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${ANTHOS_VERSION}/'"${ANTHOS_VERSION}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${ANTHOS_MEMBERSHIP_NAME}/'"${ANTHOS_MEMBERSHIP_NAME}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${CONTROL_PLANE_VIP}/'"${CONTROL_PLANE_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${INGRESS_VIP}/'"${INGRESS_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+  # shellcheck disable=SC2016
+  replace_variables_in_template 's/${LOAD_BALANCER_VIP}/'"${LOAD_BALANCER_VIP}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+fi
 escape_slash "${LOAD_BALANCER_VIP_RANGE}"
 echo "ESCAPED_NAME=${ESCAPED_NAME}"
 # shellcheck disable=SC2016
-sed -i'' 's/${LOAD_BALANCER_VIP_RANGE}/'"${ESCAPED_NAME}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
+replace_variables_in_template 's/${LOAD_BALANCER_VIP_RANGE}/'"${ESCAPED_NAME}"'/g' "$OUTPUT_FOLDER/edge-server/env.sh"
 unset ESCAPED_NAME
 
 echo "Updating node-setup.sh..."

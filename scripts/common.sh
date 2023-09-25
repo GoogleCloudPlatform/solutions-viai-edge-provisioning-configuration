@@ -334,11 +334,11 @@ update_camera_app_yaml_template() {
     INDEX="${8}"
     escape_slash "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}"
     # shellcheck disable=SC2016
-    sed -i'' 's/${CONTAINER_REPO_HOST}\/${GOOGLE_CLOUD_PROJECT}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_HOST}\/${GOOGLE_CLOUD_PROJECT}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
     # shellcheck disable=SC2016
-    sed -i'' 's/${CONTAINER_REPO_HOST}\/${CONTAINER_REPO_REPOSITORY_NAME}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_HOST}\/${CONTAINER_REPO_REPOSITORY_NAME}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
     # shellcheck disable=SC2016
-    sed -i'' 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
     unset ESCAPED_NAME
   else
     YAML_FILE_PATH="${2}"
@@ -350,21 +350,35 @@ update_camera_app_yaml_template() {
     INDEX="${8}"
 
     # shellcheck disable=SC2016
-    sed -i'' 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
     # shellcheck disable=SC2016
-    sed -i'' 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$YAML_FILE_PATH"
 
     escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
     # This is an environment variable and a template variable, use single quota to avoid replacment
     # shellcheck disable=SC2016
-    sed -i'' 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
     unset ESCAPED_NAME
 
     # This is an environment variable and a template variable, use single quota to avoid replacment
     # shellcheck disable=SC2016
-    sed -i'' 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$YAML_FILE_PATH"
     # This is an environment variable and a template variable, use single quota to avoid replacment
     # shellcheck disable=SC2016
-    sed -i'' 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$YAML_FILE_PATH"
+  fi
+}
+
+replace_variables_in_template() {
+  SED_SCRIPT="${1}"
+  shift
+  FILE_PATH="${1}"
+  shift
+  if is_linux; then
+    # shellcheck disable=SC2016
+    sed $SED_SCRIPT $FILE_PATH
+  elif is_macos; then
+    # shellcheck disable=SC2016
+    sed -i '' $SED_SCRIPT $FILE_PATH
   fi
 }
