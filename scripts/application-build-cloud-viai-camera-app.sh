@@ -193,7 +193,6 @@ unset ESCAPED_NAME
 # This is an environment variable and a template variable, use single quota to avoid replacment
 # shellcheck disable=SC2016,SC2086
 sed -i='' 's/${TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
-
 GOOGLE_APPLICATION_CREDENTIALS_PATH="/root/.config/gcloud/application_default_credentials.json"
 
 gcloud_auth
