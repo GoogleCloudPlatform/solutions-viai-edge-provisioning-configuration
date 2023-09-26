@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 
-# shellcheck disable=SC1091
-. "${SETUP_DIR}/edge-server/common.sh"
-
 print_separator() {
   echo "-----------------------------------------------------------------"
 }
@@ -131,7 +128,7 @@ setup_vlan_control_plane() {
   if [ ! -f "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf" ]; then
     touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
   else
-    replace_variables_in_template 's/unmanaged-devices=*/unmanaged-devices=except:type:ethernet,except:type:vlan,except:type:vxlan,*/g' "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf"
+    sed -i 's/unmanaged-devices=*/unmanaged-devices=except:type:ethernet,except:type:vlan,except:type:vxlan,*/g' "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf"
   fi
 
   systemctl restart NetworkManager
@@ -186,7 +183,7 @@ setup_nvidia_container_runtime() {
     if ! grep -q 'default_runtime_name = "nvidia"' "${CONTAINERD_TOML_PATH}" &&
       grep -q 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia' "${CONTAINERD_TOML_PATH}"; then
       echo "config.toml does not use Nvidia runtime, updating..."
-      replace_variables_in_template 's/default_runtime_name = "runc"/default_runtime_name = "nvidia"/g' "${CONTAINERD_TOML_PATH}"
+      sed -i 's/default_runtime_name = "runc"/default_runtime_name = "nvidia"/g' "${CONTAINERD_TOML_PATH}"
     else
       echo "config.toml already been updated with Nvidia default runtime, skip..."
     fi
