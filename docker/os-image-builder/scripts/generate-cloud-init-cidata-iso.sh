@@ -121,11 +121,7 @@ while true; do
     ls /tmp/workdir
     echo "ls /"
     ls /
-    echo "ls /tmp/output"
-    ls /tmp/output
     echo "<=="
-    ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}"
-    echo $(ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}")
     shift 2
     ;;
   -o | --cloud-init-datasource-output-directory)
