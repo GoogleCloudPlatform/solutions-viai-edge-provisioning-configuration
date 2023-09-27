@@ -109,10 +109,18 @@ while true; do
   case "${1}" in
   -d | --cloud-init-datasource-source-directory)
     CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH="${2}"
+    # TODO:
+    echo "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}"
+    echo "ls 3"
+    ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}"
     shift 2
     ;;
   -o | --cloud-init-datasource-output-directory)
     CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH="${2}"
+     # TODO:
+    echo "${CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH}"
+    echo "ls 4"
+    ls "${CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH}"
     shift 2
     ;;
   --)
