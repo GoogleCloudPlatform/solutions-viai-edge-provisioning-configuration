@@ -20,7 +20,6 @@ set -o nounset
 OUTPUT_FOLDER="$(pwd)/tmp/output"
 
 mkdir -p "${OUTPUT_FOLDER}"
-# chmod 777 "${OUTPUT_FOLDER}"
 export OUTPUT_FOLDER
 
 mkdir -p tmp/
