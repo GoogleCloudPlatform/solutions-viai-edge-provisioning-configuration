@@ -167,7 +167,7 @@ fi
 if [ "$CONTAINER_REPO_TYPE" = "${CONST_CONTAINER_REPO_TYPE_GCR}" ] || [ "$CONTAINER_REPO_TYPE" = "${CONST_CONTAINER_REPO_TYPE_ARTIFACTREGISTRY}" ]; then
   echo "Copying cloudbuild.yaml for ${CONTAINER_REPO_TYPE} to $VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH/viai-edge-camera-integration/cloudbuild.yaml"
   cp "$(pwd)"/kubernetes/viai-camera-integration/cloudbuild-gcr.yaml.tmpl "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
- else
+else
   echo "Copying cloudbuild.yaml for Private Repo to $VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH/viai-edge-camera-integration/cloudbuild.yaml"
   cp "$(pwd)"/kubernetes/viai-camera-integration/cloudbuild-private-repo.yaml.tmpl "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"/viai-edge-camera-integration/cloudbuild.yaml
 fi

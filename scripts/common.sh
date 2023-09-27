@@ -376,9 +376,9 @@ replace_variables_in_template() {
   shift
   if is_linux; then
     # shellcheck disable=SC2016
-    sed -i $SED_SCRIPT $FILE_PATH
+    sed -i "${SED_SCRIPT}" "${FILE_PATH}"
   elif is_macos; then
     # shellcheck disable=SC2016
-    sed -i '' $SED_SCRIPT $FILE_PATH
+    sed -i '' "${SED_SCRIPT}" "${FILE_PATH}"
   fi
 }
