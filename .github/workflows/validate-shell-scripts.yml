@@ -37,6 +37,9 @@ jobs:
           set -o errexit
           set -o nounset
 
+          brew install docker
+          colima start
+
           ./tests/test-common.sh
       # https://github.com/orgs/community/discussions/25777#discussioncomment-3249229
       # We need to manually install docker to verify scripts
@@ -44,9 +47,6 @@ jobs:
         run: |
           set -o errexit
           set -o nounset
-
-          brew install docker
-          colima start
 
           ./tests/test-shell-scripts.sh
       - name: "Verrify Anthos Version is configured in common.sh"
