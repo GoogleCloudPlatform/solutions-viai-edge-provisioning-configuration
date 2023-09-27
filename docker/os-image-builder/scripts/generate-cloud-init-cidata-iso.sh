@@ -113,7 +113,7 @@ while true; do
     echo "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}"
     echo "ls 3"
     ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}"
-    echo $(ls "${CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH}")
+    echo $(ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}")
     shift 2
     ;;
   -o | --cloud-init-datasource-output-directory)
