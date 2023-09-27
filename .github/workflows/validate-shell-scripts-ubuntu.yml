@@ -23,38 +23,38 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
-  validate-shell-scripts-macos:
-    strategy:
-      matrix:
-        os: [macos-latest]
-    needs:
-      - lint
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: "Test common functions and variables"
-        run: |
-          set -o errexit
-          set -o nounset
+  # validate-shell-scripts-macos:
+  #   strategy:
+  #     matrix:
+  #       os: [macos-latest]
+  #   needs:
+  #     - lint
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: "Test common functions and variables"
+  #       run: |
+  #         set -o errexit
+  #         set -o nounset
 
-          brew install docker
-          colima start
+  #         brew install docker
+  #         colima start
 
-          ./tests/test-common.sh
-      # https://github.com/orgs/community/discussions/25777#discussioncomment-3249229
-      # We need to manually install docker to verify scripts
-      - name: "Generate Edge server configuration assets and ISO file"
-        run: |
-          set -o errexit
-          set -o nounset
+  #         ./tests/test-common.sh
+  #     # https://github.com/orgs/community/discussions/25777#discussioncomment-3249229
+  #     # We need to manually install docker to verify scripts
+  #     - name: "Generate Edge server configuration assets and ISO file"
+  #       run: |
+  #         set -o errexit
+  #         set -o nounset
 
-          ./tests/test-shell-scripts.sh
-      - name: "Verrify Anthos Version is configured in common.sh"
-        run: |
-          set -o errexit
-          set -o nounset
+  #         ./tests/test-shell-scripts.sh
+  #     - name: "Verrify Anthos Version is configured in common.sh"
+  #       run: |
+  #         set -o errexit
+  #         set -o nounset
 
-          ./tests/test-anthos-version.sh
+  #         ./tests/test-anthos-version.sh
   validate-shell-scripts-ubuntu:
     strategy:
       matrix:
