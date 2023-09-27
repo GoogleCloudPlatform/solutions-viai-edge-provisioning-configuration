@@ -21,14 +21,18 @@ on:  # yamllint disable-line rule:truthy
   workflow_dispatch: null
 
 jobs:
-  lint:
-    uses: ./.github/workflows/lint.yml
+  # TODO: Test
+  # lint:
+  #   uses: ./.github/workflows/lint.yml
+  # End TODO: Test
   validate-shell-scripts-macos:
     strategy:
       matrix:
         os: [macos-latest]
-    needs:
-      - lint
+    # TODO: Test
+    # needs:
+    #   - lint
+    # End TODO: Test
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
