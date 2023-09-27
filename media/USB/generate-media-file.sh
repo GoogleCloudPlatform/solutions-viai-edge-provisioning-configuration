@@ -121,8 +121,8 @@ docker run \
   -v "${EDGE_CONFIG_DIRECTORY_PATH}":/tmp/cloud-init-source \
   -v "${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}":/tmp/cloud-init-output \
   os-image-builder:latest \
-  --cloud-init-datasource-source-directory /tmp/cloud-init-source \
-  --cloud-init-datasource-output-directory /tmp/cloud-init-output
+  -d /tmp/cloud-init-source \
+  -o /tmp/cloud-init-output
 
 echo "CIDATA ISO file created successfully, folder path: ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH} , file name: cloud-init-datasource.iso"
 
