@@ -117,15 +117,7 @@ echo "Building the OS image builder container image..."
 docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
 
 echo "Creating the CIDATA ISO in ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}..."
-# Test
-echo "===>"
-echo "${EDGE_CONFIG_DIRECTORY_PATH}"
-echo "${TEMP}"
-echo "ls 1"
-ls "${EDGE_CONFIG_DIRECTORY_PATH}"
-echo "ls 2"
-ls "${TEMP}"
-echo "<==="
+
 docker run \
   -v "${EDGE_CONFIG_DIRECTORY_PATH}":/tmp/cloud-init-source \
   -v "${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}":/tmp/cloud-init-output \
