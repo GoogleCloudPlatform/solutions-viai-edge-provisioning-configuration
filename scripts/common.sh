@@ -389,9 +389,9 @@ base64_encode() {
   SECRET_JSON_PATH="${1}"
   shift
   if is_linux; then
-    base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH.tmp"
+    base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH"
   fi
   if is_macos; then
-    base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_PATH.tmp"
+    base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_PATH"
   fi
 }
