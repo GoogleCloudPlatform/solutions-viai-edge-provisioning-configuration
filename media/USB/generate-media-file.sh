@@ -111,7 +111,11 @@ echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml ${EDGE_CON
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml ${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
-# Test
+# Test TODO
+ls "${EDGE_CONFIG_DIRECTORY_PATH}/"
+echo "==="
+ls "${EDGE_CONFIG_DIRECTORY_PATH}"
+# END TODO
 VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH="$(mktemp -d)"
 echo "Building the OS image builder container image..."
 docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
