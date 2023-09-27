@@ -17,7 +17,10 @@
 set -o errexit
 set -o nounset
 
-OUTPUT_FOLDER="$(mktemp -d)"
+OUTPUT_FOLDER="/tmp/output"
+
+mkdir -p "${OUTPUT_FOLDER}"
+
 export OUTPUT_FOLDER
 
 mkdir -p tmp/
