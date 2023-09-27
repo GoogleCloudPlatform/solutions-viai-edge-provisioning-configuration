@@ -42,7 +42,7 @@ jobs:
           set -o nounset
 
           brew install docker
-          colima start
+          docker start
 
           ./tests/test-common.sh
       # https://github.com/orgs/community/discussions/25777#discussioncomment-3249229
