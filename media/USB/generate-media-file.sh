@@ -119,6 +119,7 @@ echo "Building the OS image builder container image..."
 
 echo "Creating the CIDATA ISO in ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}..."
 docker run \
+  --privileged \
   -v "${EDGE_CONFIG_DIRECTORY_PATH}":/tmp/cloud-init-source \
   -v "${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}":/tmp/cloud-init-output \
   os-image-builder:latest \
