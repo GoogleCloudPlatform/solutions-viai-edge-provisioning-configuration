@@ -79,9 +79,9 @@ echo "MEDIA_TYPE=${MEDIA_TYPE}"
 echo "K8S_RUNTIME=${K8S_RUNTIME}"
 
 scripts/2-generate-media-file.sh \
-  --edge-config-directory-path "${OUTPUT_FOLDER}" \
-  --media-type "${MEDIA_TYPE}" \
-  --k8s-runtime "${K8S_RUNTIME}"
+  -d "${OUTPUT_FOLDER}" \
+  -t "${MEDIA_TYPE}" \
+  -i "${K8S_RUNTIME}"
 
 echo ".ISO file generate completed."
 
