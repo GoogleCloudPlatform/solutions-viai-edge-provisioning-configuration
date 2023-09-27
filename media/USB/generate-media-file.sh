@@ -120,7 +120,9 @@ echo "Building the OS image builder container image..."
 echo "Creating the CIDATA ISO in ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}..."
 # TODO:
 echo "** ls EDGE_CONFIG_DIRECTORY_PATH"
-ls $EDGE_CONFIG_DIRECTORY_PATH
+ls "$EDGE_CONFIG_DIRECTORY_PATH"
+echo "***"
+cat "$EDGE_CONFIG_DIRECTORY_PATH/user-data.yaml"
 echo "** ${EDGE_CONFIG_DIRECTORY_PATH}":/tmp/cloud-init-source
 # END TODO
 docker run \
