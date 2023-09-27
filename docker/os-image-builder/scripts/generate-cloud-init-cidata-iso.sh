@@ -117,7 +117,7 @@ while true; do
     ;;
   -o | --cloud-init-datasource-output-directory)
     CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH="${2}"
-     # TODO:
+    # TODO:
     echo "${CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH}"
     echo "ls 4"
     ls "${CLOUD_INIT_DATASOURCE_OUTPUT_DIRECTORY_PATH}"
