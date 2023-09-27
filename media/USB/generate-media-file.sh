@@ -112,7 +112,7 @@ cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG
 echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml ${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 # Test
-TEMP=$EDGE_CONFIG_DIRECTORY_PATH
+TEMP="${EDGE_CONFIG_DIRECTORY_PATH}"
 VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH="$(mktemp -d)"
 echo "Building the OS image builder container image..."
 docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
@@ -120,8 +120,8 @@ docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
 echo "Creating the CIDATA ISO in ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}..."
 # Test
 echo "===>"
-echo $EDGE_CONFIG_DIRECTORY_PATH
-echo $TEMP
+echo "${EDGE_CONFIG_DIRECTORY_PATH}"
+echo "${TEMP}"
 echo "<==="
 docker run \
   -v "${EDGE_CONFIG_DIRECTORY_PATH}":/tmp/cloud-init-source \
