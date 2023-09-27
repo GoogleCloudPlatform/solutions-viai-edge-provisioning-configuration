@@ -151,7 +151,7 @@ download_file_if_necessary() {
 
   if [ ! -f "${FILE_TO_DOWNLOAD_PATH}" ]; then
     curl \
-      -f \
+      --fail \
       --location \
       -o "${FILE_TO_DOWNLOAD_PATH}" \
       "${FILE_TO_DOWNLOAD_URL}"
@@ -296,7 +296,7 @@ cleanup_gcloud_auth() {
   if docker ps -a -f status=exited -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" ||
     docker ps -a -f status=created -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"; then
     echo "Cleaning the authentication information..."
-    docker rm -f -v "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"
+    docker rm --force --volumes "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"
   fi
 }
 

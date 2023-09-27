@@ -456,18 +456,15 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
 
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  # replace_variables_in_template 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
   replace_variables_in_template 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
   escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  # replace_variables_in_template 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
   replace_variables_in_template 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
   unset ESCAPED_NAME
 
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  # replace_variables_in_template 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${TARGET_IMAGE}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
   replace_variables_in_template 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${TARGET_IMAGE}"'/g' "$DEPLOYMENT_TEMP_FOLDER/mosquitto.yaml"
 
 fi

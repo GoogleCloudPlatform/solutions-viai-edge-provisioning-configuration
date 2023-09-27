@@ -35,7 +35,7 @@ if is_linux; then
     "${OS_IMAGE_CHECKSUM_FILE_PATH}"
 elif is_macos; then
   shasum \
-    -a "256" \
+    --algorithm "256" \
     -c \
     --ignore-missing \
     "${OS_IMAGE_CHECKSUM_FILE_PATH}"
