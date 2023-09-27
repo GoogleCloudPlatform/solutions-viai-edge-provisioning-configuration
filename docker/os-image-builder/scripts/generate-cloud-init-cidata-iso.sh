@@ -114,6 +114,10 @@ while true; do
     echo "ls 3"
     echo "==="
     ls /tmp
+    echo "ls /tmp/workdir"
+    ls /tmp/workdir
+    echo "ls /"
+    ls /
     echo "<=="
     ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}"
     echo $(ls "${CLOUD_INIT_DATASOURCE_SOURCE_DIRECTORY_PATH}")
