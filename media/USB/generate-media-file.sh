@@ -107,6 +107,8 @@ if [ ! -f "${EDGE_CONFIG_DIRECTORY_PATH}/service-account-key.json" ]; then
   exit 1
 fi
 
+docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
+
 echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml ${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml ${EDGE_CONFIG_DIRECTORY_PATH}/..."
@@ -114,7 +116,6 @@ cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG
 
 VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH="$(mktemp -d)"
 echo "Building the OS image builder container image..."
-docker build -t os-image-builder "$(pwd)/docker/os-image-builder"
 
 echo "Creating the CIDATA ISO in ${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_DIRECTORY_PATH}..."
 docker run \
