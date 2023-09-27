@@ -95,12 +95,7 @@ cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/secret_pubsub.yaml.t
 if [ -f "${SERVICE_ACCOUNT_KEY_PATH}" ]; then
   echo "Updating Pub/Sub credential..."
   SECRET_JSON_PATH="${SERVICE_ACCOUNT_KEY_PATH}"
-  if is_linux; then
-    base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH.tmp"
-  fi
-  if is_macos; then
-    base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_PATH.tmp"
-  fi
+  base64_encode "$SECRET_JSON_PATH" "$SECRET_JSON_PATH.tmp"
   tr -d '\n' <"$SECRET_JSON_PATH.tmp" >"$SECRET_JSON_PATH.txt"
 
   GCLOUD_CREDENTIAL=$(cat "$SECRET_JSON_PATH.txt")

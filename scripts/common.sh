@@ -382,3 +382,16 @@ replace_variables_in_template() {
     sed -i '' "${SED_SCRIPT}" "${FILE_PATH}"
   fi
 }
+
+base64_encode() {
+  SECRET_JSON_PATH="${1}"
+  shift
+  SECRET_JSON_PATH="${1}"
+  shift
+  if is_linux; then
+    base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH.tmp"
+  fi
+  if is_macos; then
+    base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_PATH.tmp"
+  fi
+}
