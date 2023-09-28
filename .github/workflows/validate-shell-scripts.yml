@@ -1,5 +1,5 @@
 ---
-name: Validate shell scripts - MacOS
+name: Validate shell scripts - Ubuntu and MacOS
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,33 +23,41 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml
-  validate-shell-scripts-macos:
+  validate-shell-scripts-ubuntu:
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-22.04, macos-latest]
     needs:
       - lint
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      # https://github.com/orgs/community/discussions/25777#discussioncomment-3249229
-      # We need to manually install docker to verify scripts
-      - name: "Generate Edge server configuration assets and ISO file"
+      - name: Set up Docker Buildx
+        if: ${{ runner.os == 'Linux' }}
+        uses: docker/setup-buildx-action@v2
+      - name: Install Docker runtime on MacOS Runner
         run: |
-          set -o errexit
-          set -o nounset
 
-          brew install docker colima
-          colima start
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            echo "Installing Docker..."
+            set -o errexit
+            set -o nounset
 
-          ./tests/test-shell-scripts.sh
+            brew install docker colima
+            colima start
+          fi
       - name: "Test common functions and variables"
         run: |
           set -o errexit
           set -o nounset
 
-
           ./tests/test-common.sh
+      - name: "Generate Edge server configuration assets and ISO file"
+        run: |
+          set -o errexit
+          set -o nounset
+
+          ./tests/test-shell-scripts.sh
       - name: "Verrify Anthos Version is configured in common.sh"
         run: |
           set -o errexit
