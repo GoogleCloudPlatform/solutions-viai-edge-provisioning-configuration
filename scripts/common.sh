@@ -42,6 +42,8 @@ ERR_GOOGLE_APPLICATION_CREDENTIALS_NOT_FOUND=5
 # shellcheck disable=SC2034
 ERR_DIRECTORY_NOT_FOUND=6
 # shellcheck disable=SC2034
+ERR_UNSUPPORTED_OS=7
+# shellcheck disable=SC2034
 HELP_DESCRIPTION="show this help message and exit"
 # shellcheck disable=SC2034
 GCLOUD_CLI_CONTAINER_IMAGE_ID="gcr.io/google.com/cloudsdktool/cloud-sdk:397.0.0"
@@ -153,7 +155,7 @@ download_file_if_necessary() {
     curl \
       --fail \
       --location \
-      -o "${FILE_TO_DOWNLOAD_PATH}" \
+      --output "${FILE_TO_DOWNLOAD_PATH}" \
       "${FILE_TO_DOWNLOAD_URL}"
   else
     echo "${FILE_TO_DOWNLOAD_PATH} already exists. Skipping download of ${FILE_TO_DOWNLOAD_URL}"
@@ -380,6 +382,9 @@ replace_variables_in_template() {
   elif is_macos; then
     # shellcheck disable=SC2016
     sed -i '' "${SED_SCRIPT}" "${FILE_PATH}"
+  else
+    echo "[Error]Unsupported OS - please run the scripts on Ubuntu or MacOS"
+    exit $ERR_UNSUPPORTED_OS
   fi
 }
 
@@ -390,8 +395,10 @@ base64_encode() {
   shift
   if is_linux; then
     base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_TMP_PATH"
-  fi
-  if is_macos; then
+  elif is_macos; then
     base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_TMP_PATH"
+  else
+    echo "[Error]Unsupported OS - please run the scripts on Ubuntu or MacOS"
+    exit $ERR_UNSUPPORTED_OS
   fi
 }
