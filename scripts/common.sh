@@ -44,6 +44,8 @@ ERR_DIRECTORY_NOT_FOUND=6
 # shellcheck disable=SC2034
 ERR_UNSUPPORTED_OS=7
 # shellcheck disable=SC2034
+ERR_UNSUPPORTED_OS_DESCRIPTION="[Error]Unsupported OS - please run the scripts on Ubuntu or MacOS"
+# shellcheck disable=SC2034
 HELP_DESCRIPTION="show this help message and exit"
 # shellcheck disable=SC2034
 GCLOUD_CLI_CONTAINER_IMAGE_ID="gcr.io/google.com/cloudsdktool/cloud-sdk:397.0.0"
@@ -383,7 +385,7 @@ replace_variables_in_template() {
     # shellcheck disable=SC2016
     sed -i '' "${SED_SCRIPT}" "${FILE_PATH}"
   else
-    echo "[Error]Unsupported OS - please run the scripts on Ubuntu or MacOS"
+    echo "${ERR_UNSUPPORTED_OS_DESCRIPTION}"
     exit $ERR_UNSUPPORTED_OS
   fi
 }
@@ -398,7 +400,7 @@ base64_encode() {
   elif is_macos; then
     base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_TMP_PATH"
   else
-    echo "[Error]Unsupported OS - please run the scripts on Ubuntu or MacOS"
+    echo "${ERR_UNSUPPORTED_OS_DESCRIPTION}"
     exit $ERR_UNSUPPORTED_OS
   fi
 }
