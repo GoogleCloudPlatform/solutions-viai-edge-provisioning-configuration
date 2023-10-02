@@ -107,8 +107,6 @@ if [ ! -f "${EDGE_CONFIG_DIRECTORY_PATH}/service-account-key.json" ]; then
   exit 1
 fi
 
-echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/..."
-echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 

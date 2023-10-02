@@ -17,7 +17,9 @@
 set -o errexit
 set -o nounset
 
-OUTPUT_FOLDER="$(mktemp -d)"
+OUTPUT_FOLDER="$(pwd)/tmp/output"
+
+mkdir -p "${OUTPUT_FOLDER}"
 export OUTPUT_FOLDER
 
 mkdir -p tmp/
@@ -79,9 +81,9 @@ echo "MEDIA_TYPE=${MEDIA_TYPE}"
 echo "K8S_RUNTIME=${K8S_RUNTIME}"
 
 scripts/2-generate-media-file.sh \
-  --edge-config-directory-path "${OUTPUT_FOLDER}" \
-  --media-type "${MEDIA_TYPE}" \
-  --k8s-runtime "${K8S_RUNTIME}"
+  -d "${OUTPUT_FOLDER}" \
+  -t "${MEDIA_TYPE}" \
+  -i "${K8S_RUNTIME}"
 
 echo ".ISO file generate completed."
 
