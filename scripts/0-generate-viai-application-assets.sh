@@ -422,8 +422,8 @@ if [ "${GENERATE_YAML_ONLY}" = "false" ]; then
   # Mosquitto: starting from mosquitto:2.0.0, by default it only allows connections from localhost,
   #           unless explictly edit mosquitto.config `bind_interface device`` or `bind_address ip_address`
   # Use Digest to ensure we are pulling Linux image
-  SOURCE_IMAGE="eclipse-mosquitto:1.6.15"
-  TARGET_IMAGE="${SOURCE_IMAGE}@sha256:abc6b06c4b65adca0d1330e6ef58f795c77c22a0229ba8e465014acfaab451b3"
+  TARGET_IMAGE="eclipse-mosquitto:1.6.15"
+  SOURCE_IMAGE="${TARGET_IMAGE}@sha256:abc6b06c4b65adca0d1330e6ef58f795c77c22a0229ba8e465014acfaab451b3"
 
   if [ "${CONTAINER_REPO_TYPE}" = "${CONST_CONTAINER_REPO_TYPE_PRIVATE}" ]; then
     # If edge server cannot connect to the internet, they must pull images from private repo.
