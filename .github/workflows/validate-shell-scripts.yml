@@ -1,5 +1,5 @@
 ---
-name: Validate shell scripts - Ubuntu and MacOS
+name: Validate shell scripts
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
