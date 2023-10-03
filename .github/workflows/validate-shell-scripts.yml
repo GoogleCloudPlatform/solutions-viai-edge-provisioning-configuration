@@ -13,6 +13,10 @@ on:  # yamllint disable-line rule:truthy
     paths:
       - "scripts/**"
 
+  # Validate scrtips every Sunday at 00:00
+  schedule:
+    - cron:  '0 0 * * 0'
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: null
 
@@ -20,17 +24,38 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
   validate-shell-scripts:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-latest]
     needs:
       - lint
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Docker Buildx
+        if: ${{ runner.os == 'Linux' }}
         uses: docker/setup-buildx-action@v2
+      - name: Install Docker runtime on MacOS Runner
+        if: ${{ runner.os == 'macOS' }}
+        run: |
+            brew install docker colima
+            colima start
+      - name: "Test common functions and variables"
+        run: |
+          set -o errexit
+          set -o nounset
+
+          ./tests/test-common.sh
       - name: "Generate Edge server configuration assets and ISO file"
         run: |
           set -o errexit
           set -o nounset
 
           ./tests/test-shell-scripts.sh
+      - name: "Verrify Anthos Version is configured in common.sh"
+        run: |
+          set -o errexit
+          set -o nounset
+
+          ./tests/test-anthos-version.sh
 ...

@@ -85,7 +85,6 @@ while true; do
     # Ignoring because those are defined in common.sh, and don't need quotes
     # shellcheck disable=SC2086
     exit $EXIT_OK
-    break
     ;;
   esac
 done
@@ -96,14 +95,14 @@ cp "${WORKING_DIRECTORY}/kubernetes/viai-camera-integration/secret_pubsub.yaml.t
 if [ -f "${SERVICE_ACCOUNT_KEY_PATH}" ]; then
   echo "Updating Pub/Sub credential..."
   SECRET_JSON_PATH="${SERVICE_ACCOUNT_KEY_PATH}"
-  base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_PATH.tmp"
+  base64_encode "$SECRET_JSON_PATH" "$SECRET_JSON_PATH.tmp"
   tr -d '\n' <"$SECRET_JSON_PATH.tmp" >"$SECRET_JSON_PATH.txt"
 
   GCLOUD_CREDENTIAL=$(cat "$SECRET_JSON_PATH.txt")
 
   # This is an environment variable and a template variable, use single quota to avoid replacment
   # shellcheck disable=SC2016
-  sed -i 's/${GCLOUD_CREDENTIAL}/'"${GCLOUD_CREDENTIAL}"'/g' "$DEPLOYMENT_TEMP_FOLDER/secret_pubsub.yaml"
+  replace_variables_in_template 's/${GCLOUD_CREDENTIAL}/'"${GCLOUD_CREDENTIAL}"'/g' "$DEPLOYMENT_TEMP_FOLDER/secret_pubsub.yaml"
 
   rm -rf "$SECRET_JSON_PATH.txt"
   rm -rf "$SECRET_JSON_PATH.tmp"

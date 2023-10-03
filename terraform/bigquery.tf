@@ -13,12 +13,12 @@
 # limitations under the License.
 
 module "camera-integration-bigquery" {
-  source     = "terraform-google-modules/bigquery/google"
-  version    = "5.4.1"
-  dataset_id = "viai_edge"
+  source                     = "terraform-google-modules/bigquery/google"
+  version                    = "5.4.1"
+  dataset_id                 = "viai_edge"
   delete_contents_on_destroy = true
-  project_id = var.google_viai_project_id
-  location   = var.google_default_region
+  project_id                 = var.google_viai_project_id
+  location                   = var.google_default_region
 
   tables = [
     {

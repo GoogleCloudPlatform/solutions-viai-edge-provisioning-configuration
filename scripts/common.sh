@@ -19,6 +19,9 @@ set -o errexit
 
 # Ignoring SC2034 because this variable is used in other scripts
 # shellcheck disable=SC2034
+ANTHOS_VERSION="1.16.0"
+# Ignoring SC2034 because this variable is used in other scripts
+# shellcheck disable=SC2034
 CONST_CONTAINER_REPO_TYPE_GCR="GCR"
 # shellcheck disable=SC2034
 CONST_CONTAINER_REPO_TYPE_PRIVATE="Private"
@@ -39,13 +42,17 @@ ERR_GOOGLE_APPLICATION_CREDENTIALS_NOT_FOUND=5
 # shellcheck disable=SC2034
 ERR_DIRECTORY_NOT_FOUND=6
 # shellcheck disable=SC2034
+ERR_UNSUPPORTED_OS=7
+# shellcheck disable=SC2034
+ERR_UNSUPPORTED_OS_DESCRIPTION="[Error]Unsupported OS"
+# shellcheck disable=SC2034
 HELP_DESCRIPTION="show this help message and exit"
 # shellcheck disable=SC2034
 GCLOUD_CLI_CONTAINER_IMAGE_ID="gcr.io/google.com/cloudsdktool/cloud-sdk:397.0.0"
 # shellcheck disable=SC2034
-TERRAFORM_CONTAINER_IMAGE_ID="hashicorp/terraform:1.1.3"
+TERRAFORM_CONTAINER_IMAGE_ID="$(grep <docker/terraform/Dockerfile "hashicorp/terraform" | awk -F ' ' '{print $2}')"
 # shellcheck disable=SC2034
-OS_INSTALLER_IMAGE_URL="https://releases.ubuntu.com/focal/ubuntu-20.04.5-live-server-amd64.iso"
+OS_INSTALLER_IMAGE_URL="https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso"
 # shellcheck disable=SC2034
 OS_IMAGE_CHECKSUM_FILE_URL="https://releases.ubuntu.com/focal/SHA256SUMS"
 # shellcheck disable=SC2034
@@ -57,6 +64,12 @@ OS_INSTALLER_IMAGE_PATH="${WORKING_DIRECTORY}/$(basename "${OS_INSTALLER_IMAGE_U
 # Gcloud auth container name, reused container volume when gcloud is required in later steps
 # shellcheck disable=SC2034
 GCLOUD_AUTHENTICATION_CONTAINER_NAME="gcloud-config"
+
+# Allocate a TTY and enable interactive mode only as needed
+DOCKER_FLAGS=
+if [ -t 0 ]; then
+  DOCKER_FLAGS="-it"
+fi
 
 check_argument() {
   ARGUMENT_VALUE="${1}"
@@ -186,7 +199,9 @@ run_containerized_terraform() {
   echo "Using VIAI Camera application source codes path: ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"
 
   # shellcheck disable=SC2068
-  docker run -it --rm \
+  docker run \
+    ${DOCKER_FLAGS} \
+    --rm \
     -e GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS_PATH}" \
     -v "$(pwd)":/workspace \
     -v /etc/localtime:/etc/localtime:ro \
@@ -210,7 +225,7 @@ gcloud_auth() {
   cleanup_gcloud_auth
 
   docker run \
-    -it \
+    ${DOCKER_FLAGS} \
     --name "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" \
     gcloud auth login --update-adc
@@ -251,7 +266,8 @@ is_tf_state_bucket_exists() {
   TF_STATE_BUCKET="gs://tf-state-${DEFAULT_PROJECT}/"
 
   # shellcheck disable=SC2155,SC2046
-  DOCKER_RUN_OUTPUT=$(docker run --rm -it \
+  DOCKER_RUN_OUTPUT=$(docker run --rm \
+    ${DOCKER_FLAGS} \
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     --volumes-from gcloud-config \
     --name gcloud_exec_command \
@@ -274,6 +290,7 @@ gcloud_exec_cmds() {
   shift
   # shellcheck disable=SC2068
   docker run --rm \
+    ${DOCKER_FLAGS} \
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     --volumes-from gcloud-config \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" $@
@@ -321,11 +338,11 @@ update_camera_app_yaml_template() {
     INDEX="${8}"
     escape_slash "${CAMERA_APPLICATION_CONTAIMER_IMAGE_URL}"
     # shellcheck disable=SC2016
-    sed -i 's/${CONTAINER_REPO_HOST}\/${GOOGLE_CLOUD_PROJECT}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_HOST}\/${GOOGLE_CLOUD_PROJECT}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
     # shellcheck disable=SC2016
-    sed -i 's/${CONTAINER_REPO_HOST}\/${CONTAINER_REPO_REPOSITORY_NAME}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_HOST}\/${CONTAINER_REPO_REPOSITORY_NAME}\/viai-camera-integration:${VIAI_CAMERA_APP_IMAGE_TAG}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
     # shellcheck disable=SC2016
-    sed -i 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
     unset ESCAPED_NAME
   else
     YAML_FILE_PATH="${2}"
@@ -337,21 +354,53 @@ update_camera_app_yaml_template() {
     INDEX="${8}"
 
     # shellcheck disable=SC2016
-    sed -i 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${INDEX}/'"${INDEX}"'/g' "$YAML_FILE_PATH"
     # shellcheck disable=SC2016
-    sed -i 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_HOST}/'"${CONTAINER_REPO_HOST}"'/g' "$YAML_FILE_PATH"
 
     escape_slash "${CONTAINER_REPO_REPOSITORY_NAME}"
     # This is an environment variable and a template variable, use single quota to avoid replacment
     # shellcheck disable=SC2016
-    sed -i 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${CONTAINER_REPO_REPOSITORY_NAME}/'"${ESCAPED_NAME}"'/g' "$YAML_FILE_PATH"
     unset ESCAPED_NAME
 
     # This is an environment variable and a template variable, use single quota to avoid replacment
     # shellcheck disable=SC2016
-    sed -i 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${VIAI_CAMERA_APP_IMAGE_TAG}/'"${VIAI_CAMERA_APP_IMAGE_TAG}"'/g' "$YAML_FILE_PATH"
     # This is an environment variable and a template variable, use single quota to avoid replacment
     # shellcheck disable=SC2016
-    sed -i 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$YAML_FILE_PATH"
+    replace_variables_in_template 's/${GOOGLE_CLOUD_PROJECT}/'"${GOOGLE_CLOUD_PROJECT}"'/g' "$YAML_FILE_PATH"
+  fi
+}
+
+replace_variables_in_template() {
+  SED_SCRIPT="${1}"
+  shift
+  FILE_PATH="${1}"
+  shift
+  if is_linux; then
+    # shellcheck disable=SC2016
+    sed -i "${SED_SCRIPT}" "${FILE_PATH}"
+  elif is_macos; then
+    # shellcheck disable=SC2016
+    sed -i '' "${SED_SCRIPT}" "${FILE_PATH}"
+  else
+    echo "${ERR_UNSUPPORTED_OS_DESCRIPTION}"
+    exit $ERR_UNSUPPORTED_OS
+  fi
+}
+
+base64_encode() {
+  SECRET_JSON_PATH="${1}"
+  shift
+  SECRET_JSON_TMP_PATH="${1}"
+  shift
+  if is_linux; then
+    base64 "$SECRET_JSON_PATH" >"$SECRET_JSON_TMP_PATH"
+  elif is_macos; then
+    base64 -i "$SECRET_JSON_PATH" -o "$SECRET_JSON_TMP_PATH"
+  else
+    echo "${ERR_UNSUPPORTED_OS_DESCRIPTION}"
+    exit $ERR_UNSUPPORTED_OS
   fi
 }

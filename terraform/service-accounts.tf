@@ -43,7 +43,7 @@ resource "google_project_iam_member" "viai-cloud-deploy-serviceAccountUser" {
     "roles/clouddeploy.jobRunner",
     "roles/container.developer"
   ])
-  role = each.key
+  role   = each.key
   member = "serviceAccount:${google_service_account.viai-cloud-deploy.email}"
   depends_on = [
     google_project_service.google-cloud-apis
@@ -52,8 +52,8 @@ resource "google_project_iam_member" "viai-cloud-deploy-serviceAccountUser" {
 
 resource "google_project_iam_member" "viai-camera-integration-client-pubsub-publisher" {
   project = var.google_viai_project_id
-  role   = "roles/pubsub.publisher"
-  member = "serviceAccount:${google_service_account.viai-camera-integration-client.email}"
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${google_service_account.viai-camera-integration-client.email}"
 }
 
 # service account for anthos bare metal to communicate with cloud backend
@@ -87,7 +87,7 @@ resource "google_project_iam_member" "anthos-bare-metal-serviceAccountUser" {
     "roles/iam.securityAdmin",
     "roles/pubsub.admin"
   ])
-  role = each.key
+  role   = each.key
   member = "user:${var.google_cloud_console_user_email}"
   depends_on = [
     google_project_service.google-cloud-apis
@@ -247,7 +247,7 @@ resource "google_project_iam_member" "viai-mode-deploy" {
     "roles/logging.logWriter",
     "roles/clouddeploy.releaser"
   ])
-  role = each.key
+  role   = each.key
   member = "serviceAccount:${google_service_account.viai-mode-deploy_service_account.email}"
   depends_on = [
     google_project_service.google-cloud-apis

@@ -12,42 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_clouddeploy_delivery_pipeline" "delivery_pipeline"{
-    for_each    = toset(var.anthos_target_cluster_membership)
-    location    = var.google_default_region
-    name        = "${var.google_viai_project_id}-${each.key}"
-    description = "${each.key} delivery pipeline."
-    project     = var.google_viai_project_id
-    serial_pipeline {
-        stages {
-            profiles  = []
-            target_id = google_clouddeploy_target.dev[each.key].name
-        }
+resource "google_clouddeploy_delivery_pipeline" "delivery_pipeline" {
+  for_each    = toset(var.anthos_target_cluster_membership)
+  location    = var.google_default_region
+  name        = "${var.google_viai_project_id}-${each.key}"
+  description = "${each.key} delivery pipeline."
+  project     = var.google_viai_project_id
+  serial_pipeline {
+    stages {
+      profiles  = []
+      target_id = google_clouddeploy_target.dev[each.key].name
     }
+  }
 }
 
 resource "google_clouddeploy_target" "dev" {
-    for_each    = toset(var.anthos_target_cluster_membership)
-    location        = var.google_default_region
-    name            = each.key
-    project         = var.google_viai_project_id
-    anthos_cluster {
-        membership = "projects/${var.google_viai_project_id}/locations/global/memberships/${each.key}"
-    }
-    require_approval    = false
-    execution_configs {
-        usages          = [ "RENDER", "DEPLOY" ]
-        service_account  = "viai-abm-service@${var.google_viai_project_id}.iam.gserviceaccount.com"
-    }
+  for_each = toset(var.anthos_target_cluster_membership)
+  location = var.google_default_region
+  name     = each.key
+  project  = var.google_viai_project_id
+  anthos_cluster {
+    membership = "projects/${var.google_viai_project_id}/locations/global/memberships/${each.key}"
+  }
+  require_approval = false
+  execution_configs {
+    usages          = ["RENDER", "DEPLOY"]
+    service_account = "viai-abm-service@${var.google_viai_project_id}.iam.gserviceaccount.com"
+  }
 }
 
 resource "google_workflows_workflow" "event-trigger-destination" {
-    for_each    = toset(var.anthos_target_cluster_membership)
-    name    = "workflow-${each.key}"
-    project = var.google_viai_project_id
-    region  = var.google_default_region
-    service_account = "viai-model-deploy-service@${var.google_viai_project_id}.iam.gserviceaccount.com"
-    source_contents = <<-EOF
+  for_each        = toset(var.anthos_target_cluster_membership)
+  name            = "workflow-${each.key}"
+  project         = var.google_viai_project_id
+  region          = var.google_default_region
+  service_account = "viai-model-deploy-service@${var.google_viai_project_id}.iam.gserviceaccount.com"
+  source_contents = <<-EOF
 main:
   params: [event]
   steps:
@@ -88,34 +88,34 @@ main:
 }
 
 resource "google_eventarc_trigger" "artifact_registry_trigger" {
-    for_each    = toset(var.anthos_target_cluster_membership)
-    location    = var.google_default_region
-    name        = "${each.key}-event-trigger"
-    project     = var.google_viai_project_id
+  for_each = toset(var.anthos_target_cluster_membership)
+  location = var.google_default_region
+  name     = "${each.key}-event-trigger"
+  project  = var.google_viai_project_id
 
-    matching_criteria {
-        attribute = "type"
-        value = "google.cloud.audit.log.v1.written"
-    }
-    matching_criteria {
-        attribute = "serviceName"
-        value = "artifactregistry.googleapis.com"
-    }
-    matching_criteria {
-        attribute = "methodName"
-        value = "Docker-PutManifest"
-    }
-    matching_criteria {
-        attribute   = "resourceName"
-        operator    = "match-path-pattern"
-        value       = "/projects/${var.google_viai_project_id}/locations/${var.google_default_region}/repositories/${var.google_default_region}-viai-models/dockerImages/*"
-    }
-    destination {
-        workflow = google_workflows_workflow.event-trigger-destination[each.key].id
-    }
-    service_account = "viai-model-deploy-service@${var.google_viai_project_id}.iam.gserviceaccount.com"
-    depends_on = [
-        google_workflows_workflow.event-trigger-destination,
-        google_clouddeploy_delivery_pipeline.delivery_pipeline
-    ]
+  matching_criteria {
+    attribute = "type"
+    value     = "google.cloud.audit.log.v1.written"
+  }
+  matching_criteria {
+    attribute = "serviceName"
+    value     = "artifactregistry.googleapis.com"
+  }
+  matching_criteria {
+    attribute = "methodName"
+    value     = "Docker-PutManifest"
+  }
+  matching_criteria {
+    attribute = "resourceName"
+    operator  = "match-path-pattern"
+    value     = "/projects/${var.google_viai_project_id}/locations/${var.google_default_region}/repositories/${var.google_default_region}-viai-models/dockerImages/*"
+  }
+  destination {
+    workflow = google_workflows_workflow.event-trigger-destination[each.key].id
+  }
+  service_account = "viai-model-deploy-service@${var.google_viai_project_id}.iam.gserviceaccount.com"
+  depends_on = [
+    google_workflows_workflow.event-trigger-destination,
+    google_clouddeploy_delivery_pipeline.delivery_pipeline
+  ]
 }

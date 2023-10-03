@@ -50,11 +50,16 @@ autoinstall:
       - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 
     # Explicitly set the passwords for the following users, and expire those passwords
+    # https://cloudinit.readthedocs.io/en/latest/reference/modules.html#set-passwords
     chpasswd:
       expire: true
-      list:
-        - viai-admin:viai-admin
-        - ubuntu:ubuntu
+      users:
+        - name: viai-admin
+          password: viai-admin
+          type: text
+        - name: ubuntu
+          password: ubuntu
+          type: text
 
     groups:
       - microk8s

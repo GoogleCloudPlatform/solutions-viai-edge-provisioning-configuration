@@ -95,7 +95,6 @@ while true; do
     # Ignoring because those are defined in common.sh, and don't need quotes
     # shellcheck disable=SC2086
     exit ${EXIT_OK}
-    break
     ;;
   esac
 done
@@ -108,8 +107,6 @@ if [ ! -f "${EDGE_CONFIG_DIRECTORY_PATH}/service-account-key.json" ]; then
   exit 1
 fi
 
-echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/..."
-echo "cp ${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/..."
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/meta-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 cp "${WORKING_DIRECTORY}/media/USB/${K8S_RUNTIME}/user-data.yaml" "${EDGE_CONFIG_DIRECTORY_PATH}/"
 

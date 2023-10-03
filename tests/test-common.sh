@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "anthos_target_cluster_membership" {
-  type        = list(any)
-  description = "Anthos Membership name of the target environment."
-}
+set -o errexit
+set -o nounset
 
-variable "google_default_region" {
-  type        = string
-  description = "The default Google Cloud region."
-}
+# shellcheck disable=SC1094
+. scripts/common.sh
 
-variable "google_viai_project_id" {
-  type        = string
-  description = "Google Cloud project ID."
-}
+echo "Running containerized Terraform: ${TERRAFORM_CONTAINER_IMAGE_ID}"
+docker run --rm "${TERRAFORM_CONTAINER_IMAGE_ID}" version

@@ -13,16 +13,16 @@
 # limitations under the License.
 
 variable "google_default_zone" {
-  type = string
+  type        = string
   description = "The default Google Cloud zone."
 }
 
 variable "google_default_region" {
-  type = string
+  type        = string
   description = "The default Google Cloud region."
 }
 
 variable "google_viai_project_id" {
-  type = string
+  type        = string
   description = "Google Cloud project ID."
 }
