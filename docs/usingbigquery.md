@@ -31,7 +31,7 @@ python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/
 
 The command output should now contain the following lines, showing the inference results transmission to Pub/Sub:
 
-```
+```text
 Passing camera images to the ML model container
 {'predictionResult': … 'annotationSpecDisplayName': 'defect'}]}]}, 'predictionLatency': '4.417044194s'}
 Transmitting data to Cloud Pub/Sub

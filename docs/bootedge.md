@@ -8,7 +8,7 @@ __Connecting the physical server__
 
 1. Connect the local LAN Ethernet cable to the server’s lowest numbered ethernet port.
 2. Connect a monitor to the server’s lowest numbered HDMI port
-  * Optionally, connect a serial console to the serial console port (refer to the server vendor manual for specific instructions and cables, serial terminal requirements)
+* Optionally, connect a serial console to the serial console port (refer to the server vendor manual for specific instructions and cables, serial terminal requirements)
 3. Connect a USB keyboard to one of the USB ports on the server.
 4. Plug the OS installer USB flash drive into the server.
 5. Plug the installer configuration data USB flash drive into the server.
@@ -26,7 +26,7 @@ __Booting up for the first time__
     If all the settings are correct, you will see a sceen similar to this:
 
     ![boot_screen](./images/boot.png)
-    
+
     If the server does not boot directly from the Ubuntu OS installer USB flash drive, you may need to change the position of the USB flash drivers and/or its BIOS boot settings. You must set the USB drive which contains the Ubuntu distribution as the server boot device.
 
     * Power cycle the server.
@@ -36,8 +36,7 @@ __Booting up for the first time__
     * Use the `+` and `-` keys to rearrange the boot order, and move the USB flash drive to the top fo the list, in the Boot Option #1 position.
     * Navigate to the Advanced -> Trusted Computing menu page.
       * Select `Security Device Support` and set it to `Disable`.
-    * Navigate to the Chipset -> System Agent (SA) Configuration -> 
-    Graphics Configuration.
+    * Navigate to the Chipset -> System Agent (SA) Configuration -> Graphics Configuration.
       * Set `Primary Display` to `HDMI`. This sets the server's motherboard HDMI port 1 as the primary console display port, leaving the GPU PCI card for ML acceleration tasks.
     * Navigate to Save & Exit
       * Select `Save Changes and Reset`
@@ -90,24 +89,24 @@ On the edge server, do the following:
 1. Verify that 2 secrets have been added:
 
 ```bash
-sudo su
+  sudo su
 
-export KUBECONFIG=/var/lib/viai/bmctl-workspace/${MEMBERSHIP}/${MEMBERSHIP}-kubeconfig
+  export KUBECONFIG=/var/lib/viai/bmctl-workspace/${MEMBERSHIP}/${MEMBERSHIP}-kubeconfig
 
-export NAMESPACE=<YOUR KUBERNETES NAMESPACE>
+  export NAMESPACE=<YOUR KUBERNETES NAMESPACE>
 
-kubectl get secrets -n ${NAMESPACE}
+  kubectl get secrets -n ${NAMESPACE}
 ```
 
-    The default namespace value is `viai-edge`
+The default namespace value is `viai-edge`
 
 The command output should be similar to this:
 
-```
-NAME                  TYPE                                  DATA   AGE
-default-token-p8pt5   kubernetes.io/service-account-token   3      1h
-pubsubcred            kubernetes.io/dockerconfigjson        1      1h
-regcred               kubernetes.io/dockerconfigjson        1      1h
+```text
+  NAME                  TYPE                                  DATA   AGE
+  default-token-p8pt5   kubernetes.io/service-account-token   3      1h
+  pubsubcred            kubernetes.io/dockerconfigjson        1      1h
+  regcred               kubernetes.io/dockerconfigjson        1      1h
 ```
 
 

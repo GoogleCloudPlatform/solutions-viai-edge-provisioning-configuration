@@ -17,7 +17,7 @@ python3 camera_client.py --protocol usb --device_id 'usbcam' --address /dev/vide
 
 Example output:
 
-```
+```text
 INFO:root:Camera health check result: True
 ```
 

@@ -29,14 +29,14 @@ Where:
 
 <br>
 
-The following chapters show how to connect different types of cameras to the server. Follow the instructions below for your specific camera type(s). 
+The following chapters show how to connect different types of cameras to the server. Follow the instructions below for your specific camera type(s).
 
-    Note that you can connect multiple different types of cameras to the server, but right now, the viai-camera-integration application container can only use one camera at a time. We are testing running multiple camera client containers & connected cameras simultaneously and will update this document accordingly.
+_Note:_ You can connect multiple different types of cameras to the server, but right now, the viai-camera-integration application container can only use one camera at a time. We are testing running multiple camera client containers & connected cameras simultaneously and will update this document accordingly.
 
- * [Connecting Genicam cameras](./connectinggenicam.md)
- * [Connecting ONVIF-enabled RTSP cameras](./connectingonvif.md)
- * [Connecting simple RTSP cameras](./connectingrtsp.md)
- * [Connecting USB cameras](./connectingusb.md)
- * [Using image files as data source](./connectingfiles.md)
- * [Connecting thermal cameras](./connectingthermal.md)
+* [Connecting Genicam cameras](./connectinggenicam.md)
+* [Connecting ONVIF-enabled RTSP cameras](./connectingonvif.md)
+* [Connecting simple RTSP cameras](./connectingrtsp.md)
+* [Connecting USB cameras](./connectingusb.md)
+* [Using image files as data source](./connectingfiles.md)
+* [Connecting thermal cameras](./connectingthermal.md)
 

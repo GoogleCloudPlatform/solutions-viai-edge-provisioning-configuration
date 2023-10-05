@@ -6,7 +6,8 @@ After you trained a model, to run the model on the edge server and get inference
 
 <br>
 
-__Note on model acceleration on the edge server:__ When you create the solution artifact, you can choose if the VIAI service compiles the model for x86 CPU, or NVIDIA GPU acceleration. If your server has a compatible GPU model, and runs only 1 VIAI model, you should export the model for GPU acceleration. If your server will run multiple VIAI models, or does not have a suitable GPU card, you can export the model for x86 CPU acceleration. Please refer to the chapter <<INSERT LINK>> Using multiple cameras, with dedicated ML models, triggered simultaneously for more information on how to compile ML models for CPU or GPU, and run multiple models on the same server simultaneously.
+__Note on model acceleration on the edge server:__ When you create the solution artifact, you can choose if the VIAI service compiles the model for x86 CPU, or NVIDIA GPU acceleration. If your server has a compatible GPU model, and runs only 1 VIAI model, you should export the model for GPU acceleration.
+If your server will run multiple VIAI models, or does not have a suitable GPU card, you can export the model for x86 CPU acceleration. Please refer to the chapter <<INSERT LINK>> Using multiple cameras, with dedicated ML models, triggered simultaneously for more information on how to compile ML models for CPU or GPU, and run multiple models on the same server simultaneously.
 
 <br>
 
@@ -102,7 +103,7 @@ curl localhost:8602/statusz
 
 You should see output similar to this:
 
-```
+```text
 Container is valid until: 2022-11-04T00:20:25+00:00
 ```
 

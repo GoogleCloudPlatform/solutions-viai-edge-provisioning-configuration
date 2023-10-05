@@ -72,7 +72,7 @@ scripts/provisioning-terraform.sh \
 
 When prompted by Terraform, review the proposed changes and confirm by answering `yes`.
 
-    Note: If you are demoing/testing the solution and you don't have physical servers where you will deploy the edge components, you can launch the script with the `-x` flag. The scrpit will create a sandbox VM on GCE with a T4 GPU attached that you will be able to use to demo/test the solution:
+_Note:_ If you are demoing/testing the solution and you don't have physical servers where you will deploy the edge components, you can launch the script with the `-x` flag. The scrpit will create a sandbox VM on GCE with a T4 GPU attached that you will be able to use to demo/test the solution:
 
 ```bash
 scripts/provisioning-terraform.sh \
@@ -94,7 +94,7 @@ scripts/provisioning-terraform.sh -h
 
 The `-g` flag  instructs the script to generate the `terraform.tfvars` file. You can optionally choose not to use the `-g` flag and create the file manually instead of letting the script generate it for you. The file should be in the following format:
 
-```
+```text
 google_default_region = "${DEFAULT_REGION}"
 google_default_zone = "${DEFAULT_ZONE}"
 google_viai_project_id = "${DEFAILT_PROJECT}"
@@ -114,8 +114,8 @@ Where:
 * `cloud_function_source_path`: path to the zipped file with the Cloud Function source code.
     The source code can be found at `ssh://<your-email-address>@source.developers.google.com:2022/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration` branch: `main` by default. Cloud Function codes are in the `cf` folder.
 * `anthos_target_cluster_membership`:
-    * Anthos membership names, an array of strings. For example: `[“member1", “member2"]`. The membership names are names that will be registered to Anthos to identify your edge servers.
-    * This variable can be set to `[]` if this is your first time running `provision-terraform.sh` and you only want to provision cloud resources and do not want to configure any edge servers related services at the moment.
+  * Anthos membership names, an array of strings. For example: `[“member1", “member2"]`. The membership names are names that will be registered to Anthos to identify your edge servers.
+  * This variable can be set to `[]` if this is your first time running `provision-terraform.sh` and you only want to provision cloud resources and do not want to configure any edge servers related services at the moment.
 * `create_sandbox`: `true` if you want to provision GCE VMs, otherwise `false`.
 
 <br>
@@ -123,9 +123,9 @@ Where:
 The Terraform script performs the following:
 
 * Provisions cloud resources in the specified Google Cloud project, including:
-    * Google Cloud resources [listed earlier](./prerequisites.md#supported-cloud-regions-and-services)
-    * A GCE instance attached to a T4 GPU and VPC network if you choose to create a sandbox with the `-x` flag
-    * Create and download two service account key files into the `${VIAI_PROVISIONING_FOLDER}/tmp` folder. They will be used in following configuration steps.
+  * Google Cloud resources [listed earlier](./prerequisites.md#supported-cloud-regions-and-services)
+  * A GCE instance attached to a T4 GPU and VPC network if you choose to create a sandbox with the `-x` flag
+  * Create and download two service account key files into the `${VIAI_PROVISIONING_FOLDER}/tmp` folder. They will be used in following configuration steps.
 
 At this point the required Google Cloud services are provisioned and ready to use.
 

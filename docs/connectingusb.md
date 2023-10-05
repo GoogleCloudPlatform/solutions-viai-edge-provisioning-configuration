@@ -25,7 +25,7 @@ v4l2-ctl --list-devices
 
 The output should be similar to this:
 
-```
+```text
 Logitech Webcam C930e (usb-0000:00:14.0-8):
   /dev/video0
   /dev/video1
@@ -46,13 +46,13 @@ python3 camera_client.py --protocol usb --scan
 
 The output should be similar to this:
 
-```
+```text
 Discovering USB cameras..
 USB cameras found:
 Address: /dev/video0 | Model: Logitech Webcam C930e | # of Properties: 275
 ```
 
-    The example above shows a valid camera connected to /dev/video0
+The example above shows a valid camera connected to /dev/video0
 
 
 With the information from the last step, you can start to [Collect images for training](./collectimages.md) in the next section.
@@ -74,7 +74,7 @@ python3 camera_client.py --protocol usb --address /dev/video0 --device_id cam1 -
 
 The output should be similar to:
 
-```
+```text
 2022-09-13 02:59:42,296 - root - INFO - USB cameras found: ['/dev/video0']
 Using camera: /dev/video0
 INFO:root:Querying camera runtime configs and saving to: /var/lib/viai/camera-config/current.cfg
@@ -88,7 +88,7 @@ head -5 /var/lib/viai/camera-config/current.cfg
 
 The output should be similar to:
 
-```
+```text
 CAP_PROP_APERTURE = -1.0
 CAP_PROP_AUTOFOCUS = 1.0
 CAP_PROP_AUTO_EXPOSURE = 3.0
@@ -111,7 +111,7 @@ python3 camera_client.py --protocol usb --address /dev/video0 --device_id cam1 -
 
 The output should be similar to this:
 
-```
+```text
 2022-09-13 03:01:34,150 - root - INFO - Reading config from input file: /var/lib/viai/camera-config/current.cfg
 INFO:root:Writing config to the camera: CAP_PROP_APERTURE = -1.0
 INFO:root:Writing config to the camera: CAP_PROP_AUTOFOCUS = 1.0

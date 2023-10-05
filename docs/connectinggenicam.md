@@ -10,21 +10,22 @@ Follow these steps:
 
 Ensure that the Genicam camera is connected to the same subnet as your host computer, using a gigabit ethernet PoE (Power over Ethernet) cable.
 
-Print the supported command line switches:
+Print the supported command-line switches:
 
 ```bash
 kubectl exec -it viai-camera-integration -n ${NAMESPACE} -- /bin/bash -c 'python3 camera_client.py --help'
 ```
 
 Output will be similar to the following:
-```
+```text
 usage: camera_client.py [-h] [--log LOG] --device_id DEVICE_ID
                             [--device_no DEVICE_NO] [--gentl GENTL]
                             [--mode {none,single,continuous}] [--model MODEL]
                             [--labels LABELS] [--top_k TOP_K]
 ```
 
-To communicate with the camera, you need to have its GenTL producer file, with a `.cti` file ending, and the file should be compiled for Linux x86-64. The repository contains an example GenTL producer file for FLIR cameras, for both macOS and Ubuntu 20.04 which is the base OS of the reference server. To use your camera’s GenTL producer file, place it in a directory on the server that the docker image can access.
+To communicate with the camera, you need to have its GenTL producer file, with a `.cti` file ending, and the file should be compiled for Linux x86-64. The repository contains an example GenTL producer file for FLIR cameras, for both macOS and Ubuntu 20.04 which is the base OS of the reference server.
+To use your camera’s GenTL producer file, place it in a directory on the server that the docker image can access.
 
 The container that runs the camera integration utility is called `viai-camera-integration-operations`.
 It is located inside the pod called `viai-camera-integration`.
@@ -37,9 +38,9 @@ kubectl describe pod viai-camera-integration -n ${NAMESPACE}
 The camera utility container has volumes mounted on it, which are shared with the server’s host operating system:
 
 * Mountpoint inside the container: `/var/lib/viai/camera-config`
-    * Used to store camera configuration files, and GenTL producer .cti files
+  * Used to store camera configuration files, and GenTL producer .cti files
 * Mountpoint inside the container: `/var/lib/viai/camera-data`
-    * Used to write imager array data from the camera, in images, or raw binary files
+  * Used to write imager array data from the camera, in images, or raw binary files
 
 On the host OS side, microk8s mounts those 2 shared volumes in dynamically allocated paths. To find the path of the shared volumes on the Ubuntu host side, run:
 
@@ -49,7 +50,7 @@ kubectl get pv -n ${NAMESPACE}
 
 Which should output something similar to:
 
-```
+```text
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                               STORAGECLASS        REASON   AGE
 pvc-b0a2e5ff-9414-4736-aba3-ad6b92597d7e   20Gi       RWX            Delete           Bound    container-registry/registry-claim   microk8s-hostpath            5h55m
 pvc-826b7dce-0de9-48a7-bfea-fbe20237b779   100Mi      RWO            Delete           Bound    default/viai-camera-config          microk8s-hostpath            24m
@@ -64,7 +65,7 @@ kubectl describe pv pvc-826b7dce-0de9-48a7-bfea-fbe20237b779
 
 The command should output similar to this, where the shared volume path is the attribute `Path`:
 
-```
+```text
 Name:            pvc-826b7dce-0de9-48a7-bfea-fbe20237b779
 Labels:          <none>
 Annotations:     hostPathProvisionerIdentity: localhost
@@ -134,7 +135,7 @@ ls -l /var/lib/viai/camera-config/
 
 The output should be similar to this:
 
-```
+```text
 -rw------ 1 root root 29 Oct 13 10:11 my-camera-gentl-ubuntu-x86-64.cti
 ```
 
@@ -154,12 +155,14 @@ python3 camera_client.py --protocol genicam --scan
 
 The output should be similar to this:
 
-```
+```text
 Discovering Genicam cameras on the network..
-Genicam cameras found: [{'access_status': 1, 'display_name': 'FLIR Systems AB', 'id_': '00111C0242D4_C0A8011F_FFFFFF00_C0A80101', 'model': 'FLIR AX5', 'parent': <genicam.gentl.Interface; proxy of <Swig Object of type 'std::shared_ptr< GenTLCpp::TLInterface > *' at 0x7fc4b54c9b70> >, 'serial_number': '62501484', 'tl_type': 'GEV', 'user_defined_name': '', 'vendor': 'FLIR Systems AB', 'version': 'Version 1.0  (02.05.15)'}]
+Genicam cameras found: [{'access_status': 1, 'display_name': 'FLIR Systems AB', 'id_': '00111C0242D4_C0A8011F_FFFFFF00_C0A80101', 'model': 'FLIR AX5', 'parent': <genicam.gentl.Interface;
+proxy of <Swig Object of type 'std::shared_ptr< GenTLCpp::TLInterface > *' at 0x7fc4b54c9b70> >, 'serial_number': '62501484', 'tl_type': 'GEV', 'user_defined_name': '', 'vendor': 'FLIR Systems AB', 'version': 'Version 1.0  (02.05.15)'}]
 ```
 
-    In the above example, you can see that 1 camera was found, and the model is a FLIR AX5. If your system can see multiple cameras, you can select which camera to connect to, by using the `--address` switch, counting up from zero. Meaning that if the command lists 2 cameras for example, the first listed camera is `--address 0` and the second camera is `--address 1`. The VIAI Edge solution can currently only connect to one camera at a time.
+In the above example, you can see that 1 camera was found, and the model is a FLIR AX5. If your system can see multiple cameras, you can select which camera to connect to, by using the `--address` switch, counting up from zero. Meaning that if the command lists 2 cameras for example, the first listed camera is `--address 0` and the second camera is `--address 1`.
+The VIAI Edge solution can currently only connect to one camera at a time.
 
 <br>
 
@@ -181,7 +184,7 @@ python3 camera_client.py --protocol genicam --address 0 --device_id cam1 \
 
 The output should look similar to this:
 
-```
+```text
 Cameras found: 1
 (id_='00111C0242D4_C0A80019_FFFFFF00_C0A80001', vendor='FLIR Systems AB', model='FLIR AX5', tl_type='GEV', user_defined_name=None, serial_number='62501484', version='Version 1.0  (02.05.15)')
 Querying camera runtime configs and saving to: /var/lib/viai/camera-config/current.cfg
@@ -196,7 +199,7 @@ head -5 /var/lib/viai/camera-config/current.cfg
 
 The output should be similar to this:
 
-```
+```text
 AcquisitionFrameCount = 1
 AcquisitionMode = 'Continuous'
 AtmTaoInternal = 8192
@@ -229,7 +232,7 @@ head -5 /var/lib/viai/camera-config/current.cfg
 
 The output should be similar to:
 
-```
+```text
 AcquisitionFrameCount = 1
 AcquisitionMode = 'Continuous'
 AtmTaoInternal = 8192
@@ -252,7 +255,7 @@ python3 camera_client.py --protocol genicam --address 0 --device_id cam1 --gentl
 
 The output should be similar to:
 
-```
+```text
 2022-09-13 02:52:14,755 - root - INFO - Reading config from input file: /var/lib/viai/camera-config/current.cfg
 INFO:root:Writing config to the camera: Width = 640
 ...

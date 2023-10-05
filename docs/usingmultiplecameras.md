@@ -23,11 +23,13 @@ Follow the steps below to deploy a multi-cam setup:
 
 1. Deploy the first camera, first camera client application and first ML model
 
-Follow all the previous sections from [Connecting cameras](./connectingcameras.md) until [Triggering inspection remotely with an MQTT command](./usingtriggeringinspection.md) as per normal. After completing all the steps, you now have 1 camera, with 1 client application, 1 ML model deployed for that camera, and you are able to trigger inspection with the first camera using MQTT. The first camera is now done.
+Follow all the previous sections from [Connecting cameras](./connectingcameras.md) until [Triggering inspection remotely with an MQTT command](./usingtriggeringinspection.md) as per normal.
+After completing all the steps, you now have 1 camera, with 1 client application, 1 ML model deployed for that camera, and you are able to trigger inspection with the first camera using MQTT. The first camera is now done.
 
 2. Deploy the second camera client pod
 
-* Find the first camera client’s YAML file `viai-camera-integration.yaml`. It should be located in the `$OUTPUT` folder, after you have originally executed the script `​​0-generate-viai-application-assets.sh`. The script creates the camera client pod’s YAML file with your system’s specific configurations. If you do not have that file or folder any more, you can re-run the script `0-generate-viai-application-assets.sh` using the same values as before. Refer to chapter [Generating Visual Inspection AI Edge application assets](./createviai.md) in that case.
+* Find the first camera client’s YAML file `viai-camera-integration.yaml`. It should be located in the `$OUTPUT` folder, after you have originally executed the script `​​0-generate-viai-application-assets.sh`.
+The script creates the camera client pod’s YAML file with your system’s specific configurations. If you do not have that file or folder any more, you can re-run the script `0-generate-viai-application-assets.sh` using the same values as before. Refer to chapter [Generating Visual Inspection AI Edge application assets](./createviai.md) in that case.
 
 * Copy the first camera client YAML for the second client with:
 
@@ -39,7 +41,7 @@ cp viai-camera-integration.yaml viai-camera-integration2.yaml
 
 For example, add ‘2’ to the values. Here’s an example diff between the first/original and second client YAML files:
 
-```
+```text
 $ diff viai-camera-integration1.yaml viai-camera-integration2.yaml
 5c5
 <   name: viai-camera-config
@@ -129,7 +131,7 @@ kubectl -n ${NAMESPACE} get pods
 
 The output should be similar to this:
 
-```
+```text
 NAME                                           READY   STATUS    RESTARTS       AGE
 model-mvp2-cpu-1-deployment-785b6f7c5f-jsjlt   1/1     Running   0              110m
 model-mvp2-cpu-2-deployment-554497cb7f-hnfmq   1/1     Running   0              110m
@@ -150,7 +152,7 @@ kubectl -n ${NAMESPACE} get pods
 
 The output should be similar to this:
 
-```
+```text
 NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 model-mvp2-cpu-1-deployment   1/1     1            1           111m
 model-mvp2-cpu-2-deployment   1/1     1            1           111m
@@ -167,7 +169,7 @@ kubectl -n ${NAMESPACE} get services
 
 The output should be similar to this:
 
-```
+```text
 NAME               TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)             AGE
 model-mvp2-cpu-1   ClusterIP      172.16.200.145   <none>         8602/TCP,8603/TCP   111m
 model-mvp2-cpu-2   ClusterIP      172.16.200.248   <none>         8602/TCP,8603/TCP   111m
@@ -221,7 +223,7 @@ mosquitto_pub -h 192.168.1.24 -t viai/commands -m get_frame
 
 If everything is configured correctly, _both_ camera client windows should display something similar to
 
-```
+```text
 MQTT command received: get_frame
 {'predictionResult': {'annotationsGroups'..'predictionLatency': '0.024179821s'}
 Transmitting ML inference results to local MQTT
@@ -230,7 +232,7 @@ Local MQTT transmit complete
 
 And the mosquitto_sub window should display _two_ inspection result payloads:
 
-```
+```text
 {"predictionResult":.."annotationSpecDisplayName": "defect"}]}]}, "predictionLatency": "0.024179821s"}
 {"predictionResult":.."annotationSpecDisplayName": "defect"}]}]}, "predictionLatency": "0.027308149s"}
 ```

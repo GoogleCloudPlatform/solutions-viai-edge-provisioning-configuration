@@ -80,7 +80,8 @@ python3 camera_client.py --protocol usb --device_id <camera-id> --address </dev/
     In case of files, you should already have a collection of normal and defective images, collected separately. Use this set of images to build your VIAI dataset, following the instructions below.
 
 
-If you need to place good quality objects in front of the camera 1 by 1, you can also collect the training images one at a time, executing the following command for each camera view of the object, using `--mode single`, as many times as needed. Or you can run the utility in interactive mode, with switch: `--mode interactive`. With the interactive mode, the utility will take a new image every time you press '<enter>'.
+If you need to place good quality objects in front of the camera 1 by 1, you can also collect the training images one at a time, executing the following command for each camera view of the object, using `--mode single`, as many times as needed. Or you can run the utility in interactive mode, with switch: `--mode interactive`.
+With the interactive mode, the utility will take a new image every time you press '<enter>'.
 
 Generate at least 100 normal examples by running:
 
@@ -157,7 +158,7 @@ gsutil ls gs://
 
 The command should output similar to this. Take note of the bucket path:
 
-```
+```text
 gs://viai-us-model-training-data-<your_id>/
 ```
 
@@ -175,7 +176,7 @@ gsutil ls gs://viai-us-model-training-data-<your_id>/model1/
 
 The output should be similar to:
 
-```
+```text
 gs://viai-us-model-training-data-<your_id>/model1/defect/
 gs://viai-us-model-training-data-<your_id>/model1/normal/
 ```

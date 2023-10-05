@@ -10,7 +10,8 @@ Thermal/IR cameras contain an infrared bolometer sensor array.
 
 For example, the FLIR AX5 camera has 640 sensor elements horizontally, and 512 vertically, producing a 640x512 imager array output. Each ‘pixel’ in the raw data contains radiometric information.
 
-The recommended way to use this client is to set the cameras in ‘temperature linear’ mode. With that mode enabled, it is possible to calculate the radiometric temperature value per pixel. The raw data can be acquired in 8 or 14 bits’ dynamic range. By default, 14 bits will be used in order to get the most accurate data. The 14-bits raw data can then be converted to Kelvin, Fahrenheit or Celsius values for each pixel. To summarize, the raw data produced by the FLIR AX5 camera, as an example, is a 1-dimensional array, with 327,680 elements (640 x 512), with each element containing a 14-bit value (0 to 16383) which can be converted to K, F or C with a simple formula, for example in [BigQuery](https://cloud.google.com/bigquery).
+The recommended way to use this client is to set the cameras in ‘temperature linear’ mode. With that mode enabled, it is possible to calculate the radiometric temperature value per pixel. The raw data can be acquired in 8 or 14 bits’ dynamic range. By default, 14 bits will be used in order to get the most accurate data. The 14-bits raw data can then be converted to Kelvin, Fahrenheit or Celsius values for each pixel.
+To summarize, the raw data produced by the FLIR AX5 camera, as an example, is a 1-dimensional array, with 327,680 elements (640 x 512), with each element containing a 14-bit value (0 to 16383) which can be converted to K, F or C with a simple formula, for example in [BigQuery](https://cloud.google.com/bigquery).
 
 The VIAI Edge client application has three data acquisition modes, selectable with the `--mode` switch: `none`, `single` and `continuous`
 * `none` do not acquire any data. Used primarily to read or write camera configurations
@@ -36,7 +37,8 @@ p = Struct(
 
 The file naming convention consists of the `device_id`, plus a datetime stamp (milliseconds since epoch) so that the camera, and the creation time of the file can be easily detected.
 
-Each row in the binary file consists of one complete IR sensor temperature linear dump, with metadata such as the camera ID, timestamp, and pre-calculated avg, min and max temperature values in the desired format (C|F|K). This data can be then streamed via [Cloud Pub/Sub](https://cloud.google.com/pubsub) to other Google Cloud services (for example [BigQuery](https://cloud.google.com/bigquery)) for analysis or additional ML model training.
+Each row in the binary file consists of one complete IR sensor temperature linear dump, with metadata such as the camera ID, timestamp, and pre-calculated avg, min and max temperature values in the desired format (C|F|K).
+This data can be then streamed via [Cloud Pub/Sub](https://cloud.google.com/pubsub) to other Google Cloud services (for example [BigQuery](https://cloud.google.com/bigquery)) for analysis or additional ML model training.
 
 The client contains a python encoder function that can write the raw IR data to the binary file format and a python decoder that can be used to read the binary files and store the IR array raw data back in Python numpy arrays.
 

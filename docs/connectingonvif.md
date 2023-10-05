@@ -43,14 +43,14 @@ python3 camera_client.py --protocol onvif --scan --cam_user <username> --cam_pas
 
 The output should be similar to:
 
-```
+```text
 Discovering ONVIF cameras on the network..
 ONVIF cameras found: [{'uuid': '2419d68a-2dd2-21b2-a205-ec', 'addr': '192.168.1.105', 'port': '8000'}]
 Querying found ONVIF cameras for RTSP URIs..
 ONVIF RTSP addresses found: ['rtsp://192.168.1.105:554/h264Preview_01_main', 'rtsp://192.168.1.105:554/h264Preview_01_sub']
 ```
 
-    The example above has discovered two cameras, which can be used in the next section.
+The example above has discovered two cameras, which can be used in the next section.
 
 
 At this point, the camera is connected and ready to use. You can start to [Collect images for training](./collectimages.md) in the next section.

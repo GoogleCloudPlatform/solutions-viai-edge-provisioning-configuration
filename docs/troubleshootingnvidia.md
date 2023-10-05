@@ -13,7 +13,7 @@ ubuntu-drivers devices
 ```
 
 The command should output similar to:
-```
+```text
 == /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
 modalias : pci:v000010DEd00001E82sv00001043sd00008674bc03sc00i00
 vendor   : NVIDIA Corporation
@@ -36,7 +36,7 @@ nvidia-detector
 
 The output is similar to:
 
-```
+```text
 nvidia-driver-495
 ```
 
@@ -48,7 +48,7 @@ prime-select query
 
 The command should output:
 
-```
+```text
 nvidia
 ```
 
@@ -66,7 +66,7 @@ nvidia-smi
 
 If successful, the output should be similar to this:
 
-```
+```text
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 470.82.01    Driver Version: 470.82.01    CUDA Version: 11.4     |
 |-------------------------------+----------------------+----------------------+

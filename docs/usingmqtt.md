@@ -2,7 +2,8 @@
 
 ## Streaming inference results to local MQTT for local actions
 
-The solution supports streaming the ML inference results to a locally MQTT queue. For convenience, the VIAI Edge server runs a mosquitto broker container, which you can use to inform local systems of the visual inspection results. The local systems can then for example inform human operators that a faulty object was detected or to control a robotic arm that pushes suspected faulty objects off the production line for human inspection.
+The solution supports streaming the ML inference results to a locally MQTT queue. For convenience, the VIAI Edge server runs a mosquitto broker container, which you can use to inform local systems of the visual inspection results.
+The local systems can then for example inform human operators that a faulty object was detected or to control a robotic arm that pushes suspected faulty objects off the production line for human inspection.
 
 To start publishing ML inference results to the VIAI Edge server-local MQTT topic, add the following switches to the camera app:
 * `--mqtt` when set, enables publishing ML inference results JSON to an MQTT topic

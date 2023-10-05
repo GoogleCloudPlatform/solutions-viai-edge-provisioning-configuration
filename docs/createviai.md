@@ -72,8 +72,8 @@ Where:
 
 * `CONTAINER_REPO_PASSWORD` Required if `REPO_TYPE` is `Private`,  the password  of private container registry.
 
-* `CONTAINER_REPO_REG_NAME` 
-  * If `REPO_TYPE` is `Private`, the registry name of the Container Registry. 
+* `CONTAINER_REPO_REG_NAME`
+  * If `REPO_TYPE` is `Private`, the registry name of the Container Registry.
   * If `REPO_TYPE` is `GCR`, this value should equal to `${DEFAULT_PROJECT}`.
 
 * `CONTAINER_BUILD_METHOD` Must be `GCP`, instruct the script to submit Visual Inspection AI Edge solution codes to `Cloud Build` to build the container image.
@@ -94,34 +94,34 @@ Where:
 After the script completes, you shoud see an output similar to this.<br>
 __Important:__ Take note of the _output folder_ where the assets have been generated.
 
-```
-1.6.15: digest: sha256:abc6b06c4b65adca0d1330e6ef58f795c77c22a0229ba8e465014acfaab451b3 size: 946
-Push eclipse-mosquitto:1.6.15 to us-central1-docker.pkg.dev/airy-boulevard-397316/us-central1-viai-applications/eclipse-mosquitto:1.6.15
-[OK]: optional name of the membership register to Anthos value is defined: anthos-server
-Cleaning the authentication information...
-gcloud-config
-[Generating Assets] Completed.
+```text
+  1.6.15: digest: sha256:abc6b06c4b65adca0d1330e6ef58f795c77c22a0229ba8e465014acfaab451b3 size: 946
+  Push eclipse-mosquitto:1.6.15 to us-central1-docker.pkg.dev/airy-boulevard-397316/us-central1-viai-applications/eclipse-mosquitto:1.6.15
+  [OK]: optional name of the membership register to Anthos value is defined: anthos-server
+  Cleaning the authentication information...
+  gcloud-config
+  [Generating Assets] Completed.
 
-VIAI application assets have been generated at: /tmp/tmp.39xMkl1xDm
+  VIAI application assets have been generated at: /tmp/tmp.39xMkl1xDm
 ```
 
 The _output folder_ has the following structure:
 
-```
-/tmp/tmp.39xMkl1xDm
-├── kubernetes
-│   ├── mosquitto.yaml
-│   ├── namespace.yaml
-│   ├── secret_image_pull.yaml
-│   ├── secret_pubsub.yaml
-│   └── viai-camera-integration.yaml
-├── scripts
-│   ├── 1-deploy-app.sh
-│   ├── common.sh
-│   ├── deploy-app.sh
-│   ├── gcp-anthos-attach-cluster.sh
-│   └── machine-install-prerequisites.sh
-└── service-account-key.json
+```text
+  /tmp/tmp.39xMkl1xDm
+  ├── kubernetes
+  │   ├── mosquitto.yaml
+  │   ├── namespace.yaml
+  │   ├── secret_image_pull.yaml
+  │   ├── secret_pubsub.yaml
+  │   └── viai-camera-integration.yaml
+  ├── scripts
+  │   ├── 1-deploy-app.sh
+  │   ├── common.sh
+  │   ├── deploy-app.sh
+  │   ├── gcp-anthos-attach-cluster.sh
+  │   └── machine-install-prerequisites.sh
+  └── service-account-key.json
 ```
 
 Where:
@@ -138,7 +138,8 @@ If your environment will have multiple cameras, please [use this guide](./multip
 
 __Creating Kubernetes setup assets__
 
-By default, the Anthos installation requires you to allocate IP addresses for Control Plane and Load Balancer. It is out of the scope of this document to show How to design and manage IP addresses allocation, please refer to the [Anthos Network Requirements](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/concepts/network-reqs) and the [Set up Load Balancer](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/load-balance) guides for details.
+By default, the Anthos installation requires you to allocate IP addresses for Control Plane and Load Balancer.
+It is out of the scope of this document to show How to design and manage IP addresses allocation, please refer to the [Anthos Network Requirements](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/concepts/network-reqs) and the [Set up Load Balancer](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/load-balance) guides for details.
 
 This is an example table for IP Addresses allocation:
 
@@ -222,26 +223,26 @@ This script
 
 After the script runs, the console will show details about the asset creation. All assets created are stored in the `$OUTPUT_PATH` folder.
 
-```
-Copying Anthos Bare Metal template file...
-Copy dependecies installation scripts...
-USERS_EMAILS=admin@junholee.altostrat.com
-Node setup scripts have been generated at /tmp/tmp.39xMkl1xDm/edge-server
-```
+```text
+  Copying Anthos Bare Metal template file...
+  Copy dependecies installation scripts...
+  USERS_EMAILS=admin@junholee.altostrat.com
+  Node setup scripts have been generated at /tmp/tmp.39xMkl1xDm/edge-server
+  ```
 
-The `$OUTPUT_PATH` will have a structure similar to this:
+  The `$OUTPUT_PATH` will have a structure similar to this:
 
-```
-/tmp/tmp.39xMkl1xDm/edge-server
-├── anthos-service-account-key.json
-├── bmctl-physical-template.yaml
-├── cloud-ops-account-key.json
-├── config-section.toml
-├── gcr-service-account-key.json
-├── gke-connect-angent-account-key.json
-├── gke-connect-register-account-key.json
-├── machine-install-prerequisites.sh
-└── node-setup.sh
+```text
+  /tmp/tmp.39xMkl1xDm/edge-server
+  ├── anthos-service-account-key.json
+  ├── bmctl-physical-template.yaml
+  ├── cloud-ops-account-key.json
+  ├── config-section.toml
+  ├── gcr-service-account-key.json
+  ├── gke-connect-angent-account-key.json
+  ├── gke-connect-register-account-key.json
+  ├── machine-install-prerequisites.sh
+  └── node-setup.sh
 ```
 
 

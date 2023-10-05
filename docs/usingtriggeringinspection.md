@@ -23,7 +23,7 @@ python3 camera_client.py --protocol usb --address /dev/video0 --device_id 'usbca
 
 If everything goes well, the utility starts in daemon mode and outputs similar to:
 
-```
+```text
 2022-09-13 06:45:23,846 - root - INFO - Starting MQTT client. Publishing results to: viai/results
 Local network MQTT connected with result code 0
 Subscribing to MQTT topic: viai/commands
@@ -46,7 +46,7 @@ mosquitto_pub -h ${MQTT_HOST}-t viai/commands -m get_frame
 
 If successful, your VIAI Edge utility window should display:
 
-```
+```text
 INFO:root:MQTT command received: get_frame
 INFO:root:{'predictionResult':...
 INFO:root:Transmitting ML inference results to local MQTT
@@ -55,7 +55,7 @@ INFO:root:Local MQTT transmit complete
 
 and your mosquitto_sub window should display the ML inspection result payload:
 
-```
+```text
 {"predictionResult":...
 ...
 ```
@@ -68,7 +68,7 @@ mosquitto_pub -h ${MQTT_HOST} -t viai/commands -m quit
 
 Which should close the utility on the VIAI Edge server and output:
 
-```
+```text
 INFO:root:Quit command received via MQTT..
 ```
 

@@ -68,7 +68,7 @@ Where:
 
 The output should be similar to this:
 
-```
+```text
 A new kubeconfig entry "connectgateway_project_id_global_anthos-server-xyz" has been generated and set as the current context.
 ```
 
@@ -89,7 +89,7 @@ kubectl get pods -n $NAMESPACE
 
 When the deployment pod is being deployed, it will appear in the output like this:
 
-```
+```text
 mledge-deployment-7bf7889c8f-bqxld                    1/1     Running     1 (1m ago)   2m
 ```
 
@@ -101,7 +101,7 @@ kubectl get deployments -n $NAMESPACE
 
 The output should be similar to:
 
-```
+```text
 NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
 mosquitto               1/1     1            1           45h
 viai-model-deployment   1/1     1            1           40m
@@ -115,7 +115,7 @@ kubectl get service viai-model -n $NAMESPACE
 
 The output should be similar to:
 
-```
+```text
 NAME         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
 viai-model   ClusterIP      10.152.183.175   <none>        8602/TCP         38m
 ```
@@ -143,7 +143,7 @@ curl $INFERENCE_URL -X POST -d "{\"image_bytes\": \"$(base64 -w0 image.png)\"}"
 
 If successful, the model should return a JSON output similar to the following.
 
-```
+```text
 {"predictionResult":{"annotationsGroups":[{"annotationSet":{"name":"projects/199334883686/locations/us-central1/datasets/1648497783524556800/annotationSets/5668840060254945280","displayName":"Predicted Classification Labels","classificationLabel":{},"createTime":"2022-02-04T16:23:34.994263Z","updateTime":"2022-02-04T16:23:35.058343Z"},"annotations":[{"name":"localAnnotations/0","annotationSpecId":"1583825059334586368","annotationSetId":"5668840060254945280","classificationLabel":{"confidenceScore":0.0598243},"source":{"type":"MACHINE_PRODUCED","sourceModel":"projects/199334883686/locations/us-central1/solutions/5917483619760209920/modules/463272627293650944/models/8522710451077775360"}}]}]},"predictionLatency":"0.125581514s"}
 ```
 

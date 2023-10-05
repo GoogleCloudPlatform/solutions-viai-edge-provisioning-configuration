@@ -49,7 +49,7 @@ curl -v -X POST -H "Content-Type: application/json" -d @body http://ml-model:860
 
 If successful, the output will be similar to:
 
-```
+```text
 {"predictionResult":{"annotationsGroups":[{"annotationSet":{"name":"projects…
 ```
 

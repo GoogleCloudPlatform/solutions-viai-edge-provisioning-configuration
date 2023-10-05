@@ -7,43 +7,43 @@ __Hardware__
 * Supported server hardware [(see below)](#supported-gateway-servers) or existing Kubernetes cluster available
 * Supported camera model available
 * For a dedicated server deployment:
-    * Gigabit Ethernet LAN network with DHCP and internet access
-    * Or an air-gapped local isolated LAN, still with DHCP but no internet
-    * AC power
-    * HDMI monitor or Serial console
-    * USB keyboard
-    * A USB flash drive of at least 4 GB for the OS installer
-    * A USB flash drive of at least 1 GB for the installer configuration data
-    * Another Linux or macOS system to prepare the installation media
+  * Gigabit Ethernet LAN network with DHCP and internet access
+  * Or an air-gapped local isolated LAN, still with DHCP but no internet
+  * AC power
+  * HDMI monitor or Serial console
+  * USB keyboard
+  * A USB flash drive of at least 4 GB for the OS installer
+  * A USB flash drive of at least 1 GB for the installer configuration data
+  * Another Linux or macOS system to prepare the installation media
 *  Software, installed on the installation person’s Linux or macOS machine
-    * Docker Engine (tested with version 20.10.2)
-        * Please follow [this instructions](https://docs.docker.com/engine/install/ubuntu/) to install Docker Engine if not already.
-        * This document assumes that the user running Docker Engine commands has the rights to manage the Docker daemon without requiring root privileges. For more information, see [Manage Docker as non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
-    * Git (tested with version 2.33)
+  * Docker Engine (tested with version 20.10.2)
+    * Please follow [this instructions](https://docs.docker.com/engine/install/ubuntu/) to install Docker Engine if not already.
+    * This document assumes that the user running Docker Engine commands has the rights to manage the Docker daemon without requiring root privileges. For more information, see [Manage Docker as non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+  * Git (tested with version 2.33)
 * Google Cloud
-    * A Google Cloud [organization](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#organizations)
-    * An active [billing account](https://cloud.google.com/billing/docs/how-to/manage-billing-account)
-    * A Google account with the [Project Creator role](https://cloud.google.com/iam/docs/understanding-roles#resource-manager-roles) for the Google Cloud organization
+  * A Google Cloud [organization](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#organizations)
+  * An active [billing account](https://cloud.google.com/billing/docs/how-to/manage-billing-account)
+  * A Google account with the [Project Creator role](https://cloud.google.com/iam/docs/understanding-roles#resource-manager-roles) for the Google Cloud organization
 * Google Cloud connectivity
-    * The workstation that creates cloud resources must have connectivity to Google Cloud.
-    * The edge server that runs the VIAI edge application must connect to Google Cloud during the installation process
+  * The workstation that creates cloud resources must have connectivity to Google Cloud.
+  * The edge server that runs the VIAI edge application must connect to Google Cloud during the installation process
 * On-premises IP address allocation.
-    * You need control over the IP address allocations in your target edge environment.
-    * The Allocated IP address will not be changed after the edge server is configured.
-    * Four IP addresses, which are:
-        * Control Plane IP address
-        * Load Balancing control plane IP address
-        * Ingress IP addresses (at least two IP addresses are required)
+  * You need control over the IP address allocations in your target edge environment.
+  * The Allocated IP address will not be changed after the edge server is configured.
+  * Four IP addresses, which are:
+    * Control Plane IP address
+    * Load Balancing control plane IP address
+    * Ingress IP addresses (at least two IP addresses are required)
 * Google source repositories access
-    * The solution source code is on GitHub with public access.
-    * At this point in time, the camera application code resides in a private Google repository. Access will be provided when requested.
+  * The solution source code is on GitHub with public access.
+  * At this point in time, the camera application code resides in a private Google repository. Access will be provided when requested.
 * Required Roles to provision Cloud Resources. You must have roles listed below to provision GCP resources. Ask your administrator to assign you to these roles if not already.
-    * Project Editor
-    * Project IAM Admin
-    * BigQuery Data Editor
-    * Cloud Functions Admin
-    * Pub/Sub Admin
-    * Source Repository Administrator
+  * Project Editor
+  * Project IAM Admin
+  * BigQuery Data Editor
+  * Cloud Functions Admin
+  * Pub/Sub Admin
+  * Source Repository Administrator
 
 </br>
 
@@ -65,8 +65,8 @@ You can find full location support for each service in the official [Google Clou
 * Cloud Workflow
 * Cloud Functions
 * Compute Engine instance with T4 GPU (as sandbox environment, optional)
-    * T4 Availability can be found [here](https://cloud.google.com/compute/docs/gpus/gpu-regions-zones).
-    * Supported other GPU models: P100, V100s
+  * T4 Availability can be found [here](https://cloud.google.com/compute/docs/gpus/gpu-regions-zones).
+  * Supported other GPU models: P100, V100s
 * Container Registry
 * Cloud Pub/Sub
 * Cloud Storage

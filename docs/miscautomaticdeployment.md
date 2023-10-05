@@ -209,7 +209,7 @@ A default deployment pipeline that deploys applications to the Anthos cluster sp
 
 For example:
 
-```
+```text
 export MEMBERSHIP=<YOUR ANTHOS MEMBERSHIP NAME>
 
 scripts/provisioning-terraform.sh \

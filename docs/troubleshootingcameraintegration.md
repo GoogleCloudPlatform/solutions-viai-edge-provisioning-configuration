@@ -12,7 +12,7 @@ This way you can access the container environment directly.
 kubectl exec -it viai-camera-integration -- /bin/bash
 ```
 
-```
+```text
 Defaulted container "viai-genicam-sleep" out of: viai-genicam-sleep, viai-genicam (init)
 
     Mounts:
