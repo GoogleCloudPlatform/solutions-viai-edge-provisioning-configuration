@@ -15,7 +15,7 @@ __Hardware__
   * A USB flash drive of at least 4 GB for the OS installer
   * A USB flash drive of at least 1 GB for the installer configuration data
   * Another Linux or macOS system to prepare the installation media
-*  Software, installed on the installation person’s Linux or macOS machine
+* Software, installed on the installation person’s Linux or macOS machine
   * Docker Engine (tested with version 20.10.2)
     * Please follow [this instructions](https://docs.docker.com/engine/install/ubuntu/) to install Docker Engine if not already.
     * This document assumes that the user running Docker Engine commands has the rights to manage the Docker daemon without requiring root privileges. For more information, see [Manage Docker as non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).

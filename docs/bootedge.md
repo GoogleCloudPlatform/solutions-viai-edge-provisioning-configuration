@@ -89,13 +89,13 @@ On the edge server, do the following:
 1. Verify that 2 secrets have been added:
 
 ```bash
-  sudo su
+sudo su
 
-  export KUBECONFIG=/var/lib/viai/bmctl-workspace/${MEMBERSHIP}/${MEMBERSHIP}-kubeconfig
+export KUBECONFIG=/var/lib/viai/bmctl-workspace/${MEMBERSHIP}/${MEMBERSHIP}-kubeconfig
 
-  export NAMESPACE=<YOUR KUBERNETES NAMESPACE>
+export NAMESPACE=<YOUR KUBERNETES NAMESPACE>
 
-  kubectl get secrets -n ${NAMESPACE}
+kubectl get secrets -n ${NAMESPACE}
 ```
 
 The default namespace value is `viai-edge`
@@ -103,10 +103,10 @@ The default namespace value is `viai-edge`
 The command output should be similar to this:
 
 ```text
-  NAME                  TYPE                                  DATA   AGE
-  default-token-p8pt5   kubernetes.io/service-account-token   3      1h
-  pubsubcred            kubernetes.io/dockerconfigjson        1      1h
-  regcred               kubernetes.io/dockerconfigjson        1      1h
+NAME                  TYPE                                  DATA   AGE
+default-token-p8pt5   kubernetes.io/service-account-token   3      1h
+pubsubcred            kubernetes.io/dockerconfigjson        1      1h
+regcred               kubernetes.io/dockerconfigjson        1      1h
 ```
 
 

@@ -14,7 +14,7 @@ The following steps should be run on the setup machine:
 1. Switch to the current project:
 
 ```bash
-  gcloud config set project $DEFAULT_PROJECT
+gcloud config set project $DEFAULT_PROJECT
 ```
 
 2. Plug the 4GB (min) flash drive into the setup machine.
@@ -22,15 +22,15 @@ The following steps should be run on the setup machine:
 3. Download the OS installer ISO image:
 
 ```bash
-  cd $VIAI_PROVISIONING_FOLDER
-  ./scripts/download-os-images.sh
+cd $VIAI_PROVISIONING_FOLDER
+./scripts/download-os-images.sh
 ```
 
 The output should be similar to the following:
 
 ```text
-  [...]
-  OS image downloaded and verified: viai-provisioning-configuration/ubuntu-20.04.6-live-server-amd64.iso
+[...]
+OS image downloaded and verified: viai-provisioning-configuration/ubuntu-20.04.6-live-server-amd64.iso
 ```
 
 Take note of the OS image path that the script produces.
@@ -42,7 +42,7 @@ You can use an image flash app like [Balena Etcher](https://etcher.balena.io/) o
 * On Linux
 
 ```text
-  sudo dd bs=4M if=[PATH_TO_OS_INSTALLER_ISO] of=[USB_FLASH_DRIVE] conv=fdatasync status=progress
+sudo dd bs=4M if=[PATH_TO_OS_INSTALLER_ISO] of=[USB_FLASH_DRIVE] conv=fdatasync status=progress
 ```
 
 * On macOS
@@ -50,15 +50,15 @@ You can use an image flash app like [Balena Etcher](https://etcher.balena.io/) o
 Use `diskutil` to list the devices attached and select the device ID, for example `/dev/disk4`. Then, run the following:
 
 ```bash
-  INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE=/dev/<DEVICE ID>
+INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE=/dev/<DEVICE ID>
 
-  diskutil unmountDisk $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
+diskutil unmountDisk $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 
-  sudo dd bs=4m if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=$INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
+sudo dd bs=4m if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=$INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 
-  sync
+sync
 
-  sudo diskutil eject $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
+sudo diskutil eject $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 ```
 
 
@@ -83,13 +83,13 @@ The server will then boot from the two USB drives; one will contain the operatin
 Run this commands to create the .ISO file:
 
 ```bash
-  export MEDIA_TYPE="USB"
+export MEDIA_TYPE="USB"
 
-  ./scripts/2-generate-media-file.sh \
-    -d ${OUTPUT_FOLDER} \
-    -t ${MEDIA_TYPE} \
-    -i ${K8S_RUNTIME}
-  ```
+./scripts/2-generate-media-file.sh \
+  -d ${OUTPUT_FOLDER} \
+  -t ${MEDIA_TYPE} \
+  -i ${K8S_RUNTIME}
+```
 
 Where:
 * `MEDIA_TYPE` must be `USB`
@@ -97,17 +97,17 @@ Where:
 After the script runs, the console will show details about the asset creation. All assets created are stored in the `$OUTPUT_PATH` folder.
 
 ```text
-  242 extents written (0 MB)
-  Deleting the temporary working directory (/tmp/tmp.8He7ET4VIC)...
-  Results saved in the temporary working directory: /tmp/cloud-init-output
-  CIDATA ISO file created successfully, folder path: /tmp/tmp.dc9KQE1Xa8 , file name: cloud-init-datasource.iso
-  Cleaning up...
+242 extents written (0 MB)
+Deleting the temporary working directory (/tmp/tmp.8He7ET4VIC)...
+Results saved in the temporary working directory: /tmp/cloud-init-output
+CIDATA ISO file created successfully, folder path: /tmp/tmp.dc9KQE1Xa8 , file name: cloud-init-datasource.iso
+Cleaning up...
 ```
 
 Save the path to the ISO image that was just generated in an environment variable:
 
 ```bash
-  export VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH="${OUTPUT_PATH}/cloud-init-datasource.iso"
+export VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH="${OUTPUT_PATH}/cloud-init-datasource.iso"
 ```
 
 Flash the installer configuration data to the USB flash drive:
@@ -119,7 +119,7 @@ Alternatively, you can use the commands below, depending on your platform:
 * On Linux:
 
 ```bash
-  sudo dd bs=4M if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=[INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE] conv=fdatasync status=progress
+sudo dd bs=4M if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=[INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE] conv=fdatasync status=progress
 ```
 
 * On macOS:
@@ -127,15 +127,15 @@ Alternatively, you can use the commands below, depending on your platform:
 Use `diskutil list` to list the devices attached and select the device ID, for example `/dev/disk4`. Then, run the following:
 
 ```bash
-  INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE=/dev/<DEVICE ID>
+INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE=/dev/<DEVICE ID>
 
-  diskutil unmountDisk $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
+diskutil unmountDisk $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 
-  sudo dd bs=4m if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=$INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
+sudo dd bs=4m if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=$INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 
-  sync
+sync
 
-  sudo diskutil eject $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
+sudo diskutil eject $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 ```
 
 Where:

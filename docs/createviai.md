@@ -156,9 +156,7 @@ This is an example table for IP Addresses allocation:
 Once you have allocated the required IP addresses, run the scripts below to generate the Kubernetes set up assets.
 
 
-_Note:_  
-
-If you used the `-x` flag in the [previous step](./provisiongcp.md) to create a sandbox machine, the Terraform script will create a GCE VM with the IP address `10.128.0.2`. The suggested IPs in this particular case woul be:
+_Note:_ If you used the `-x` flag in the [previous step](./provisiongcp.md) to create a sandbox machine, the Terraform script will create a GCE VM with the IP address `10.128.0.2`. The suggested IPs in this particular case woul be:
 
 | Variable | IP |
 |----------|----|

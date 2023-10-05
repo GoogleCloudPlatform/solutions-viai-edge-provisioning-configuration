@@ -79,7 +79,7 @@ Access Modes:    RWO
 VolumeMode:      Filesystem
 Capacity:        100Mi
 Node Affinity:   <none>
-Message:  
+Message:
 Source:
     Type:          HostPath (bare host directory volume)
     Path:          /var/snap/microk8s/common/default-storage/default-viai-camera-config-pvc-826b7dce-0de9-48a7-bfea-fbe20237b779

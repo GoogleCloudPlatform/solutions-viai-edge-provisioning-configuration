@@ -37,8 +37,9 @@ python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/
 The app should output th eML model's inference results, which should look similar to this:
 
 ```text
-{'predictionResult': {'annotationsGroups': [{'annotationSet': {'name': 'projects/199851883686/locations/us-central1/datasets/106648229847760896/annotationSets/5392255711264636928', 'displayName': 'Predicted Classification Labels', 'classificationLabel': {}, 'createTime': '2022-02-15T12:04:13.827789Z', 'updateTime': '2022-02-15T12:04:13.902274Z'}, 
-'annotations': [{'name': 'localAnnotations/0', 'annotationSpecId': '2438893262023426048', 'annotationSetId': '5392255711264636928', 'classificationLabel': {'confidenceScore': 0.52206558}, 'source': {'type': 'MACHINE_PRODUCED', 'sourceModel': 'projects/199851883686/locations/us-central1/solutions/7580859994631831552/modules/6066366290254102528/models/4464967186816958464'}, 'annotationSpecDisplayName': 'defect'}]}]}, 'predictionLatency': '0.035581135s'}
+{'predictionResult': {'annotationsGroups': [{'annotationSet': {'name': 'projects/199851883686/locations/us-central1/datasets/106648229847760896/annotationSets/5392255711264636928', 'displayName': 'Predicted Classification Labels', 'classificationLabel': {}, 'createTime': '2022-02-15T12:04:13.827789Z', 'updateTime': '2022-02-15T12:04:13.902274Z'},
+'annotations': [{'name': 'localAnnotations/0', 'annotationSpecId': '2438893262023426048', 'annotationSetId': '5392255711264636928', 'classificationLabel': {'confidenceScore': 0.52206558}, 'source':
+{'type': 'MACHINE_PRODUCED', 'sourceModel': 'projects/199851883686/locations/us-central1/solutions/7580859994631831552/modules/6066366290254102528/models/4464967186816958464'}, 'annotationSpecDisplayName': 'defect'}]}]}, 'predictionLatency': '0.035581135s'}
 ```
 
 In the output you can see the result as `annotationSpecDisplayName` (which is 'defect' in this example) and the `confidenceScore` and `predictionLatency` among others.

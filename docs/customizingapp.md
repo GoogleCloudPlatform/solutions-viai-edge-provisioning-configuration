@@ -52,9 +52,9 @@ The setup procedure creates a new `ImagePullSecret` on the Anthos cluster with n
   data:
       .dockerconfigjson: ${IMAGE_PULL_SECRET}
   type: kubernetes.io/dockerconfigjson
-  ```
+```
 
-Update `viai-camera-integration.tmpl` located in the same directory 
+Update `viai-camera-integration.tmpl` located in the same directory
 
 ```text
   imagePullSecrets:
