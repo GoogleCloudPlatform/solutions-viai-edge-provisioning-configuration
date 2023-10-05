@@ -20,5 +20,10 @@ set -o nounset
 # shellcheck disable=SC1094
 . scripts/common.sh
 
-echo "Running containerized Terraform: ${TERRAFORM_CONTAINER_IMAGE_ID}"
-docker run --rm "${TERRAFORM_CONTAINER_IMAGE_ID}" version
+echo "Running containerized Terraform"
+
+docker run \
+    --name "gcloud-config" \
+    "hello-world" \
+
+run_containerized_terraform "$(pwd)" "$(pwd)" version
