@@ -2,13 +2,13 @@
 
 ## Using multiple cameras, with dedicated ML models, triggered simultaneously
 
-In some situations, you may need to inspect multiple angles or faces of the product. 
+In some situations, you may need to inspect multiple angles or faces of the product.
 
-In practice this means connecting multiple cameras to the solution, and running inspection on them simultaneously. 
+In practice this means connecting multiple cameras to the solution, and running inspection on them simultaneously.
 
-This section shows how to configure such a multi-cam scenario. 
+This section shows how to configure such a multi-cam scenario.
 
-The example uses two cameras, but the same scaling principles should work for a larger number of cameras, as long as the server has enough resources (RAM, storage space, CPU or GPU model acceleration resources etc) to scale the number of camera client containers. 
+The example uses two cameras, but the same scaling principles should work for a larger number of cameras, as long as the server has enough resources (RAM, storage space, CPU or GPU model acceleration resources etc) to scale the number of camera client containers.
 
 Objective: deploy an inspection station which uses two cameras. Each camera has its own, dedicated camera client application, and its own ML model, trained for that specific camera angle. Then trigger inspection on all cameras simultaneously, and collect all inference results.
 
@@ -35,12 +35,12 @@ Follow all the previous sections from [Connecting cameras](./connectingcameras.m
 cp viai-camera-integration.yaml viai-camera-integration2.yaml
 ```
 
-* Edit the `name`, `app` and `claimName` values in the second client YAML files to be non-conflicting. 
+* Edit the `name`, `app` and `claimName` values in the second client YAML files to be non-conflicting.
 
 For example, add ‘2’ to the values. Here’s an example diff between the first/original and second client YAML files:
 
 ```
-$ diff viai-camera-integration1.yaml viai-camera-integration2.yaml 
+$ diff viai-camera-integration1.yaml viai-camera-integration2.yaml
 5c5
 <   name: viai-camera-config
 ---
@@ -88,7 +88,7 @@ $ diff viai-camera-integration1.yaml viai-camera-integration2.yaml
 * Deploy the second camera client
 
 ```bash
-kubectl apply -f viai-camera-integration2.yaml 
+kubectl apply -f viai-camera-integration2.yaml
 ```
 
 * Monitor the deployment to make sure all the components are running correclty
@@ -103,15 +103,15 @@ watch -n 2 kubectl -n ${NAMESPACE} get pods
 kubectl exec -it viai-camera-integration-2-xyz -n ${NAMESPACE} -- /bin/bash
 ```
 
-* Connect the second, new camera to the same LAN as the server, or to the server directly. 
+* Connect the second, new camera to the same LAN as the server, or to the server directly.
 
 * Follow the steps in the chapter [Connecting cameras](./connectingcameras.md) to discover, connect to, and test the new, second camera.
 
-3. Follow the steps in the chapters from: [Collecting and uploading training images](./collectimages.md) until [Running the model locally](./usinglocalinference.md) with a live camera feed. 
+3. Follow the steps in the chapters from: [Collecting and uploading training images](./collectimages.md) until [Running the model locally](./usinglocalinference.md) with a live camera feed.
 
-NOTE: please export the second ML model with CPU acceleration. At the moment, the scaling works with either all models running on the CPU, or with one model using the GPU, and the other model(s) using the CPU. 
+NOTE: please export the second ML model with CPU acceleration. At the moment, the scaling works with either all models running on the CPU, or with one model using the GPU, and the other model(s) using the CPU.
 
-By following the chapters listed here, you will: 
+By following the chapters listed here, you will:
 * Collect training images from the new camera 2
 * Train a new ML model for camera 2
 * Deploy the camera 2 model to the server
@@ -138,7 +138,7 @@ viai-camera-1-integration-856b878856-8f7js     1/1     Running   0              
 viai-camera-2-integration-6fcc7b4b5c-6hzv6     1/1     Running   0              107m
 ```
 
-Take note of the names of the pods for camera integration. 
+Take note of the names of the pods for camera integration.
 
 In the example above, `viai-camera-1-integration-856b878856-8f7js` and `viai-camera-2-integration-6fcc7b4b5c-6hzv6`
 
@@ -176,7 +176,7 @@ mosquitto          LoadBalancer   172.16.200.144   192.168.1.24   1883:30522/TCP
 
 Take note also of the names of each service (`model-mvp2-cpu-1` and `model-mvp2-cpu-2`)
 
-* Login to each camera client. 
+* Login to each camera client.
 
 Following the same names as in the example above:
 
@@ -243,7 +243,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./usingbatchprocessing.md">Batch processing inference against a set of image files >>></td></tr>
 </table>
-
-
-
- 

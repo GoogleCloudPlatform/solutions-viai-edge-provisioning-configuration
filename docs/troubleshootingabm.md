@@ -4,7 +4,8 @@
 
 <br>
 
-`bmctl` is the utility to install Anthos clusters. It runs some preflight checks and generates reports during the installation. 
+`bmctl` is the utility to install Anthos clusters. It runs some preflight checks
+and generates reports during the installation. 
 
 Please refer to the [understand preflight checks](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/preflight) documentation for more details.
 
@@ -18,7 +19,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./troubleshootinganthosconfig.md">Troubleshooting Anthos Config Sync >>></td></tr>
 </table>
-
-
-
- 

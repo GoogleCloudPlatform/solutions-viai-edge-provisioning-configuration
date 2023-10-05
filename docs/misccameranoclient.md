@@ -2,9 +2,11 @@
 
 ## Using a camera and the VIAI model container without the camera client application
 
-The camera integration app was built to ease the usage of typical industrial cameras, with the VIAI inference container and an optional GCP backend. 
+The camera integration app was built to ease the usage of typical industrial
+cameras, with the VIAI inference container and an optional GCP backend. 
 
-However, if the camera integration app does not meet the specific customer requirements for example for performance (FPS, bandwidth, latency) or features (specific camera protocol or ML inference results handling) - the camera and ML container can be used without the app. 
+However, if the camera integration app does not meet the specific customer
+requirements for example for performance (FPS, bandwidth, latency) or features (specific camera protocol or ML inference results handling) - the camera and ML container can be used without the app. 
 
 1. Use the existing 3rd party camera integration to acquire images from the camera.
 
@@ -31,7 +33,8 @@ kubectl -n ${NAMESPACE} get services
 cat img.png |base64 -w 0 > body
 ```
 
-5. Edit the base64 encoded image file ‘body’, and add JSON formatting to the beginning and end of the (long base64 encoded) line. 
+5. Edit the base64 encoded image file ‘body’, and add JSON formatting to the
+beginning and end of the (long base64 encoded) line. 
 
 Original ‘body’ contents example: iVBORw0KGgoAAA <br>
 New contents example: {"image_bytes":"iVBORw0KGgoAAA”}
@@ -60,7 +63,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./misclogging.md">Logging and debugging >>></td></tr>
 </table>
-
-
-
- 

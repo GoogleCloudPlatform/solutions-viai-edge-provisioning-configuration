@@ -15,7 +15,7 @@ The following steps will run batch mode inference against a set of images.
 
 1. Log in to the VIAI Edge server as user `viai-admin`
 
-2. Check which physical volumes are mounted to the camera application 
+2. Check which physical volumes are mounted to the camera application
 
 ```bash
 kubectl -n ${NAMESPACE} get pods
@@ -29,7 +29,7 @@ You should see a mount point similar to: `/mnt/localpv-share/pvs/3/` which is mo
 
 3. Copy your testing image dataset to the VIAI Edge server, to the directory found above
 
-4. Login to the container 
+4. Login to the container
 
 ```bash
 kubectl exec -it viai-camera-integration -- /bin/bash
@@ -41,13 +41,13 @@ kubectl exec -it viai-camera-integration -- /bin/bash
 ls -l /var/lib/viai/camera-data/
 ```
 
-6. (Reccomended) On another host, start receiving ML inference results, by subscribing to an MQTT topic 
+6. (Reccomended) On another host, start receiving ML inference results, by subscribing to an MQTT topic
 
 ```bash
-mosquitto_sub -h 192.168.1.24 -t viai/results 
+mosquitto_sub -h 192.168.1.24 -t viai/results
 ```
 
-Where `192.168.1.24` is the IP address of the mosquitto service running in Kubernetes on the same server. 
+Where `192.168.1.24` is the IP address of the mosquitto service running in Kubernetes on the same server.
 
 You can find the mosquitto service IP and ML model service name with:
 
@@ -55,7 +55,7 @@ You can find the mosquitto service IP and ML model service name with:
 kubectl -n ${NAMESPACE} get services
 ```
 
-7. Start batch processing all images in the dataset, and forwarding the inference results to MQTT 
+7. Start batch processing all images in the dataset, and forwarding the inference results to MQTT
 
 ```bash
 python3 camera_client.py --protocol file --address /var/lib/viai/camera-data/good/ --device_id good_batch --ml \
@@ -79,7 +79,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td></tr>
 </table>
-
-
-
- 

@@ -33,8 +33,9 @@ helm repo update
 3. Prepare the time-slicing configuration file.
 
 Note that in this sample configuration, VIAI Edge advertises 10 replicas to the Anthos runtime. If you have two GPUs installed on the edge server, each will have 10 replicas, meaning device plugins advertise 20 GPUs to the Anthos.
- 
-You should monitor your GPU memory utilization in your development environment to understand actual requirements of running your machine learning models, and decide what is the best value for your workload. 
+
+You should monitor your GPU memory utilization in your development environment to
+understand actual requirements of running your machine learning models, and decide what is the best value for your workload. 
 
 To monitor GPU utilization, you use tools such as [nvitop](https://github.com/XuehaiPan/nvitop).
 
@@ -99,7 +100,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td></tr>
 </table>
-
-
-
- 

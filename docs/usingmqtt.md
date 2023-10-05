@@ -16,8 +16,8 @@ export ML_HOST=viai-model
 export MQTT_HOST=mosquitto
 
 python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/FLIR_GenTL_Ubuntu_20_04_x86_64.cti \
-  --cfg_write --cfg_write_file ./flir-ax5-recommended.cfg --device_id ax5  --mode continuous --ml --ml_host ${ML_HOST} 
-  --ml_port 8602 --mqtt --mqtt_host ${MQTT_HOST} --mqtt_port 1883 
+  --cfg_write --cfg_write_file ./flir-ax5-recommended.cfg --device_id ax5  --mode continuous --ml --ml_host ${ML_HOST}
+  --ml_port 8602 --mqtt --mqtt_host ${MQTT_HOST} --mqtt_port 1883
 ```
 
 </br>
@@ -27,7 +27,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./usingphysicalactions.md">Launching physical actions based on inference results >>></td></tr>
 </table>
-
-
-
- 

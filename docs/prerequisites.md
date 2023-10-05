@@ -110,7 +110,7 @@ ___
 ## Supported IP Address configurations
 
 To configure Anthos Bare Metal clusters, you must specify at least four IP addresses for Anthos.
-For more details please refer to [Anthos documentation](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/bundled-lb#requirements). 
+For more details please refer to [Anthos documentation](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/bundled-lb#requirements).
 
 You can optionally choose to use physical IP addresses if you have specific needs, for example, your existing Anthos cluster already has external load balancer nodes and you want to [manually configure them.](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/manual-lb)
 
@@ -146,9 +146,10 @@ details below for requirements.
 
 [__Nexcom AIEdge-X300-RTX30__](https://www.nexcom.com/Products/multi-media-solutions/ai-edge-computer/nvidia-solutions/ai-edge-computer-aiedge-x-300-rtx30#)</br>
 
-| ![nexcom server front](./images/nexcom-front.png)  | ![nexcom server back](./images/nexcom-back.png)               | 
+| ![nexcom server front](./images/nexcom-front.png)  | 
+![nexcom server back](./images/nexcom-back.png)      |
 -------------------------|--------------------------------|
-| SKU #                  | AIEdge-X300-RTX30              | 
+| SKU #                  | AIEdge-X300-RTX30              |
 | Cooling design         | GPU Card with Active Cooling |
 | Form factor            | Desktop                      |
 | CPU                    | Intel i7-8700 6 cores 65W    |
@@ -169,7 +170,8 @@ details below for requirements.
 
 [__Google Cloud Edge Appliance__](https://cloud.google.com/distributed-cloud/edge-appliance/docs/specifications)</br>
 
-| ![gce appliance server front](./images/gce-front.png)  | ![gce appliance server back](./images/gce-back.png)               | 
+| ![gce appliance server front](./images/gce-front.png)  |
+![gce appliance server back](./images/gce-back.png)      |
 
 |                        | EA-STORAGE-10                  | EA-GPU-T4         |
 -------------------------|--------------------------------|-------------------|
@@ -200,7 +202,7 @@ ___
 
 ## Industrial camera requirements
 
-Camera resolution requirements
+* Camera resolution requirements
 
 | | |
 ---------|-----------------
@@ -212,7 +214,7 @@ Camera resolution requirements
 
 </br>
 
-Lighting requirements 
+* Lighting requirements
 
 | | |
 ---------|-----------------

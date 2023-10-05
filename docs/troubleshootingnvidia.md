@@ -78,7 +78,7 @@ If successful, the output should be similar to this:
 | 20%   30C    P8    17W / 215W |      0MiB /  7982MiB |      0%      Default |
 |                               |                      |                  N/A |
 +-------------------------------+----------------------+----------------------+
-                                                                               
+                                                                       
 +-----------------------------------------------------------------------------+
 | Processes:                                                                  |
 |  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
@@ -96,6 +96,3 @@ ___
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td></tr>
 </table>
 
-
-
- 

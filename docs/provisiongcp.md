@@ -86,7 +86,7 @@ scripts/provisioning-terraform.sh \
 -x
 ```
 
-You can check the different flags used in the script by running 
+You can check the different flags used in the script by running
 
 ```bash
 scripts/provisioning-terraform.sh -h
@@ -139,11 +139,5 @@ ___
 <table width="100%">
 <tr><td><a href="./deployment.md">^^^ Deployment of the solution</td><td><a href="./createviai.md">Creating VIAI Assets >>></td></tr>
 </table>
-
-
-
-
-
-
 
 

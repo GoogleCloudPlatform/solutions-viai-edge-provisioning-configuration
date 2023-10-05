@@ -79,7 +79,7 @@ Where:
 
 ![Anthos Config Management](./images/anthosconfigmanagement.png)
 
-4. Create a New Setup 
+4. Create a New Setup
 
 ![New Setup](./images/newsetup.png)
 
@@ -96,7 +96,7 @@ Where:
 
 ![Custom Repository](./images/selectcustomrepository.png)
 
-8. Expand the 'Advanced' section, type in the repo URL. 
+8. Expand the 'Advanced' section, type in the repo URL.
 
 It should be in this format:  `https://source.developers.google.com/p/<PROJECT_ID>/r/acm-repo`
 
@@ -140,7 +140,8 @@ You can customize the deployment and service by modifying the Skaffold and Kuber
 * Default template files
   * Kubernetes service template files are in `kubernetes/viai-model/viai-model.tmpl`
   * Skaffold template files are in `kubernetes/viai-model/skaffold.tmpl`
-* Update `kubernetes/viai-model/viai-model.yaml`, replace `${SERVICE_NAME}` with the container image name. 
+* Update `kubernetes/viai-model/viai-model.yaml`, replace `${SERVICE_NAME}` 
+with the container image name. 
 
 For example, if the Visual Inspection AI trained model container image is stored at `gcr.io/my-project/my-viai-model:version-001`. The SERVICE_NAME should be `my-viai-model`
 
@@ -148,7 +149,8 @@ For example, if the Visual Inspection AI trained model container image is stored
 
 ```bash
 cd ${OUTPUT_FOLDER}/kubernetes/viai-model
-tar -czf "${OUTPUT_FOLDER}"/"${SERVICE_NAME}".tar.gz -C "${OUTPUT_FOLDER}" viai-model.yaml skaffold.yaml 
+tar -czf "${OUTPUT_FOLDER}"/"${SERVICE_NAME}".tar.gz \
+  -C "${OUTPUT_FOLDER}" viai-model.yaml skaffold.yaml 
 
 gsutil cp "${OUTPUT_FOLDER}"/"${SERVICE_NAME}".tar.gz gs://${DEFAULT_PROJECT}_cloudbuild/viai-models/${SERVICE_NAME}.tar.gz
 ```
@@ -161,7 +163,8 @@ Where:
 
 __Customize the Workflow__
 
-The deployment pipeline creates a Cloud Workflow to invoke and kick-off a Cloud Deploy delivery pipeline. 
+The deployment pipeline creates a Cloud Workflow to invoke and kick-off a 
+Cloud Deploy delivery pipeline. 
 
 The Cloud Workflow definition is in `terraform/model-deployment-pipeline/main.tf`
 
@@ -172,7 +175,7 @@ resource "google_workflows_workflow" "event-trigger-destination" {
     project = var.google_viai_project_id
     region  = var.google_default_region
     source_contents = <<-EOF
-…<WORKFLOW DEFINITION>
+    …<WORKFLOW DEFINITION>
 	EOF
 ```
 
@@ -199,9 +202,10 @@ resource "google_clouddeploy_target" "dev" {
 
 __Update the deployment pipeline__
 
-When you [provision the Google Cloud resources](./provisiongcp.md), add `-e ${ANTHOS-MEMBERSHIP-NAME}` and execute the `provision-terraform.sh script`. 
+When you [provision the Google Cloud resources](./provisiongcp.md), add 
+`-e ${ANTHOS-MEMBERSHIP-NAME}` and execute the `provision-terraform.sh script`. 
 
-A default deployment pipeline that deploys applications to the Anthos cluster specified is automatically created for you. You can update the pipeline to fit your business needs. 
+A default deployment pipeline that deploys applications to the Anthos cluster specified is automatically created for you. You can update the pipeline to fit your business needs.
 
 For example:
 
@@ -243,7 +247,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./miscimprovegpuuse.md">Improving GPU utilization in Kubernetes >>></td></tr>
 </table>
-
-
-
- 

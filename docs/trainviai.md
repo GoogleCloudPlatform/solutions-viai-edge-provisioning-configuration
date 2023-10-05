@@ -2,7 +2,8 @@
 
 <br>
 
-Once you have uploaded the `defect` and `normal` example images in GCS, you can import them as a new Dataset in VIAI using the VIAI service console. 
+Once you have uploaded the `defect` and `normal` example images in GCS, you can
+import them as a new Dataset in VIAI using the VIAI service console. 
 
 Please refer to the product documentation on how to create a dataset, import the images, train and evaluate new models:
 

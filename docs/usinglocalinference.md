@@ -31,7 +31,7 @@ export ML_HOST=viai-model
 
 python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/FLIR_GenTL_Ubuntu_20_04_x86_64.cti \
     --cfg_write --cfg_write_file /var/lib/viai/camera-config/flir-ax5-recommended.cfg \
-    --device_id ax5 --mode single --ml --ml_host ${ML_HOST} --ml_port 8602 
+    --device_id ax5 --mode single --ml --ml_host ${ML_HOST} --ml_port 8602
 ```
 
 The app should output th eML model's inference results, which should look similar to this:
@@ -51,6 +51,3 @@ ___
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./usingbigquery.md">Streaming inference results to BigQuery >>></td></tr>
 </table>
 
-
-
- 

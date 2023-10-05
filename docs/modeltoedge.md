@@ -72,7 +72,7 @@ The output should be similar to this:
 A new kubeconfig entry "connectgateway_project_id_global_anthos-server-xyz" has been generated and set as the current context.
 ```
 
-4. Deploy the model 
+4. Deploy the model
 
 ```bash
 kubectl apply -f ./viai-model.yaml
@@ -169,7 +169,4 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">Use the VIAI Edge solution >>></td></tr>
 </table>
-
-
-
 

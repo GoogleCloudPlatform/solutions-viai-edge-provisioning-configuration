@@ -2,11 +2,12 @@
 
 ## Camera connection health checks
 
-The utility supports checking the health of a camera connection. 
+The utility supports checking the health of a camera connection.
 
 In practice, the utility requests a frame from the camera. If the operation is successful, and the camera returns a valid image, the utility displays: `True`, and exists normally with code `0`. In case of an error, the error is displayed, the log output is `False`, and the utility exit code is `1`.
 
-To execute the healthcheck, just add the command line argument `--health_check` to the utility. You will also need to pass valid arguments for the target camera, i.e camera protocol and address. 
+To execute the healthcheck, just add the command line argument `--health_check` to
+the utility. You will also need to pass valid arguments for the target camera, i.e camera protocol and address. 
 
 Example command:
 
@@ -27,7 +28,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./miscautomaticdeployment.md">Automatic deployment options >>></td></tr>
 </table>
-
-
-
- 

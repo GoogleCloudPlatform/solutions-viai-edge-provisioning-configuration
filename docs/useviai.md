@@ -37,5 +37,3 @@ Troubleshooting sections for the most common issues:
 Cleanup after testing the solution:
 
  * [Cleaning up Google Cloud resources](./cleanup.md)
-
- 

@@ -4,7 +4,7 @@
 
 <br>
 
-To help you troubleshoot issues, you can generate inspection reports populated with details about the VIAI server. 
+To help you troubleshoot issues, you can generate inspection reports populated with details about the VIAI server.
 
 You may be asked to generate such reports when asking for support.
 
@@ -32,6 +32,3 @@ ___
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./troubleshootingcloudresources.md">Troubleshooting cloud resources provisioning >>></td></tr>
 </table>
 
-
-
- 

@@ -2,7 +2,7 @@
 
 ## Triggering inspection remotely with an MQTT command
 
-To remotelly trigger taking pictures and running inference on them, you can use MQTT to publish commands to the camera client. 
+To remotelly trigger taking pictures and running inference on them, you can use MQTT to publish commands to the camera client.
 
 The main use case for this is to have an external inspection station, which notices that an object is on the conveyor belt, using sensors. When the object to be inspected is in front of the camera, this external system can send an MQTT message to the VIAI Edge application to trigger the camera and visual inspection of the image.
 
@@ -30,7 +30,7 @@ Subscribing to MQTT topic: viai/commands
 MQTT subscription result code: (0, 1)
 ```
 
-2. On a second console window, subscribe to the MQTT inference results. 
+2. On a second console window, subscribe to the MQTT inference results.
 
 Note, this requires installing the mosquitto MQTT client on your laptop or running these commands on the VIAI Edge server:
 
@@ -80,7 +80,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./usingmultiplecameras.md">Using multiple cameras, with dedicated ML models, triggered simultaneously >>></td></tr>
 </table>
-
-
-
- 

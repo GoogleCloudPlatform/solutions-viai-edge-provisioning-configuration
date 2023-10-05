@@ -4,9 +4,9 @@
 
 <br>
 
-To access the camera integration utility’s container, you can execute a container with a bash shell as the entry point. 
+To access the camera integration utility’s container, you can execute a container with a bash shell as the entry point.
 
-This way you can access the container environment directly. 
+This way you can access the container environment directly.
 
 ```bash
 kubectl exec -it viai-camera-integration -- /bin/bash
@@ -28,7 +28,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./troubleshootingnvidia.md">Troubleshooting NVIDIA GPU >>></td></tr>
 </table>
-
-
-
- 
