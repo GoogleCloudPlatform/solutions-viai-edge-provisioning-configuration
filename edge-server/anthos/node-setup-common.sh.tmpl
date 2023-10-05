@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-KUBECONFIG="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig"
+KUBECONFIG="${SETUP_DIR}/bmctl-workspace/${ANTHOS_MEMBERSHIP_NAME}/${ANTHOS_MEMBERSHIP_NAME}-kubeconfig"
 export KUBECONFIG
 
 print_separator() {
@@ -146,7 +146,6 @@ setup_vlan_control_plane() {
 update_kubeconfig_environment_variable() {
   echo "[Info] append_kubeconfig_path is invoked..."
 
-  echo "[Info] KUBECONFIG=${KUBECONFIG}"
   if [ -z "${1}" ]; then
     echo "[Info] No path specified, use default"
     USER_HOME_PATH="/home/viai-admin"
@@ -155,17 +154,26 @@ update_kubeconfig_environment_variable() {
     echo "[Info] USER_HOME_PATH=${USER_HOME_PATH}"
     shift
   fi
-  echo "[Info] KUBECONFIG=${KUBECONFIG}"
-  echo "[Info] Appending KUBECONFIG to ${USER_HOME_PATH}/.bashrc"
-  echo "export KUBECONFIG=${KUBECONFIG}" >>"${USER_HOME_PATH}/.bashrc"
 
-  echo "[Info] Appending KUBECONFIG to ${USER_HOME_PATH}/.profile"
-  echo "export KUBECONFIG=${KUBECONFIG}" >>"${USER_HOME_PATH}/.profile"
+  if [ ! -d "${USER_HOME_PATH}" ]; then
+    echo "[Error] ${USER_HOME_PATH} does not exists."
+    exit $ERR_DIRECTORY_NOT_FOUND
+  fi
+
+  USER_BASHRC_PATH="${USER_HOME_PATH}/.bashrc"
+  USER_PROFILE_PATH="${USER_HOME_PATH}/.profile"
+
+  echo "[Info] Appending KUBECONFIG to ${USER_BASHRC_PATH}"
+  echo "export KUBECONFIG=${KUBECONFIG}" >>"${USER_BASHRC_PATH}"
+
+  echo "[Info] Appending KUBECONFIG to ${USER_PROFILE_PATH}"
+  echo "export KUBECONFIG=${KUBECONFIG}" >>"${USER_PROFILE_PATH}"
 }
 
 append_kubeconfig_path() {
+  echo "[Info] KUBECONFIG=${KUBECONFIG}"
   for d in /home/*; do
-    echo "Appending KUBECONFIG variable...${d}"
+    echo "[Info] Appending KUBECONFIG variable...${d}"
     update_kubeconfig_environment_variable "$d"
   done
 }

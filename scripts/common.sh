@@ -49,16 +49,12 @@ ERR_UNSUPPORTED_OS_DESCRIPTION="[Error]Unsupported OS"
 HELP_DESCRIPTION="show this help message and exit"
 # shellcheck disable=SC2034
 GCLOUD_CLI_CONTAINER_IMAGE_ID="gcr.io/google.com/cloudsdktool/cloud-sdk:397.0.0"
-if [ -f "docker/terraform/Dockerfile" ]; then
-  # shellcheck disable=SC2034
-  TERRAFORM_CONTAINER_IMAGE_ID="$(grep <docker/terraform/Dockerfile "hashicorp/terraform" | awk -F ' ' '{print $2}')"
-else
-  echo "[Warning] docker/terraform/Dockerfile does not exist. Variable TERRAFORM_CONTAINER_IMAGE_ID not set."
-fi
 # shellcheck disable=SC2034
 OS_INSTALLER_IMAGE_URL="https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso"
 # shellcheck disable=SC2034
 OS_IMAGE_CHECKSUM_FILE_URL="https://releases.ubuntu.com/focal/SHA256SUMS"
+# shellcheck disable=SC2034
+TERRAFORM_DOCKERFILE_PATH="docker/terraform/Dockerfile"
 # shellcheck disable=SC2034
 WORKING_DIRECTORY="$(pwd)"
 echo "Working directory: ${WORKING_DIRECTORY}"
@@ -198,6 +194,14 @@ run_containerized_terraform() {
   shift
   VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH="${1}"
   shift
+
+  if [ -f "${TERRAFORM_DOCKERFILE_PATH}" ]; then
+    # shellcheck disable=SC2034
+    TERRAFORM_CONTAINER_IMAGE_ID="$(grep <$TERRAFORM_DOCKERFILE_PATH "hashicorp/terraform" | awk -F ' ' '{print $2}')"
+  else
+    echo "[Error] ${TERRAFORM_DOCKERFILE_PATH} does not exist. Variable TERRAFORM_CONTAINER_IMAGE_ID not set."
+    exit $ERR_VARIABLE_NOT_DEFINED
+  fi
 
   echo "Running: terraform $*"
   echo "Using VIAI Camera application source codes path: ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"
