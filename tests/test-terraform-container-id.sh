@@ -23,7 +23,7 @@ set -o nounset
 echo "Running containerized Terraform"
 
 docker run \
-    --name "gcloud-config" \
-    "hello-world" \
+  --name "gcloud-config" \
+  "hello-world" \
 
 run_containerized_terraform "$(pwd)" "$(pwd)" version
