@@ -50,11 +50,11 @@ HELP_DESCRIPTION="show this help message and exit"
 # shellcheck disable=SC2034
 GCLOUD_CLI_CONTAINER_IMAGE_ID="gcr.io/google.com/cloudsdktool/cloud-sdk:397.0.0"
 # shellcheck disable=SC2034
-TERRAFORM_CONTAINER_IMAGE_ID="$(grep <docker/terraform/Dockerfile "hashicorp/terraform" | awk -F ' ' '{print $2}')"
-# shellcheck disable=SC2034
 OS_INSTALLER_IMAGE_URL="https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso"
 # shellcheck disable=SC2034
 OS_IMAGE_CHECKSUM_FILE_URL="https://releases.ubuntu.com/focal/SHA256SUMS"
+# shellcheck disable=SC2034
+TERRAFORM_DOCKERFILE_PATH="docker/terraform/Dockerfile"
 # shellcheck disable=SC2034
 WORKING_DIRECTORY="$(pwd)"
 echo "Working directory: ${WORKING_DIRECTORY}"
@@ -194,6 +194,14 @@ run_containerized_terraform() {
   shift
   VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH="${1}"
   shift
+
+  if [ -f "${TERRAFORM_DOCKERFILE_PATH}" ]; then
+    # shellcheck disable=SC2034
+    TERRAFORM_CONTAINER_IMAGE_ID="$(grep <$TERRAFORM_DOCKERFILE_PATH "hashicorp/terraform" | awk -F ' ' '{print $2}')"
+  else
+    echo "[Error] ${TERRAFORM_DOCKERFILE_PATH} does not exist. Variable TERRAFORM_CONTAINER_IMAGE_ID not set."
+    exit $ERR_VARIABLE_NOT_DEFINED
+  fi
 
   echo "Running: terraform $*"
   echo "Using VIAI Camera application source codes path: ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}"
@@ -402,5 +410,94 @@ base64_encode() {
   else
     echo "${ERR_UNSUPPORTED_OS_DESCRIPTION}"
     exit $ERR_UNSUPPORTED_OS
+  fi
+}
+
+# Install NVIDIA cotnainer toolkit and device plugin
+# Reference: https://github.com/NVIDIA/k8s-device-plugin
+setup_nvidia_container_runtime() {
+  # Starting from Anthos Bare Metal 1.13, Containerd is the only supported container runtime
+  echo "[Info] invoking setup_nvidia_container_runtime()"
+  if [ -z "${1}" ]; then
+    echo "[Error] No KUBECONFIG_PATH specified, existing."
+    exit $ERR_VARIABLE_NOT_DEFINED
+  else
+    KUBECONFIG_PATH="${1}"
+    echo "[Info] KUBECONFIG_PATH=${KUBECONFIG_PATH}"
+    shift
+  fi
+
+  CONTAINERD_TOML_PATH="/etc/containerd/config.toml"
+  if [ -f "${CONTAINERD_TOML_PATH}" ]; then
+    ## Backup original config.toml
+    CONTAINERD_TOML_BACKUP_PATH="${CONTAINERD_TOML_PATH}.backup.$(date +%Y%m%d-%H%M%S)"
+    echo "Backing up ${CONTAINERD_TOML_PATH} to ${CONTAINERD_TOML_BACKUP_PATH}"
+    cp "${CONTAINERD_TOML_PATH}" "${CONTAINERD_TOML_BACKUP_PATH}"
+
+    ## Install NVIDIA-Container-Toolkit
+    echo "[Info] Installing NVIDIA Device Plugin"
+
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg &&
+      curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list |
+      sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |
+        tee /etc/apt/sources.list.d/nvidia-container-toolkit.list &&
+      apt-get update
+
+    echo "[Info] Installing nvidia-container-toolkit"
+    apt-get update -y
+    apt-get install -y nvidia-container-toolkit
+
+    ## update toml file
+    ## Add Nvidia runtime configuration section if it does not exists.
+    if ! cat ${CONTAINERD_TOML_PATH} | grep -q 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia'; then
+      echo "config.toml does not contains Nvidia containerd runtime configuration, updating..."
+      cat "/var/lib/viai/edge-server/config-section.toml" >>"${CONTAINERD_TOML_PATH}"
+    else
+      echo "config.toml has already been configured with Nvidia runtime as the default one, skip..."
+    fi
+
+    ## Update to use Nvidia runtime.
+    ## Update default runtime to nvidia only if the Nvidia runtime configuration section exists.
+    if ! grep -q 'default_runtime_name = "nvidia"' "${CONTAINERD_TOML_PATH}" &&
+      grep -q 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia' "${CONTAINERD_TOML_PATH}"; then
+      echo "config.toml does not use Nvidia runtime, updating..."
+      sed -i 's/default_runtime_name = "runc"/default_runtime_name = "nvidia"/g' "${CONTAINERD_TOML_PATH}"
+    else
+      echo "config.toml already been updated with Nvidia default runtime, skip..."
+    fi
+
+    ## Restart containerd
+    echo "Restarting Containerd service..."
+    systemctl restart containerd
+    echo "Restarting Containerd service...Done"
+
+    # Install Nvidia Device Pligin
+    ## Wait untill containerd is running.
+    COUNTER=0
+
+    while [ $COUNTER -lt 30 ]; do
+      COUNTER=$((COUNTER + 1))
+      sleep 1s
+      if systemctl status containerd | grep -q "Active: active (running)"; then
+        echo "Containerd is in running state."
+        break
+      elif [ $COUNTER -lt 30 ]; then
+        echo "Containerd is not in running state, waiting..."
+      else
+        echo "Containerd is not in running state after ${COUNTER} seconds, exit..."
+        exit 1
+      fi
+    done
+    if kubectl get ds -n kube-system --kubeconfig="${KUBECONFIG_PATH}" | grep -q "nvidia-device-plugin-daemonset"; then
+      echo "nvidia-device-plugin-daemonset exists, deleting"
+      kubectl delete ds nvidia-device-plugin-daemonset \
+        --kubeconfig="${KUBECONFIG_PATH}" \
+        -n kube-system
+    fi
+    echo "[Info] Creating nvidia-device-plugin-daemonset"
+    kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.1/nvidia-device-plugin.yml \
+      --kubeconfig="${KUBECONFIG_PATH}"
+  else
+    echo "[Error]File:${CONTAINERD_TOML_PATH} not found, can not update ${CONTAINERD_TOML_PATH}"
   fi
 }

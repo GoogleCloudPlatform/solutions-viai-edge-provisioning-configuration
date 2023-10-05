@@ -149,13 +149,15 @@ if [ ! -f "${KUBECONFIG_PATH}" ]; then
   # Ignoring because those are defined in common.sh, and don't need quotes
   # shellcheck disable=SC2086
   exit ${EXIT_GENERIC_ERR}
+else
+  setup_nvidia_container_runtime "${KUBECONFIG_PATH}"
 fi
 
 # Activate service account
 echo "SERVICE_ACCOUNT_KEY_PATH=${SERVICE_ACCOUNT_KEY_PATH}"
 gcloud auth activate-service-account --key-file="${SERVICE_ACCOUNT_KEY_PATH}"
 
-echo "Creating RBAC for Connect Gateway..."
+echo "[Info] Creating RBAC for Connect Gateway..."
 
 gcloud beta container fleet memberships generate-gateway-rbac \
   --membership="${ANTHOS_MEMBERSHIP_NAME}" \
