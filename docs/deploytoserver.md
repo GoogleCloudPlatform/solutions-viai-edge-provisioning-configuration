@@ -47,7 +47,7 @@ sudo dd bs=4M if=[PATH_TO_OS_INSTALLER_ISO] of=[USB_FLASH_DRIVE] conv=fdatasync 
 
 * On macOS
 
-Use `diskutil` to list the devices attached and select the device id, for example `/dev/disk4`. Then, run the following:
+Use `diskutil` to list the devices attached and select the device ID, for example `/dev/disk4`. Then, run the following:
 
 ```bash
 INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE=/dev/<DEVICE ID>
@@ -65,7 +65,7 @@ sudo diskutil eject $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 Where:
 
 * `PATH_TO_OS_INSTALLER_ISO` path to the OS installer ISO, noted earlier.
- 
+
 * `USB_FLASH_DRIVE` path to the raw device representing the USB flash drive where you flash the OS installer. You can use `lsblk` (on Linux) or `diskutil list` (on macOS) to get this value. Refer to this [Raspberry Pi guide document](https://www.raspberrypi.org/documentation/computers/getting-started.html) for a useful reference. On macOS, use `rdisk` instead of `disk` to speed up the copy when running the `dd` command.
 
 Unplug the USB flash drive.
@@ -123,7 +123,7 @@ sudo dd bs=4M if="${VIAI_INSTALLER_CONFIGURATION_DATA_ISO_FILE_PATH}" of=[INSTAL
 
 * On macOS:
 
-Use `diskutil list` to list the devices attached and select the device id, for example `/dev/disk4`. Then, run the following:
+Use `diskutil list` to list the devices attached and select the device ID, for example `/dev/disk4`. Then, run the following:
 
 ```bash
 INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE=/dev/<DEVICE ID>
@@ -138,7 +138,7 @@ sudo diskutil eject $INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE
 ```
 
 Where:
- 
+
 * `INSTALLER_CONFIG_DATA_USB_FLASH_DRIVE` path to the raw device representing the USB flash drive where you flash the OS installer. You can use `lsblk` (on Linux) or `diskutil list` (on macOS) to get this value. Refer to this [Raspberry Pi guide document](https://www.raspberrypi.org/documentation/computers/getting-started.html) for a useful reference. On macOS, use `rdisk` instead of `disk` to speed up the copy when running the `dd` command.
 
 Unplug the USB flash drive.

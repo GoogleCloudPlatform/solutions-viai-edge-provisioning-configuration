@@ -25,8 +25,8 @@ kubectl exec -it viai-camera-integration  -n ${NAMESPACE} -- /bin/bash
 
 2. Scan the local LAN segment for any ONVIF-enabled cameras
 
-    Note: the network scan uses the WSDiscovery protocol, which sends standards-defined broadcast messages to discover devices that advertise web services. Next, the utility filters the found devices for those that support the ONVIF specification. Finally, the utility tries to query all found ONVIF cameras, using the ONVIF protocol, and get their RTSP stream addresses. 
-    
+    Note: the network scan uses the WSDiscovery protocol, which sends standards-defined broadcast messages to discover devices that advertise web services. Next, the utility filters the found devices for those that support the ONVIF specification. Finally, the utility tries to query all found ONVIF cameras, using the ONVIF protocol, and get their RTSP stream addresses.
+
     Note: if your camera has access control enabled using a username/password pair, you need to provide these credentials to enable the ONVIF query for RTSP streams information.
 
 * For unauthenticated cameras, run:
@@ -38,7 +38,7 @@ python3 camera_client.py --protocol onvif --scan
 * For cameras with authentication enabled, run:
 
 ```bash
-python3 camera_client.py --protocol onvif --scan --cam_user <username> --cam_passwd <pwd> 
+python3 camera_client.py --protocol onvif --scan --cam_user <username> --cam_passwd <pwd>
 ```
 
 The output should be similar to:

@@ -4,11 +4,11 @@
 
 <br>
 
-The VIAI Edge solution can also use image files as the source data for visual inspection inference. 
+The VIAI Edge solution can also use image files as the source data for visual inspection inference.
 
-This can be the case if the camera system is external to this server, and the two cannot be integrated directly. 
+This can be the case if the camera system is external to this server, and the two cannot be integrated directly.
 
-In this scenario, a local integration is required to take images on the external camera system and then copy the image files to the server hosting this solution. 
+In this scenario, a local integration is required to take images on the external camera system and then copy the image files to the server hosting this solution.
 
 Note that the image files need to be on a filesystem that is accessible to the camera integration container. In practice, the best place to copy the images is the kubernetes volume mounted as `/var/lib/viai/camera-data` mounted within the camera integration container. Please refer to the earlier chapter ‘[Connecting to the camera using its Genicam GenTL producer file](./connectinggenicam.md)’ for instructions on how to find and access this mountpoint on the server host OS side, and how to transfer files to that volume. Use the same method as when transferring the GenTL files for Genicam cameras, as shown in the Genicam chapters above.
 
@@ -25,7 +25,7 @@ kubectl exec -it viai-camera-integration-0 -n ${NAMESPACE} -- /bin/bash
 ```
 export ML_HOST=viai-model
 python3 camera_client.py --protocol file --address /var/lib/viai/camera-data/source-image.png \
-	--device_id 'filecam' --mode single --ml --ml_host ${ML_HOST} --ml_port 8602 
+  --device_id 'filecam' --mode single --ml --ml_host ${ML_HOST} --ml_port 8602
 ```
 
 At this point you can start to [Collect images for training](./collectimages.md) in the next section.
@@ -37,7 +37,3 @@ ___
 <table width="100%">
 <tr><td><a href="./connectingcameras.md">^^^ Connecting cameras</td><td><a href="./collectimages.md">Collect images for training >>></td></tr>
 </table>
-
-
-
-

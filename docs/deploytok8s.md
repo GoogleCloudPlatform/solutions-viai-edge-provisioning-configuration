@@ -9,9 +9,9 @@ Follow this section to deploy the VIAI Edge solution __only if__ all the criteri
 __Requirements__
 
 * You already have a Kubernetes cluster running.
-* The kubernetes is already attached to Anthos. 
+* The kubernetes is already attached to Anthos.
   * If it's not attached yet, [follow this instructions](https://cloud.google.com/anthos/clusters/docs/multi-cloud/attached/previous-generation/how-to/attach-kubernetes-clusters) to attach the cluster to Anthos.
-* The required NVIDIA drivers are already installed on the kubernetes cluster. 
+* The required NVIDIA drivers are already installed on the kubernetes cluster.
   * If they are not installed yet, [follow this instructions](https://docs.nvidia.com/datacenter/cloud-native/kubernetes/install-k8s.html) to install the NVIDIA drivers for the Kubernetes cluster, then [follow this instructions](https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts) to install NVIDIA drivers on Ubuntu server.
 
 <br>

@@ -28,7 +28,7 @@ Where:
 
 * `-x` If this flag is set, the script will only generate Camera application deployment yaml files. It will _NOT_ recreate `ImagePullSecrets` and other application assets.
 
-* `-t` Tell the script to use the image url instead of recreating the camera application container image. `-x` _MUST_ be set for `-t` to work.
+* `-t` Tell the script to use the image URL instead of recreating the camera application container image. `-x` _MUST_ be set for `-t` to work.
 
 
 </br>

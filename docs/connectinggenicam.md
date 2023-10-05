@@ -27,7 +27,7 @@ usage: camera_client.py [-h] [--log LOG] --device_id DEVICE_ID
 To communicate with the camera, you need to have its GenTL producer file, with a `.cti` file ending, and the file should be compiled for Linux x86-64. The repository contains an example GenTL producer file for FLIR cameras, for both macOS and Ubuntu 20.04 which is the base OS of the reference server. To use your camera’s GenTL producer file, place it in a directory on the server that the docker image can access.
 
 The container that runs the camera integration utility is called `viai-camera-integration-operations`.
-It is located inside the pod called `viai-camera-integration`. 
+It is located inside the pod called `viai-camera-integration`.
 
 You can see this by running the following command:
 ```bash
@@ -41,7 +41,7 @@ The camera utility container has volumes mounted on it, which are shared with th
 * Mountpoint inside the container: `/var/lib/viai/camera-data`
     * Used to write imager array data from the camera, in images, or raw binary files
 
-On the host OS side, microk8s mounts those 2 shared volumes in dynamically allocated paths. To find the path of the shared volumes on the Ubuntu host side, run:  
+On the host OS side, microk8s mounts those 2 shared volumes in dynamically allocated paths. To find the path of the shared volumes on the Ubuntu host side, run:
 
 ```bash
 kubectl get pv -n ${NAMESPACE}
@@ -68,7 +68,7 @@ The command should output similar to this, where the shared volume path is the a
 Name:            pvc-826b7dce-0de9-48a7-bfea-fbe20237b779
 Labels:          <none>
 Annotations:     hostPathProvisionerIdentity: localhost
-                 pv.kubernetes.io/provisioned-by: microk8s.io/hostpath
+                pv.kubernetes.io/provisioned-by: microk8s.io/hostpath
 Finalizers:      [kubernetes.io/pv-protection]
 StorageClass:    microk8s-hostpath
 Status:          Bound
@@ -78,11 +78,11 @@ Access Modes:    RWO
 VolumeMode:      Filesystem
 Capacity:        100Mi
 Node Affinity:   <none>
-Message:         
+Message:  
 Source:
     Type:          HostPath (bare host directory volume)
     Path:          /var/snap/microk8s/common/default-storage/default-viai-camera-config-pvc-826b7dce-0de9-48a7-bfea-fbe20237b779
-    HostPathType:  
+    HostPathType:
 Events:          <none>
 ```
 
@@ -96,7 +96,7 @@ ls -l /var/snap/microk8s/common/default-storage/default-viai-camera-config-pvc-b
 
 __Transferring your camera GenTL producer file to the system__
 
-This is applicable to cameras that use the Genicam protocol stack. Each camera has a GenTL producer file, compiled to the target architecture. In the case of the reference server, the architecture is Ubuntu Linux x86-64. To interface with a Genicam-based camera on this server, you need to get the GenTL producer `.cti` file compiled for Linux x86-64. 
+This is applicable to cameras that use the Genicam protocol stack. Each camera has a GenTL producer file, compiled to the target architecture. In the case of the reference server, the architecture is Ubuntu Linux x86-64. To interface with a Genicam-based camera on this server, you need to get the GenTL producer `.cti` file compiled for Linux x86-64.
 
 Once you have the file, you need to transfer it to the shared volume `viai-camera-config`, using the commands from the previous section to identify the host OS path for that volume/directory. It should be under `/var/snap/microk8s/common/default-storage/<dynamic path>` on the server.
 
@@ -165,18 +165,18 @@ Genicam cameras found: [{'access_status': 1, 'display_name': 'FLIR Systems AB', 
 
 __Connecting to the camera and reading its runtime configuration__
 
-In this section you will connect to the camera, read its current runtime configuration (GenTL node tree), and output it to a configuration file that you can edit. Later on, you can write the edited, desired configurations back to the camera. 
+In this section you will connect to the camera, read its current runtime configuration (GenTL node tree), and output it to a configuration file that you can edit. Later on, you can write the edited, desired configurations back to the camera.
 
-Here, replace the value of `--device_id` with an arbitrary label that you wish to give this camera. For example: `site1_cam1`. 
+Here, replace the value of `--device_id` with an arbitrary label that you wish to give this camera. For example: `site1_cam1`.
 
-The label will be used in the data file names written from that camera. And point the `--gen_tl` parameter’s value to the `.cti` file that you transferred to the shared volume in the previous sections. The mode switch `--mode none` instructs the utility not to take any images with the camera. 
+The label will be used in the data filenames written from that camera. And point the `--gen_tl` parameter’s value to the `.cti` file that you transferred to the shared volume in the previous sections. The mode switch `--mode none` instructs the utility not to take any images with the camera.
 
 1. Query the camera configurations and output them to a file (replace the `device_id` and `getnl` path with your own values)
 
 ```bash
 python3 camera_client.py --protocol genicam --address 0 --device_id cam1 \
     --gentl /var/lib/viai/camera-config/<your-camera>.cti --mode none \
-    --cfg_read --cfg_read_file /var/lib/viai/camera-config/current.cfg 
+    --cfg_read --cfg_read_file /var/lib/viai/camera-config/current.cfg
 ```
 
 The output should look similar to this:

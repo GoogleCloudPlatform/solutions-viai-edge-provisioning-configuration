@@ -36,7 +36,8 @@ __Booting up for the first time__
     * Use the `+` and `-` keys to rearrange the boot order, and move the USB flash drive to the top fo the list, in the Boot Option #1 position.
     * Navigate to the Advanced -> Trusted Computing menu page.
       * Select `Security Device Support` and set it to `Disable`.
-    * Navigate to the Chipset -> System Agent (SA) Configuration -> Graphics Configuration 
+    * Navigate to the Chipset -> System Agent (SA) Configuration -> 
+    Graphics Configuration.
       * Set `Primary Display` to `HDMI`. This sets the server's motherboard HDMI port 1 as the primary console display port, leaving the GPU PCI card for ML acceleration tasks.
     * Navigate to Save & Exit
       * Select `Save Changes and Reset`
@@ -44,7 +45,7 @@ __Booting up for the first time__
 
 <br>
 
-2. If asked, boot via the Ubuntu OS installer USB flash drive. 
+2. If asked, boot via the Ubuntu OS installer USB flash drive.
 
     The OS installer will boot and load the installation configuration from the second USB flash drive (installer configuration data).
     For more information on this process, refer to [cloud-init NoCloud](https://cloudinit.readthedocs.io/en/latest/introduction.html).
@@ -68,7 +69,7 @@ __Booting up for the first time__
 
 <br>
 
-4. Log in to the system. 
+4. Log in to the system.
 
     To find out the IP address, log in via the console first.
 
@@ -76,9 +77,7 @@ __Booting up for the first time__
 
     After the first log in, the shell will ask you to change the default password. This ensures you don’t leave a device accessible via SSH with a known, clear-text. We recommend that, even after changing the password, you set up [key-based authentication](https://www.ssh.com/academy/ssh/public-key-authentication) and disable password-based authentication.
 
-    After you log in, the shell should display the server’s IPv4 address. From here onwards, you can SSH to the server using the following command from the your host machine:
-
-  	`ssh viai-admin@<server-ip-address>`
+    After you log in, the shell should display the server’s IPv4 address. From here onwards, you can SSH to the server using the following command from the your host machine: `ssh viai-admin@<server-ip-address>`
 
 <br>
 
@@ -116,7 +115,7 @@ regcred               kubernetes.io/dockerconfigjson        1      1h
 
 __Verifying that the server is attached to Anthos__
 
-To verify if the edge server is attached to Anthos, Go to [Google Cloud console, Kubernetes Engine, Clusters](https://console.cloud.google.com/anthos/clusters). 
+To verify if the edge server is attached to Anthos, Go to [Google Cloud console, Kubernetes Engine, Clusters](https://console.cloud.google.com/anthos/clusters).
 
 You should see the cluster you just created.
 

@@ -26,7 +26,7 @@ cd -
 
 ![ssh from cloud console](./images/sshscreenshot.png)
 
-3. Upload the zip file generated in step 1, use the top right button in the SSH window.
+3. Upload the ZIP file generated in step 1, use the top right button in the SSH window.
 
 ![ssh upload file](./images/sshuploadfile.png)
 

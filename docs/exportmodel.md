@@ -2,7 +2,7 @@
 
 <br>
 
-After you trained a model, to run the model on the edge server and get inference results, the next step is to create the solution artifacts. You can use the Google Cloud Console for Visual Inspection AI service, or command line scripts to create a solution artifact.
+After you trained a model, to run the model on the edge server and get inference results, the next step is to create the solution artifacts. You can use the Google Cloud Console for Visual Inspection AI service, or command-line scripts to create a solution artifact.
 
 <br>
 
@@ -38,7 +38,7 @@ __Option 2 - Exporting the VIAI ML model to Artifact Registry__
 
 To export a trained VIAI model container with GPU accelration to Google Cloud Artifiact Registry, follow the next steps:
 
-1. In the Google Cloud Console, go to Visual Inspection AI -> Models -> expand the model you trained in the previous sections. 
+1. In the Google Cloud Console, go to Visual Inspection AI -> Models -> expand the model you trained in the previous sections.
 Take note of the part of the URL highlighted, set an environment variable with that value.
 
 ![Solution ID URL](./images/export_to_artifact_registry_step_1.png)
@@ -72,7 +72,7 @@ export SOLUTION_ARTIFACTS_URL=https://${VIAI_REGION}-visualinspection.googleapis
 
 4. Prepare the API call to upload the model to Artifact Registry.
 
-Note that you will need to define an expiration time for the solution artifact. This is done specifying an epoch value for `seconds`, in the example below `1668386001` translates to Nov 14, 2022. Change that value as needed. Keep in mind that you might incur in additional charges. You can see an estimation on the [Artifacts Registry pricing page](https://cloud.google.com/artifact-registry/pricing). 
+Note that you will need to define an expiration time for the solution artifact. This is done specifying an epoch value for `seconds`, in the example below `1668386001` translates to Nov 14, 2022. Change that value as needed. Keep in mind that you might incur in additional charges. You can see an estimation on the [Artifacts Registry pricing page](https://cloud.google.com/artifact-registry/pricing).
 
 ```bash
 rm /tmp/body.json

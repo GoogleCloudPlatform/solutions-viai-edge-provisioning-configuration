@@ -4,7 +4,7 @@
 
 <br>
 
-Simple RTSP cameras cannot be queried or discovered automatically. 
+Simple RTSP cameras cannot be queried or discovered automatically.
 
 If your IP camera does not support ONVIF, you will need to write down its RTSP addresses manually, including a username/password pair if authentication is enabled. Use the RTSP stream information in the next chapters.
 

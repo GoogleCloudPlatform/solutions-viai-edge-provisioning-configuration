@@ -20,7 +20,7 @@ When applying changes to google_project_iam_member.anthos-bare-metal-serviceAcco
 This is a known issue with the Terraform provider, which should be reported in the provider's own issue tracker.
 
 [Provider produced inconsistent results](https://support.hashicorp.com/hc/en-us/articles/1500006254562-Provider-Produced-Inconsistent-Results)
-[Github issue](https://github.com/hashicorp/terraform-provider-google/issues/10193), [issue](https://github.com/hashicorp/terraform-provider-google/issues/10128)
+[GitHub issue](https://github.com/hashicorp/terraform-provider-google/issues/10193), [issue](https://github.com/hashicorp/terraform-provider-google/issues/10128)
 
 If you see this error, please run the provisioning script again. The resources should be provisioned correctly.
 

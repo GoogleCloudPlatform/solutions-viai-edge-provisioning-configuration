@@ -23,7 +23,7 @@ __Enabling time-slicing on th edge server__
 snap install helm --classic
 ```
 
-2. Configure NVIDIA Helm repo.
+2. Configure NVIDIA Helm repository.
 
 ```bash
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
@@ -35,7 +35,7 @@ helm repo update
 Note that in this sample configuration, VIAI Edge advertises 10 replicas to the Anthos runtime. If you have two GPUs installed on the edge server, each will have 10 replicas, meaning device plugins advertise 20 GPUs to the Anthos.
 
 You should monitor your GPU memory utilization in your development environment to
-understand actual requirements of running your machine learning models, and decide what is the best value for your workload. 
+understand actual requirements of running your machine learning models, and decide what is the best value for your workload.
 
 To monitor GPU utilization, you use tools such as [nvitop](https://github.com/XuehaiPan/nvitop).
 

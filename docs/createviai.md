@@ -6,7 +6,8 @@
 
 Administrators or Google will perform this task. This procedure performs the following steps:
 
-1. Clones the latest version of Visual Inspection AI Camera Application from a source repository.
+1. Clones the latest version of Visual Inspection AI Camera Application from a
+source repository.
 2. Uses Kaniko to build Visual Inspection AI Camera Application container images and push the image to the remote private container registry.
 3. Pushes the required container images to a private repository.
 4. Creates image pull secrets and Pub/Sub credential secrets.
@@ -67,7 +68,7 @@ Where:
 | europe-west4                | eu.gcr.io |
 
 
-* `CONTAINER_REPO_USER` Required if `REPO_TYPE` is `Private`,  the user name of private container registry.
+* `CONTAINER_REPO_USER` Required if `REPO_TYPE` is `Private`,  the username of private container registry.
 
 * `CONTAINER_REPO_PASSWORD` Required if `REPO_TYPE` is `Private`,  the password  of private container registry.
 
@@ -215,7 +216,7 @@ You can also use the `-h` flag to display all the possible options available.
 This script
 * Checks if the specified runtime folder exists, the path to the specific Kubernetes runtime should be `“${VIAI_PROVISIONING_FOLDER}"/edge-server/<RUNTIME>` (runtime is `anthos`)
 * Passes input arguments to the `generate-script.sh` script in the runtime folder to generate additional required scripts to set up the edge server, this includes:
-  * Generate scripts to install required packages, such as NVIDIA GPU Driver, gcloud command line tool, docker…etc.
+  * Generate scripts to install required packages, such as NVIDIA GPU Driver, gcloud command-line tool, docker…etc.
   * Update template files with specified environment variables.
 
 
@@ -254,12 +255,3 @@ ___
 <table width="100%">
 <tr><td><a href="./deployment.md">^^^ Deployment of the solution</td><td><a href="./deployedge.md">Deploy VIAI in the edge server >>></td></tr>
 </table>
-
-
-
-
-
-
-
-
-

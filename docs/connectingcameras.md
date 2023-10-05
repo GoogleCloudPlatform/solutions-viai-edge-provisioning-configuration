@@ -22,7 +22,7 @@ sudo su
 export KUBECONFIG=/var/lib/viai/bmctl-workspace/${MEMBERSHIP}/${MEMBERSHIP}-kubeconfig
 export NAMESPACE=<YOUR APPLICATION NAMESPACE>
 ```
- 
+
 Where:
 * `MEMBERSHIP` is the Anthos Cluster name.
 * `NAMESPACE` is the application namespace. Default is `viai-edge`.
@@ -36,6 +36,7 @@ The following chapters show how to connect different types of cameras to the ser
  * [Connecting Genicam cameras](./connectinggenicam.md)
  * [Connecting ONVIF-enabled RTSP cameras](./connectingonvif.md)
  * [Connecting simple RTSP cameras](./connectingrtsp.md)
- * [Connecting USB cameras](./connectingusb.md) 
+ * [Connecting USB cameras](./connectingusb.md)
  * [Using image files as data source](./connectingfiles.md)
  * [Connecting thermal cameras](./connectingthermal.md)
+

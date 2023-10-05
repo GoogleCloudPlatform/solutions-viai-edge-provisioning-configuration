@@ -35,7 +35,7 @@ __Hardware__
         * Load Balancing control plane IP address
         * Ingress IP addresses (at least two IP addresses are required)
 * Google source repositories access
-    * The solution source code is on Github with public access.
+    * The solution source code is on GitHub with public access.
     * At this point in time, the camera application code resides in a private Google repository. Access will be provided when requested.
 * Required Roles to provision Cloud Resources. You must have roles listed below to provision GCP resources. Ask your administrator to assign you to these roles if not already.
     * Project Editor
@@ -57,7 +57,7 @@ Inspection AI Service is only available in __us-central1__ and __europe-west4__ 
 
 
 This is a list of the services that will be provisioned by Visual Inspection AI Edge solution.
-You can find full location support for each service in the official [Google Cloud website](https://cloud.google.com/about/locations#europe).
+You can find full location support for each service in the official [Google Cloud locations documentation](https://cloud.google.com/about/locations#europe).
 * Anthos and Anthos Configuration Management
 * Artifact Registry
 * Bigquery
@@ -146,7 +146,7 @@ details below for requirements.
 
 [__Nexcom AIEdge-X300-RTX30__](https://www.nexcom.com/Products/multi-media-solutions/ai-edge-computer/nvidia-solutions/ai-edge-computer-aiedge-x-300-rtx30#)</br>
 
-| ![nexcom server front](./images/nexcom-front.png)  | 
+| ![nexcom server front](./images/nexcom-front.png)  |
 ![nexcom server back](./images/nexcom-back.png)      |
 -------------------------|--------------------------------|
 | SKU #                  | AIEdge-X300-RTX30              |

@@ -12,7 +12,7 @@ There are other [automatic deployment options](./automaticdeployment.md) availab
 
 __Manual Deploy__
 
-1. Clone this repo and switch to the working folder
+1. Clone this repository and switch to the working folder
 
 ```bash
 cd ${VIAI_PROVISION_FOLDER}/setup/kubernetes/viai-model

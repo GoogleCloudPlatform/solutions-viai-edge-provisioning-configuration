@@ -4,11 +4,11 @@
 
 <br>
 
-The camera utility can discover USB (web) cameras which are directly connected to a USB port on the host server. 
+The camera utility can discover USB (web) cameras which are directly connected to a USB port on the host server.
 
-In practice, the software scans the linux OS for video devices from `/dev/video0` until `/dev/video9`, i.e the first 10 connected USB devices. 
+In practice, the software scans the linux OS for video devices from `/dev/video0` until `/dev/video9`, i.e the first 10 connected USB devices.
 
-If a device exists, the utility will try to open the device as a camera. If this works, it’s reported as an available camera. 
+If a device exists, the utility will try to open the device as a camera. If this works, it’s reported as an available camera.
 
 The scanning will produce warnings when incompatible devices are scanned - you can ignore those warnings.
 
@@ -19,7 +19,7 @@ __Scan for USB cameras__
 1. On the edge server, use the `v2l4` tool to check if the camera is connected and is detected.
 
 ```bash
-sudo apt-get install v4l-utils 
+sudo apt-get install v4l-utils
 v4l2-ctl --list-devices
 ```
 
@@ -27,9 +27,9 @@ The output should be similar to this:
 
 ```
 Logitech Webcam C930e (usb-0000:00:14.0-8):
-	/dev/video0
-	/dev/video1
-	/dev/media0
+  /dev/video0
+  /dev/video1
+  /dev/media0
 ```
 
 2. Open a shell to the camera utility container
