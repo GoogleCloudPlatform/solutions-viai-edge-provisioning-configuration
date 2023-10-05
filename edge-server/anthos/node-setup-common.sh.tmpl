@@ -157,6 +157,8 @@ update_kubeconfig_environment_variable() {
 
   if [ ! -d "${USER_HOME_PATH}" ]; then
     echo "[Error] ${USER_HOME_PATH} does not exists."
+    # Ignoring because those are defined in common.sh, and don't need quotes
+    # shellcheck disable=SC2086
     exit $ERR_DIRECTORY_NOT_FOUND
   fi
 
