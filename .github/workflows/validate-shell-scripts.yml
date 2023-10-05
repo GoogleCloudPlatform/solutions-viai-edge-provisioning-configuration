@@ -45,7 +45,7 @@ jobs:
           set -o errexit
           set -o nounset
 
-          ./tests/test-common.sh
+          ./tests/test-terraform-container-id.sh
       - name: "Generate Edge server configuration assets and ISO file"
         run: |
           set -o errexit
