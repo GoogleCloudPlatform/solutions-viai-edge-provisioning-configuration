@@ -6,7 +6,7 @@
 
 __Downloading the OS images and writing them to USB drives__
 
-    Warning: This procedure will wipe all the data that is currently in both USB drives.
+Warning: This procedure will wipe all the data that is currently in both USB drives.
 
 
 The following steps should be run on the setup machine:
