@@ -19,64 +19,64 @@ __Connecting the physical server__
 
 __Booting up for the first time__
 
-    Warning: This procedure will wipe all the data that is currently in the server.
+Warning: This procedure will wipe all the data that is currently in the server.
 
 1. Power on the server.
 
-    If all the settings are correct, you will see a sceen similar to this:
+If all the settings are correct, you will see a sceen similar to this:
 
-    ![boot_screen](./images/boot.png)
+![boot_screen](./images/boot.png)
 
-    If the server does not boot directly from the Ubuntu OS installer USB flash drive, you may need to change the position of the USB flash drivers and/or its BIOS boot settings. You must set the USB drive which contains the Ubuntu distribution as the server boot device.
+If the server does not boot directly from the Ubuntu OS installer USB flash drive, you may need to change the position of the USB flash drivers and/or its BIOS boot settings. You must set the USB drive which contains the Ubuntu distribution as the server boot device.
 
-    * Power cycle the server.
-    * Press `Esc` or `Del` when you see the AMI BIOS logo.
-    * Use an USB keyboard to navigate to the Boot page.
-    * Under the Boot Option Priorities, locate your flash drive. It might be labeled `[UEFI: SanDISK]` or similar.
-    * Use the `+` and `-` keys to rearrange the boot order, and move the USB flash drive to the top fo the list, in the Boot Option #1 position.
-    * Navigate to the Advanced -> Trusted Computing menu page.
-      * Select `Security Device Support` and set it to `Disable`.
-    * Navigate to the Chipset -> System Agent (SA) Configuration -> Graphics Configuration.
-      * Set `Primary Display` to `HDMI`. This sets the server's motherboard HDMI port 1 as the primary console display port, leaving the GPU PCI card for ML acceleration tasks.
-    * Navigate to Save & Exit
-      * Select `Save Changes and Reset`
-      * Confirm when prompted
+* Power cycle the server.
+* Press `Esc` or `Del` when you see the AMI BIOS logo.
+* Use an USB keyboard to navigate to the Boot page.
+* Under the Boot Option Priorities, locate your flash drive. It might be labeled `[UEFI: SanDISK]` or similar.
+* Use the `+` and `-` keys to rearrange the boot order, and move the USB flash drive to the top fo the list, in the Boot Option #1 position.
+* Navigate to the Advanced -> Trusted Computing menu page.
+  * Select `Security Device Support` and set it to `Disable`.
+* Navigate to the Chipset -> System Agent (SA) Configuration -> Graphics Configuration.
+  * Set `Primary Display` to `HDMI`. This sets the server's motherboard HDMI port 1 as the primary console display port, leaving the GPU PCI card for ML acceleration tasks.
+* Navigate to Save & Exit
+  * Select `Save Changes and Reset`
+  * Confirm when prompted
 
 <br>
 
 2. If asked, boot via the Ubuntu OS installer USB flash drive.
 
-    The OS installer will boot and load the installation configuration from the second USB flash drive (installer configuration data).
-    For more information on this process, refer to [cloud-init NoCloud](https://cloudinit.readthedocs.io/en/latest/introduction.html).
+The OS installer will boot and load the installation configuration from the second USB flash drive (installer configuration data).
+For more information on this process, refer to [cloud-init NoCloud](https://cloudinit.readthedocs.io/en/latest/introduction.html).
 
 <br>
 
 3. The installer will ask for confirmation before perfoming any changes to the server disk.
 
-    When you see a prompt asking `Continue with autoinstall? (yes|no)` <br>
-    Type `yes <enter>`
+When you see a prompt asking `Continue with autoinstall? (yes|no)` <br>
+Type `yes <enter>`
 
-    The machine might reboot during the installation if any OS package requires a restart to finalize its upgrade.
+The machine might reboot during the installation if any OS package requires a restart to finalize its upgrade.
 
-    After the first automated reboot, you should see a console message similar to this:
+After the first automated reboot, you should see a console message similar to this:
 
-    `Ubuntu 20.04.3 LTS viai-nexcom tty1`
+`Ubuntu 20.04.3 LTS viai-nexcom tty1`
 
-    At this point, the system is still installing packages. The installation is finished when you see the following message:
+At this point, the system is still installing packages. The installation is finished when you see the following message:
 
-    `[ OK ] Reached target Cloud-init target.`
+`[ OK ] Reached target Cloud-init target.`
 
 <br>
 
 4. Log in to the system.
 
-    To find out the IP address, log in via the console first.
+To find out the IP address, log in via the console first.
 
-    Default username is `viai-admin` and the default password is `viai-admin`.
+Default username is `viai-admin` and the default password is `viai-admin`.
 
-    After the first log in, the shell will ask you to change the default password. This ensures you don’t leave a device accessible via SSH with a known, clear-text. We recommend that, even after changing the password, you set up [key-based authentication](https://www.ssh.com/academy/ssh/public-key-authentication) and disable password-based authentication.
+After the first log in, the shell will ask you to change the default password. This ensures you don’t leave a device accessible via SSH with a known, clear-text. We recommend that, even after changing the password, you set up [key-based authentication](https://www.ssh.com/academy/ssh/public-key-authentication) and disable password-based authentication.
 
-    After you log in, the shell should display the server’s IPv4 address. From here onwards, you can SSH to the server using the following command from the your host machine: `ssh viai-admin@<server-ip-address>`
+After you log in, the shell should display the server’s IPv4 address. From here onwards, you can SSH to the server using the following command from the your host machine: `ssh viai-admin@<server-ip-address>`
 
 <br>
 
