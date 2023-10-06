@@ -90,11 +90,8 @@ On the edge server, do the following:
 
 ```bash
 sudo su
-
 export KUBECONFIG=/var/lib/viai/bmctl-workspace/${MEMBERSHIP}/${MEMBERSHIP}-kubeconfig
-
 export NAMESPACE=<YOUR KUBERNETES NAMESPACE>
-
 kubectl get secrets -n ${NAMESPACE}
 ```
 
