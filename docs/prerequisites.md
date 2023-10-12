@@ -146,9 +146,8 @@ details below for requirements.
 
 [__Nexcom AIEdge-X300-RTX30__](https://www.nexcom.com/Products/multi-media-solutions/ai-edge-computer/nvidia-solutions/ai-edge-computer-aiedge-x-300-rtx30#)</br>
 
-| ![nexcom server front](./images/nexcom-front.png)  |
-![nexcom server back](./images/nexcom-back.png)      |
--------------------------|--------------------------------|
+| ![nexcom server front](./images/nexcom-front.png)  | ![nexcom server back](./images/nexcom-back.png)   |
+|-------------------------|--------------------------------|
 | SKU #                  | AIEdge-X300-RTX30              |
 | Cooling design         | GPU Card with Active Cooling |
 | Form factor            | Desktop                      |
