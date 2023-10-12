@@ -46,7 +46,7 @@ If you want to delete the BigQuery dataset everytime when run the `provision-ter
 
 
 <br>
-___
+---
 
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./troubleshootingabm.md">Troubleshooting Anthos Baremetal installation >>></td></tr>

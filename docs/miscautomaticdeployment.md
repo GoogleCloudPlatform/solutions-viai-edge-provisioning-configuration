@@ -242,7 +242,7 @@ Go to Cloud Deploy console, you should see a new release been created, to deploy
 
 
 <br>
-___
+---
 
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./miscimprovegpuuse.md">Improving GPU utilization in Kubernetes >>></td></tr>
