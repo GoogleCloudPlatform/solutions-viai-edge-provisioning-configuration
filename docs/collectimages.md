@@ -192,5 +192,5 @@ At this point the training dataset is ready to be used by VIAI. You can continue
 ___
 
 <table width="100%">
-<tr><td><a href="./trainingviai.md">Train your ML model in VIAI >>></td></tr>
+<tr><td><a href="./trainviai.md">Train your ML model in VIAI >>></td></tr>
 </table>
