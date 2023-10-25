@@ -191,7 +191,7 @@ ___
 ## Industrial camera requirements
 
 * Camera resolution requirements
-
+| | |
 |---------|-----------------|
 | Resolution (max) |  100M pixels |
 | Resoultion (min) | > 1M pixels |
@@ -203,7 +203,7 @@ ___
 
 * Lighting requirements
 
-
+| | |
 |---------|-----------------|
 | Focus |  Focus is on object surface but not on background context |
 | Light | Object is well and evenly lit (e.g. through ring light) |
