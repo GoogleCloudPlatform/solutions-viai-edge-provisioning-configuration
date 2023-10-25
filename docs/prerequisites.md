@@ -191,6 +191,7 @@ ___
 ## Industrial camera requirements
 
 * Camera resolution requirements
+
 | | |
 |---------|-----------------|
 | Resolution (max) |  100M pixels |
