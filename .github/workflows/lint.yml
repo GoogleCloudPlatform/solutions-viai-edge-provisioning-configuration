@@ -26,16 +26,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+      - name: Load super-linter configuration
+        run: cat config/lint/super-linter.env >> "$GITHUB_ENV"
       - name: Super-Linter
         uses: super-linter/super-linter@v5.5.0
         env:
-          DISABLE_ERRORS: false
-          ERROR_ON_MISSING_EXEC_BIT: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: .
-          # Disable kubeconform because it gets confused by Anthos on Bare Metal descriptors
-          # and it doesn't support ignoring files.
-          VALIDATE_KUBERNETES_KUBECONFORM: false
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_KUBERNETES_KUBEVAL: false
+      - name: Run super-linter from script
+        run: |
+          tests/lint.sh
 ...

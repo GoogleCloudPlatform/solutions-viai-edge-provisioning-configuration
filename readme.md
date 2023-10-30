@@ -1,4 +1,4 @@
-# Visual Inspection AI Edge Solution document
+# Visual Inspection AI (VIAI) Edge Solution
 
 ## Required Roles to run Terraform
 
@@ -72,7 +72,6 @@ bash ./scripts/0-generate-viai-application-assets.sh \
 
 ```
 
-
 ### Create VIAI application assets with three camera with camera ID from 1 to 3
 
 If later you need to regenerate Kubernete yaml files to deploy camera application, use this script sample.
@@ -111,7 +110,6 @@ export REPO_TYPE="ArtifactRegistry"
 
 ### Generste Edge Server setup scripts
 
-
 * Configure and install Anthos cluster with physical IP addresses.
 
 |  Variable Name   | Used for  | Requirements |
@@ -120,7 +118,6 @@ export REPO_TYPE="ArtifactRegistry"
 | LB_CP_VIP  | Load Balancer Control Plane VIP | Unreachable IP address in the same subnet with CP_VIP |
 | INGRESS_VIP  | Ingress VIP | Unreachable IP address in the same subnet with LB_CP_VIP, must be the First IP address of LB_ADDRESS_RANGE |
 | LB_ADDRESS_RANGE  | Load Balancer IP pool | Unreachable IP address in the same subnet with LB_CP_VIP |
-
 
 ```shell
 export OUTPUT_FOLDER="<APPLICATION ASSETS OUTPUT FOLDER>"
@@ -148,6 +145,7 @@ bash ./scripts/1-generate-edge-server-assets.sh \
     -u ${GOOGLE_CLOUD_DEFAULT_USER_EMAIL} 2>&1 | tee log-1.log
 
 ```
+
 * Setup VXLAN on the host and install Anthos.
 
 > This is not recommended for production environment.
@@ -189,9 +187,13 @@ bash ./scripts/2-generate-media-file.sh \
 
 ```
 
-
 ## Notes
 
 * The `provision-terraform.sh -a` command creates a Storage Bucket `gs://tf-state-${DEFAULT_PROJECT}/` to store Terraform state that is not managed by Terraform. This is intentionaly to ensure the state will be always available when create / update resources.
 
 The Bucket will be deleted if you run `provision-terraform.sh -s "destroy"` to delete generated resources.
+
+## Development
+
+For information about development environment setup, conventions, standards,
+and processes, see [Develop VIAI Edge](./docs/development.md).
