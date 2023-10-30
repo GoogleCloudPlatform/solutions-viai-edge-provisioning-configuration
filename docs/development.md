@@ -15,7 +15,7 @@ This project runs a set of code linters and static analyzers that are part of
 [super-linter](https://github.com/github/super-linter) as part of the build
 process.
 
-### Run code linting and static analysis from the command line
+### Run code linting and static analysis from the command-line
 
 1. Open a POSIX-compliant shell.
 1. Change your working directory to the root directory of this repository.
