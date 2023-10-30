@@ -34,5 +34,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run super-linter from script
         run: |
-          scripts/lint.sh
+          tests/lint.sh
 ...
