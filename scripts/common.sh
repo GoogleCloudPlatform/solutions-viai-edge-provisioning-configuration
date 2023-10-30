@@ -189,6 +189,14 @@ is_macos() {
   fi
 }
 
+is_ci() {
+  if [ "${GITHUB_ACTIONS:-}" = "true" ] || [ "${CI:-}" = "true" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 run_containerized_terraform() {
   GOOGLE_APPLICATION_CREDENTIALS_PATH="${1}"
   shift
