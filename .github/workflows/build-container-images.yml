@@ -5,27 +5,15 @@ env:
   CONTAINER_IMAGE_REGISTRY: ghcr.io
 
 on:  # yamllint disable-line rule:truthy
-  push:
-    paths:
-      - ".github/workflows/build-container-images.yml"
-      - ".github/workflows/lint.yml"
-      - "docker/**"
-  pull_request:
-    paths:
-      - ".github/workflows/build-container-images.yml"
-      - ".github/workflows/lint.yml"
-      - "docker/**"
+  push: null
+  pull_request: null
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: null
 
 jobs:
-  lint:
-    uses: ./.github/workflows/lint.yml
   build-container-images:
     env:
       CONTAINER_IMAGE_ID: "${{ github.repository }}-${{ matrix.container-image-context-directory }}"
-    needs:
-      - lint
     permissions:
       contents: read
       packages: write
