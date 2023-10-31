@@ -2,8 +2,8 @@
 
 The deployment of the solution is done with the following steps:
 
-* [Provisioning the Google Cloud backend](./provisiongcp.md)
-* [(Optional) Customizing the application](./customizingapp.md)
-* [Creating VIAI application assets](./createviai.md)
-* [Deploy the solution in the edge server](./deployedge.md)
+1. [Provisioning the Google Cloud backend](./provisiongcp.md)
+2. [(Optional) Customizing the application](./customizingapp.md)
+3. [Creating VIAI application assets](./createviai.md)
+4. [Deploy the solution in the edge server](./deployedge.md)
 

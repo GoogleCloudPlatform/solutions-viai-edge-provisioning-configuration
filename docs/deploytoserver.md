@@ -6,10 +6,9 @@
 
 __Downloading the OS images and writing them to USB drives__
 
-Warning: This procedure will wipe all the data that is currently in both USB drives.
+_Warning:_ This procedure will wipe all the data that is currently in both USB drives.
 
-
-The following steps should be run on the setup machine:
+The following steps should be run on the _setup machine_ (your Linux or macOS):
 
 1. Switch to the current project:
 

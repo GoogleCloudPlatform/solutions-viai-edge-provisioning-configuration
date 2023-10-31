@@ -21,6 +21,8 @@ by Google Cloud. You use the service to train your Visual Inspection AI models.
 * __Target edge environment.__ The physical location where your edge server will be
 deployed.
 
+* __Setup machine__ A Linux or macOS desktop or laptop, with access to the internet and USB ports, that will be used to setup the Google Cloud assets and prepare the Edge server configuration and operating system.
+
 </br>
 
 ___

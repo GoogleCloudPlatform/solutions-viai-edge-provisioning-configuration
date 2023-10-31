@@ -2,7 +2,7 @@
 
 ## General Pre-requisites
 
-__Hardware__
+__Edge server hardware__
 
 * Supported server hardware [(see below)](#supported-gateway-servers) or existing Kubernetes cluster available.
 * Supported camera(s).
@@ -12,12 +12,13 @@ __Hardware__
   * AC power.
   * HDMI monitor or Serial console.
   * USB keyboard.
-  * An USB flash drive of at least 4 GB for the OS installer.
-  * An USB flash drive of at least 1 GB for the installer configuration data.
-  * Another Linux or macOS system to prepare the installation media.
 
-__Software__
+__Setup machine__
 
+* Linux or macOS system to prepare the installation media, edge server configuration and Google Cloud assets.
+* An USB flash drive of at least 4 GB for the OS installer.
+* An USB flash drive of at least 1 GB for the installer configuration data.
+* Internet access and connectivity to Google Cloud.
 * Docker Engine (tested with version 20.10.2).
   * Please follow [these instructions](https://docs.docker.com/engine/install/ubuntu/) to install Docker Engine if needed.
   * This document assumes that the user running Docker Engine commands has the permissions to manage the Docker daemon without requiring root privileges. For more information, see [Manage Docker as non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).

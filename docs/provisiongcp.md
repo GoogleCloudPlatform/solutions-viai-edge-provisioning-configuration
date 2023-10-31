@@ -15,13 +15,12 @@ __Provisioning resources in the Google Cloud project__
 <br>
 
 Before you provision cloud resources, you must take into account the Google Cloud resources locations.
-At the time of writing this document, Visual Inspection AI is only available in us-central and
-europe-west4 regions.
+At the time of writing this document, Visual Inspection AI is only available in __us-central__ and
+__europe-west4__ regions.
 
-If you enable the `-x` flag, the script will provision a GCE
-instance with T4 GPU, which is [not available in every GCP region](https://cloud.google.com/compute/docs/gpus/gpu-regions-zones).
+*Note:* If you are planning to deploy the VIAI Edge solution in sandbox, add the `-x` flag at the end of the following command. The script will provision a GCE instance with a T4 GPU to be used as a sandbox. See instructions below.
 
-Execute the following tasks:
+In the _setup machine_ (your Linux or macOS), execute the following tasks:
 
 1. Clone the VIAI Edge cloud project and switch to the source folder:
 
@@ -43,11 +42,11 @@ export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=<Your GCP Anthos Administrator email>
 ```
 
 Where:
-* `DEFAULT_PROJECT`: the ID of the Google Cloud project to provision the resources to deploy the solution.
-* `DEFAULT_REGION`: the default region where to provision resources. Please see the [Supported Cloud Regions](./prerequisites.md#supported-cloud-regions-and-services) section for recommendations.
-* `DEFAULT_ZONE`: the default [zone](https://cloud.google.com/compute/docs/regions-zones) where to provision the optional sandbox VM. A value for the zone has to be provided but the zone will only be used for the optional sandbox VM.
-* `VIAI_STORAGE_BUCKET_LOCATION`: the location where to create the Cloud Storage buckets.
-* `GOOGLE_CLOUD_DEFAULT_USER_EMAIL`: the user email of Anthos administrator. This user will be assigned required roles to configure the Anthos.
+* `DEFAULT_PROJECT` is the ID of the Google Cloud project to provision the resources to deploy the solution.
+* `DEFAULT_REGION` is the default region where to provision resources. Please see the [Supported Cloud Regions](./prerequisites.md#supported-cloud-regions-and-services) section for recommendations.
+* `DEFAULT_ZONE` is the default [zone](https://cloud.google.com/compute/docs/regions-zones) where to provision the optional sandbox VM. A value for the zone has to be provided but the zone will only be used for the optional sandbox VM.
+* `VIAI_STORAGE_BUCKET_LOCATION` is the location where to create the Cloud Storage buckets.
+* `GOOGLE_CLOUD_DEFAULT_USER_EMAIL` is the user email of Anthos administrator. This user will be assigned required roles to configure Anthos Bare Metal.
 
 3. Ensure that you have the Docker daemon running
 
@@ -55,7 +54,7 @@ Where:
 docker run hello-world
 ```
 
-If the command finishes successfully, you can proceed with the next step. Otherwise, make sure you troubleshoot Docker before continuing.
+If the command finishes successfully, you can proceed with the next step. Otherwise, make sure you [troubleshoot Docker](https://docs.docker.com/config/daemon/troubleshoot/) before continuing.
 
 4. Provision Google Cloud resources in your project.
 
@@ -106,25 +105,25 @@ create_sandbox = "true | false"
 ```
 
 Where:
-* `google_default_region`: the default region where to provision resources
-* `google_default_zone`: the default zone where to provision resources.
-* `google_viai_project_id`: the ID of the Google Cloud project to provision the resources.
-* `viai_storage_buckets_location`: the location where to create the Cloud Storage buckets.
-* `google_cloud_console_user_email`: the user email of Anthos administrator. This user will be assigned required roles to configure the Anthos
-* `cloud_function_source_path`: path to the zipped file with the Cloud Function source code.
-    The source code can be found at `ssh://<your-email-address>@source.developers.google.com:2022/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration` branch: `main` by default. Cloud Function codes are in the `cf` folder.
+* `google_default_region` is the default region to provision resources.
+* `google_default_zone` is the default zone to provision resources.
+* `google_viai_project_id` is the ID of the Google Cloud project to provision the resources.
+* `viai_storage_buckets_location` is the location where to create the Cloud Storage buckets.
+* `google_cloud_console_user_email` is the user email of Anthos administrator. This user will be assigned required roles to configure the Anthos
+* `cloud_function_source_path` is the path to the zipped file with the Cloud Function source code.
+    The source code can be found at `ssh://<your-email-address>@source.developers.google.com:2022/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration` branch: `main` by default. Cloud Function codes are in the `cf` folder. Access to this private repository will be granted upon request. Contact your Google Cloud sales representative.
 * `anthos_target_cluster_membership`:
   * Anthos membership names, an array of strings. For example: `[“member1", “member2"]`. The membership names are names that will be registered to Anthos to identify your edge servers.
   * This variable can be set to `[]` if this is your first time running `provision-terraform.sh` and you only want to provision cloud resources and do not want to configure any edge servers related services at the moment.
-* `create_sandbox`: `true` if you want to provision GCE VMs, otherwise `false`.
+* `create_sandbox` set to `true` if you want to provision sandbox GCE VMs, otherwise set to `false`.
 
 <br>
 
 The Terraform script performs the following:
 
 * Provisions cloud resources in the specified Google Cloud project, including:
-  * Google Cloud resources [listed earlier](./prerequisites.md#supported-cloud-regions-and-services)
-  * A GCE instance attached to a T4 GPU and VPC network if you choose to create a sandbox with the `-x` flag
+  * Google Cloud resources [listed earlier](./prerequisites.md#supported-cloud-regions-and-services).
+  * A GCE instance attached to a T4 GPU and VPC network if you choose to create a sandbox with the `-x` flag.
   * Create and download two service account key files into the `${VIAI_PROVISIONING_FOLDER}/tmp` folder. They will be used in following configuration steps.
 
 At this point the required Google Cloud services are provisioned and ready to use.

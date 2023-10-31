@@ -4,7 +4,7 @@
 
 <br>
 
-Administrators or Google will perform this task. This procedure performs the following steps:
+This procedure performs the following steps:
 
 1. Clones the latest version of Visual Inspection AI Camera Application from a
 source repository.
@@ -13,13 +13,16 @@ source repository.
 4. Creates image pull secrets and Pub/Sub credential secrets.
 5. Updates Kubernetes manifest files.
 
+_Note:_ The script pulls Visual Inspection AI Edge Application source code from the default source repository `https://source.developers.google.com/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration`. If you have another source repository, you must first authenticate to that source repository before running the following scripts.
+
 Follow the steps below to create the application assets:
 
-Build the application and push the image to your container registry by running below scripts.
+__Build the application and push the image to your container registry.__
 
-Note that the script pulls Visual Inspection AI Edge Application source codes from a source repository, which defaults to `https://source.developers.google.com/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration` . If you have another source repository, you must first authenticate to the source repository before running the script.
+In the  _setup machine_ (your Linux or macOS), review the env variables and update as needed:
 
-Review the env variables and update as needed:
+_Note:_ you should use the same shell session in the _setup machine_ that you used to create the Cloud assets in the previous step. If for any reason
+you have closed the terminal, make sure that you export again the env variables from the [previous step](./provisiongcp.md) before continuing.
 
 ```bash
 export ANTHOS_SVC_ACCOUNT_KEY_PATH=$(pwd)/tmp/service-account-key.json
@@ -53,13 +56,11 @@ Launch the script to generate the VIAI assets:
 
 Where:
 
-* `ANTHOS_SVC_ACCOUNT_KEY_PATH` The service account key file path for Anthos. If you follow the previous section to provision cloud resources, a key file was downloaded to `$(pwd)/tmp/service-account-key.json`
-
+* `ANTHOS_SVC_ACCOUNT_KEY_PATH` is the service account key file path for Anthos. It was generated in the previous step and a key file was downloaded to `$(pwd)/tmp/service-account-key.json`
 * `REPO_TYPE` Can be one of the following:
   * `Private` for a Private container registry
   * `GCR` for Google Cloud Container Registry
   * `ArtifactRegistry` for Google Cloud Artifact Registry.
-
 * `CONTAINER_REPO_HOST` Required if `REPO_TYPE` is `Private`. If you use Container Registry, use the below table to specify a valid hostname:
 
 | Visual Inspection AI Region | Hostname |
@@ -69,30 +70,22 @@ Where:
 
 
 * `CONTAINER_REPO_USER` Required if `REPO_TYPE` is `Private`,  the username of private container registry.
-
 * `CONTAINER_REPO_PASSWORD` Required if `REPO_TYPE` is `Private`,  the password  of private container registry.
-
 * `CONTAINER_REPO_REG_NAME`
   * If `REPO_TYPE` is `Private`, the registry name of the Container Registry.
   * If `REPO_TYPE` is `GCR`, this value should equal to `${DEFAULT_PROJECT}`.
-
 * `CONTAINER_BUILD_METHOD` Must be `GCP`, instruct the script to submit Visual Inspection AI Edge solution codes to `Cloud Build` to build the container image.
-
 * `DEFAULT_PROJECT` the ID of the Google Cloud project to provision the resources to complete this installation.
-
 * `DEFAULT_REGION` Default Google Cloud Region.
-
 * `GOOGLE_CLOUD_DEFAULT_USER_EMAIL` User’s email. This user will be granted gateway RBAC and required roles to access Anthos Cluster. Will be ignored if `${GENERATE_ATTACH_CLUSTER_SCRIPT}` is `false`.
-
 * `K8S_RUNTIME` Must be `anthos`.
-
 * `MEMBERSHIP` Anthos membership name. This is the name that will be used in Anthos console to represent the edge server.
-
-* `VIAI_SVC_ACCOUNT_KEY_PATH` VIAI service account key, The Terraform script will download the service account key to `./tmp/viai-camera-integration-client_service_account_key-service-account-key.json` folder.
+* `VIAI_SVC_ACCOUNT_KEY_PATH` VIAI service account key, The Terraform script in the previous step downloaded the service account key to `./tmp/viai-camera-integration-client_service_account_key-service-account-key.json` folder.
 
 
 After the script completes, you shoud see an output similar to this.<br>
-__Important:__ Take note of the _output folder_ where the assets have been generated.
+
+__Important:__ Take note of the _output folder_ where the assets have been generated. You will need this later.
 
 ```text
   1.6.15: digest: sha256:abc6b06c4b65adca0d1330e6ef58f795c77c22a0229ba8e465014acfaab451b3 size: 946
@@ -127,7 +120,6 @@ The _output folder_ has the following structure:
 Where:
 
 * `kubernetes` folder containes the required kubernetes manifest files to deploy the VIAI application.
-
 * `scripts` folder contains the required scripts to set up the edge server.
 
 Verify if the Kubernetes manifest files and scripts are correctly generated. These scripts will be copied to the target server in later steps and executed there to provision the server.
@@ -139,22 +131,19 @@ If your environment will have multiple cameras, please [use this guide](./multip
 __Creating Kubernetes setup assets__
 
 By default, the Anthos installation requires you to allocate IP addresses for Control Plane and Load Balancer.
-It is out of the scope of this document to show How to design and manage IP addresses allocation, please refer to the [Anthos Network Requirements](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/concepts/network-reqs) and the [Set up Load Balancer](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/load-balance) guides for details.
+It is out of the scope of this document to show how to design and manage IP addresses allocation. Please refer to the [Anthos Network Requirements](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/concepts/network-reqs) and the [Set up Load Balancer](https://cloud.google.com/anthos/clusters/docs/bare-metal/latest/installing/load-balance) guides for details.
 
-This is an example table for IP Addresses allocation:
+This is an example table for IP addresses allocation:
 
 | Variable name |  Use   |  Sample IP address |
 |---------------|--------|--------------------|
-| CP_VIP   | Control Plane VIP. <br> You must use the server's host OS primary NIC IP. <br> Must be configured over DHCP manual allocation with the <br> correct MAC address of the first NIC you choose. | 192.168.1.21 <br> (must be the same IP as the server host OS primary IP) |
+| CP_VIP   | Control Plane VIP. <br> You must use the server's host OS primary NIC IP. <br> Must be configured over DHCP manual allocation with the <br> correct MAC address of the primary NIC. | 192.168.1.21 <br> (must be the same IP as the server host OS primary IP) |
 | LB_CP_VIP | The destination IP address to be used for traffic sent <br> to the Kubernetes control plane. <br> These IPs must NOT be reachable during Anthos setup. <br> Must be in the same subnet as CP_VIP. | 192.168.1.22 |
-| INGRESS_VIP | The IP address to be used for Services behind the <br> load balancer for ingress traffic. <br> This IP must NOT be reachaeble during Anthos setup. <br> Must be the first IP address of LB_ADDRESS_RANGE. <br> Must be in the same subnet as CP_VIP. | 192.168.1.23 |
-| LB_ADDRESS_RANGE | One IP range of contiguous IP addresses  (minimum 2 IPs but 4 IPs is recommended) <br> These IPs must NOT be reacheable during Anthos setup. | 192.168.1.23-192.168.1.26 |
+| INGRESS_VIP | The IP address to be used for Services behind the <br> load balancer for ingress traffic. <br> This IP must NOT be reachable during Anthos setup. <br> Must be the first IP address of LB_ADDRESS_RANGE. <br> Must be in the same subnet as CP_VIP. | 192.168.1.23 |
+| LB_ADDRESS_RANGE | One IP range of contiguous IP addresses  (minimum 2 IPs but 4 IPs is recommended) <br> These IPs must NOT be reachable during Anthos setup. | 192.168.1.23-192.168.1.26 |
 
 
 <br>
-
-Once you have allocated the required IP addresses, run the scripts below to generate the Kubernetes set up assets.
-
 
 _Note:_ If you used the `-x` flag in the [previous step](./provisiongcp.md) to create a sandbox machine, the Terraform script will create a GCE VM with the IP address `10.128.0.2`. The suggested IPs in this particular case woul be:
 
@@ -167,8 +156,12 @@ _Note:_ If you used the `-x` flag in the [previous step](./provisiongcp.md) to c
 
 <br>
 
+Once you have allocated the required IP addresses, run the scripts below to generate the Kubernetes set up assets.
 
-Review and modify the environment variables for your environment:
+_Note:_ you should use the same shell session in your _setup machine_ that you used to create the Cloud assets in the previous step and the VIAI application assets above.
+If for any reason you have closed the terminal, make sure that you export again the env variables from the [previous step](./provisiongcp.md) and from above before continuing.
+
+Review and modify the environment variables for your particular deployment:
 
 ```bash
 export OUTPUT_FOLDER=<OUTPUT FOLDER noted on previous step>
@@ -202,21 +195,21 @@ Then, run:
 
 Where:
 
-* `-x` Use physical IP addresses.
+* `-x` Uses physical IP addresses for the configuration.
 * `DEFAULT_PROJECT` Google Cloud Project name.
 * `DEFAULT_REGION` Default Google Cloud region.
-* `GOOGLE_CLOUD_DEFAULT_USER_EMAIL` User’s email. This user will be granted gateway RBAC and required roles to access Anthos Cluster. Will be ignored if `${GENERATE_ATTACH_CLUSTER_SCRIPT}` is `false`
-* `K8S_RUNTIME` Kubernetes runtime, must be `anthos`
+* `GOOGLE_CLOUD_DEFAULT_USER_EMAIL` User’s email. This user will be granted gateway RBAC and required roles to access Anthos Cluster. Will be ignored if `${GENERATE_ATTACH_CLUSTER_SCRIPT}` is `false`.
+* `K8S_RUNTIME` Kubernetes runtime, must be `anthos`.
 * `MEMBERSHIP` Anthos Membership name. This is the name that will be registered to Anthos to identify your edge server.
 * `OUTPUT_FOLDER` VIAI Application assets folder path, usually is the output of the [previous step](./createviai.md#creating-viai-assets).
 
 You can also use the `-h` flag to display all the possible options available.
 
-This script
-* Checks if the specified runtime folder exists, the path to the specific Kubernetes runtime should be `“${VIAI_PROVISIONING_FOLDER}"/edge-server/<RUNTIME>` (runtime is `anthos`)
-* Passes input arguments to the `generate-script.sh` script in the runtime folder to generate additional required scripts to set up the edge server, this includes:
-  * Generate scripts to install required packages, such as NVIDIA GPU Driver, gcloud command-line tool, docker…etc.
-  * Update template files with specified environment variables.
+This script:
+* Checks if the specified runtime folder exists. The path to the specific Kubernetes runtime should be `“${VIAI_PROVISIONING_FOLDER}"/edge-server/<RUNTIME>` (runtime is `anthos`).
+* Passes input arguments to the `generate-script.sh` script in the runtime folder to generate additional required scripts to set up the edge server. This includes:
+  * Generate scripts to install required packages, such as the NVIDIA GPU driver, gcloud command-line tool, docker, etc.
+  * Update template files with the specified environment variables.
 
 
 After the script runs, the console will show details about the asset creation. All assets created are stored in the `$OUTPUT_PATH` folder.
@@ -224,7 +217,7 @@ After the script runs, the console will show details about the asset creation. A
 ```text
   Copying Anthos Bare Metal template file...
   Copy dependecies installation scripts...
-  USERS_EMAILS=admin@junholee.altostrat.com
+  USERS_EMAILS=admin@foobar.com
   Node setup scripts have been generated at /tmp/tmp.39xMkl1xDm/edge-server
   ```
 
@@ -243,9 +236,7 @@ After the script runs, the console will show details about the asset creation. A
   └── node-setup.sh
 ```
 
-
-
-Yu can continue to the next step, deploy the VIAI Edge solution in the edge server.
+All the VIAI Edge assets are ready. You can continue to the next step, deploy the VIAI Edge solution in the edge server.
 
 </br>
 
