@@ -16,7 +16,7 @@ module "camera_integration_pubsub" {
   project_id = var.google_viai_project_id
   source     = "terraform-google-modules/pubsub/google"
   topic      = "camera-integration"
-  version    = "4.0.1"
+  version    = "6.0.0"
   message_storage_policy = {
     allowed_persistence_regions = [
       var.google_default_region
@@ -38,7 +38,7 @@ module "camera_integration_telemetry_pubsub" {
   project_id = var.google_viai_project_id
   source     = "terraform-google-modules/pubsub/google"
   topic      = "camera-integration-telemetry"
-  version    = "4.0.1"
+  version    = "6.0.0"
   message_storage_policy = {
     allowed_persistence_regions = [
       var.google_default_region
@@ -60,7 +60,7 @@ module "camera_integration_device_state_pubsub" {
   project_id = var.google_viai_project_id
   source     = "terraform-google-modules/pubsub/google"
   topic      = "camera-integration-device-state"
-  version    = "4.0.1"
+  version    = "6.0.0"
   message_storage_policy = {
     allowed_persistence_regions = [
       var.google_default_region
@@ -85,7 +85,7 @@ module "container_images_notifications_pubsub" {
   project_id = var.google_viai_project_id
   source     = "terraform-google-modules/pubsub/google"
   topic      = "gcr"
-  version    = "4.0.1"
+  version    = "6.0.0"
 
   push_subscriptions = [
     {
