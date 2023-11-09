@@ -13,7 +13,7 @@ jobs:
             const pr = context.payload.pull_request;
             const baseRef = pr.base.ref;
             const repoName = pr.base.repo.full_name;
-            const isFork = (repoName !== context.repo.owner + '/' + context.repo.name);
+            const isFork = (repoName !== context.repo.owner + '/' + context.repo.repo);
             core.setOutput('isFork', isFork);
 
       - name: Get user permissions
