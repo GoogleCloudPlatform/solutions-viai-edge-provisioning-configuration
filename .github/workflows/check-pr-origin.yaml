@@ -1,0 +1,29 @@
+---
+name: Check PR origin for users with push access to the repository
+on: [pull_request]
+jobs:
+  check-origin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get PR information
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const baseRef = pr.base.ref;
+            const repoName = pr.base.repo.full_name;
+            const isFork = (repoName !== context.repo.owner + '/' + context.repo.name);
+            core.setOutput('isFork', isFork);
+
+            // Check if user has push access
+            const hasPushAccess = pr.user.permissions.push;
+            core.setOutput('hasPushAccess', hasPushAccess);
+
+      - name: Fail if PR is from a fork for users with push access
+        if: >
+          steps.check_origin.outputs.isFork
+          && steps.check_origin.outputs.hasPushAccess
+        run: |
+          echo "This pull request is from a forked repository. We only accept PRs from branches within the repository for users with push access."
+          exit 1
+...
