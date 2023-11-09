@@ -10,7 +10,6 @@ jobs:
         id: check-origin
         with:
           script: |
-            console.debug(context.payload);
             const repoName = context.payload.repository.full_name;
             console.log(`Repository full name: ${repoName}`);
 
@@ -19,8 +18,8 @@ jobs:
             console.debug(pr.base)
             console.debug("PR Head:")
             console.debug(pr.head)
-            const prRepoName = pr.base.repo.full_name;
-            console.log(`PR base repository full name: ${prRepoName}`);
+            const prRepoName = pr.head.repo.full_name;
+            console.log(`PR head repository full name: ${prRepoName}`);
             const isFork = (prRepoName !== repoName);
             core.setOutput('isFork', isFork);
 
