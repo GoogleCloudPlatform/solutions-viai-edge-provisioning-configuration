@@ -12,7 +12,7 @@ jobs:
           script: |
             console.log(context.payload);
             const repoName = context.payload.repository.full_name;
-            console.log(`PR base repository full name: ${prRepoName}`);
+            console.log(`Repository full name: ${repoName}`);
 
             const pr = context.payload.pull_request;
             const prRepoName = pr.base.repo.full_name;
