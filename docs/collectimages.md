@@ -8,7 +8,7 @@ This section shows the steps and instructions to integrate Visual Inspection AI 
 
 To create a custom ML model we need to collect training images from your particular use case. Including a good quality, high number of training images may lead to a higher quality ML model.
 
-The images are acquired from the camera and written on disk on the server, from where they are uploaded in batch to to Google Cloud Storage (GCS) with the gsutil rsync command. Once the images are in GCS, they can be subsequently used as source data by the Visual Inspection AI cloud service during ML model training.
+The images are acquired from the camera and written on disk on the edge server, from where they are uploaded in batch to Google Cloud Storage (GCS) with the `gsutil rsync` command. Once the images are in GCS, they can be subsequently used as source data by the Visual Inspection AI cloud service during ML model training.
 
 When creating the training dataset in Visual Inspection AI, you will need to label the images. This tells the service which images are examples of anomalies and which are normal. Labelling the images is done in the VIAI console.
 
@@ -32,14 +32,16 @@ __Collecting and uploading training images__
 
 Use the following commands to collect at least 100 examples of ‘normal’ images and at least a few dozen examples of ‘defective’ images. Training the model with more examples may lead to better results. The quality of these images will have a dramatic effect in the accuracy of the ML model. Take your time to generate the best training dataset possible.
 
-1. In the edge server, create a folder called, for example, `model1` with two sub-folders called `normal` and `defect`
+1. In the _edge server_, create a folder called, for example, `model1` with two sub-folders called `normal` and `defect`:
 
 ```bash
-mkdir -p /var/lib/viai/camera-data/model1/normal
-mkdir -p /var/lib/viai/camera-data/model1/defect
+sudo mkdir -p /var/lib/viai/camera-data/model1/normal
+sudo mkdir -p /var/lib/viai/camera-data/model1/defect
 ```
 
-2. Open a shell to the camera utility container
+2. Open a shell to the camera utility container:
+
+(If you are using a new terminal, remember to set the `$NAMESPACE` env variable. Default value should be `viai-edge`)
 
 ```bash
 kubectl exec -it -n $NAMESPACE viai-camera-integration-0 -- /bin/bash
@@ -47,9 +49,14 @@ kubectl exec -it -n $NAMESPACE viai-camera-integration-0 -- /bin/bash
 
 3. Use the camera client app to generate the images for the `normal` label.
 
-Make sure you change the parameters based on your environment. These examples take 150 images in continuous mode.
+_Capture in continuous mode_
+
+These examples take 150 images in continuous mode.
 If you need to change the objects, you can change the `--sleep` paramater or use the examples in the next section
 using `interactive` mode.
+
+Make sure you change the parameters (camera-id, camera settings, address... etc) based on your environment. Those parameters
+can be retrieved following [these instructions](./connectingcameras.md) (depending on which camera type you are using). 
 
 * Genicam example
 
@@ -79,9 +86,10 @@ python3 camera_client.py --protocol usb --device_id <camera-id> --address </dev/
 
     In case of files, you should already have a collection of normal and defective images, collected separately. Use this set of images to build your VIAI dataset, following the instructions below.
 
+_Capture in interactive mode_
 
 If you need to place good quality objects in front of the camera 1 by 1, you can also collect the training images one at a time, executing the following command for each camera view of the object, using `--mode single`, as many times as needed. Or you can run the utility in interactive mode, with switch: `--mode interactive`.
-With the interactive mode, the utility will take a new image every time you press '<enter>'.
+With the interactive mode, the utility will take a new image every time you press 'enter'.
 
 Generate at least 100 normal examples by running:
 
@@ -159,13 +167,13 @@ gsutil ls gs://
 The command should output similar to this. Take note of the bucket path:
 
 ```text
-gs://viai-us-model-training-data-<your_id>/
+gs://model-training-data-<your_id>/
 ```
 
 4. Upload the directories of images to GCS
 
 ```bash
-gsutil -m rsync -r /var/lib/viai/camera-data/model1 gs://viai-us-model-training-data-<your_id>/model1/
+gsutil -m rsync -r /var/lib/viai/camera-data/model1 gs://model-training-data-<your_id>/model1/
 ```
 
 5. Verify that the sub-folders have been created in GCS

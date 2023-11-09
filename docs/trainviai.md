@@ -16,7 +16,7 @@ Optionally you can also [create an Import file](https://cloud.google.com/visual-
 
 <br>
 
-At this point the ML model is ready. You can continue to the next section to [deploy your ML model to a registry](./exportmodel.md)
+Once the ML model is ready, you can continue to the next section to [deploy your ML model to a registry](./exportmodel.md)
 
 
 
