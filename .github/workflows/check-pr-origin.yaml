@@ -5,9 +5,9 @@ jobs:
   check-origin:
     runs-on: ubuntu-latest
     steps:
-      - name: Get PR information
+      - name: Check if the PR comes from a fork
         uses: actions/github-script@v6
-        id: check_origin
+        id: check-origin
         with:
           script: |
             const pr = context.payload.pull_request;
@@ -33,8 +33,8 @@ jobs:
 
       - name: Fail if PR is from a fork and user has push access
         if: >
-          steps.check_origin.outputs.isFork
-          && steps.get-permissions.outputs.hasPushAccess
+          steps.check-origin.outputs.isFork == 'true'
+          && steps.get-permissions.outputs.hasPushAccess == 'true'
         run: |
           echo "This pull request is from a forked repository. We only accept PRs from branches within the repository for users with push access."
           exit 1
