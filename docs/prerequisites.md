@@ -65,9 +65,9 @@ The Visual Inspection AI Service today is a preview service and requires your Go
 project to be allowlisted before you can use it. At the time that this documentation is written, the Visual
 Inspection AI Service is only available in __us-central1__ and __europe-west4__ regions.
 
-
 This is a list of the services that will be provisioned by Visual Inspection AI Edge solution.
 You can find the locations that support each service in the official [Google Cloud locations documentation](https://cloud.google.com/about/locations#europe).
+
 * Anthos and Anthos Configuration Management.
 * Artifact Registry.
 * Bigquery.
@@ -92,15 +92,19 @@ ___
 ## Supported deployment models
 
 The solution supports three deployment options:
+
 1. Dedicated server.<br>
-  * You have an edge server that you wish to install Visual Inspection AI Edge applications on.
-  * __Note:__ During the deployment of the solution, the boot disk of the server will be erased.
 
-2. Existing Anthos Bare Metal clusters.</br>
-  * You already have an Anthos Bare Metal cluster configured and you just want to install Visual Inspection AI Edge on the existing Anthos Bare Metal cluster.
+* You have an edge server that you wish to install Visual Inspection AI Edge applications on.
+* __Note:__ During the deployment of the solution, the boot disk of the server will be erased.
 
-3. Sandbox GCE instance.</br>
-  * You want to explore the Visual Inspection AI Edge solution and do not wish to set up the solution on a physical server. Instead, the solution will create a GCE instance as the sandbox environment so you can test or demo the solution.
+1. Existing Anthos Bare Metal clusters.</br>
+
+* You already have an Anthos Bare Metal cluster configured and you just want to install Visual Inspection AI Edge on the existing Anthos Bare Metal cluster.
+
+1. Sandbox GCE instance.</br>
+
+* You want to explore the Visual Inspection AI Edge solution and do not wish to set up the solution on a physical server. Instead, the solution will create a GCE instance as the sandbox environment so you can test or demo the solution.
 
 </br>
 
@@ -218,6 +222,7 @@ ___
 ## Supported camera types
 
 The solution aims to support a wide range of suitable cameras, by providing drivers for the following types:
+
 * Genicam / GigE Vision IP cameras, including thermal cameras e.g FLIR
 * RTSP with ONVIF support, or simple RTSP IP cameras
 * USB cameras

@@ -1,10 +1,12 @@
 # Deployment
 
 ## Provisioning the Google Cloud backend
+
 <br>
 
 __Creating a Google Cloud project__
 <br>
+
 1. [Create a Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project) to provision the necessary resources into.
 2. [Enable billing](https://cloud.google.com/billing/docs/how-to/modify-project#enable_billing_for_a_project) for the Google Cloud project.
 3. Request access to the Visual Inspection AI service through your Google Cloud sales channels
@@ -20,7 +22,7 @@ __europe-west4__ regions.
 
 *Note:* If you are planning to deploy the VIAI Edge solution in sandbox, add the `-x` flag at the end of the following command. The script will provision a GCE instance with a T4 GPU to be used as a sandbox. See instructions below.
 
-In the _setup machine_ (your Linux or macOS), execute the following tasks:
+In the *setup machine* (your Linux or macOS), execute the following tasks:
 
 1. Clone the VIAI Edge cloud project and switch to the source folder:
 
@@ -31,7 +33,7 @@ mkdir tmp
 export VIAI_PROVISIONING_FOLDER=$(pwd)
 ```
 
-2. Initialize the environment variables
+1. Initialize the environment variables
 
 ```bash
 export DEFAULT_PROJECT=<your-project-id>
@@ -42,13 +44,14 @@ export GOOGLE_CLOUD_DEFAULT_USER_EMAIL=<Your GCP Anthos Administrator email>
 ```
 
 Where:
+
 * `DEFAULT_PROJECT` is the ID of the Google Cloud project to provision the resources to deploy the solution.
 * `DEFAULT_REGION` is the default region where to provision resources. Please see the [Supported Cloud Regions](./prerequisites.md#supported-cloud-regions-and-services) section for recommendations.
 * `DEFAULT_ZONE` is the default [zone](https://cloud.google.com/compute/docs/regions-zones) where to provision the optional sandbox VM. A value for the zone has to be provided but the zone will only be used for the optional sandbox VM.
 * `VIAI_STORAGE_BUCKET_LOCATION` is the location where to create the Cloud Storage buckets.
 * `GOOGLE_CLOUD_DEFAULT_USER_EMAIL` is the user email of Anthos administrator. This user will be assigned required roles to configure Anthos Bare Metal.
 
-3. Ensure that you have the Docker daemon running
+1. Ensure that you have the Docker daemon running
 
 ```bash
 docker run hello-world
@@ -56,7 +59,7 @@ docker run hello-world
 
 If the command finishes successfully, you can proceed with the next step. Otherwise, make sure you [troubleshoot Docker](https://docs.docker.com/config/daemon/troubleshoot/) before continuing.
 
-4. Provision Google Cloud resources in your project.
+1. Provision Google Cloud resources in your project.
 
 ```bash
 scripts/provisioning-terraform.sh \
@@ -71,7 +74,7 @@ scripts/provisioning-terraform.sh \
 
 When prompted by Terraform, review the proposed changes and confirm by answering `yes`.
 
-_Note:_ If you are demoing/testing the solution and you don't have physical servers where you will deploy the edge components, you can launch the script with the `-x` flag. The scrpit will create a sandbox VM on GCE with a T4 GPU attached that you will be able to use to demo/test the solution:
+*Note:* If you are demoing/testing the solution and you don't have physical servers where you will deploy the edge components, you can launch the script with the `-x` flag. The scrpit will create a sandbox VM on GCE with a T4 GPU attached that you will be able to use to demo/test the solution:
 
 ```bash
 scripts/provisioning-terraform.sh \
@@ -105,6 +108,7 @@ create_sandbox = "true | false"
 ```
 
 Where:
+
 * `google_default_region` is the default region to provision resources.
 * `google_default_zone` is the default zone to provision resources.
 * `google_viai_project_id` is the ID of the Google Cloud project to provision the resources.
@@ -130,7 +134,6 @@ At this point the required Google Cloud services are provisioned and ready to us
 
 There are some optional customizations that you can do in your environment. You should be able to continue the instalation without any changes, but they are [documented here](./customizingapp.md) for your reference.
 
-
 </br>
 
 ___
@@ -138,5 +141,3 @@ ___
 <table width="100%">
 <tr><td><a href="./deployment.md">^^^ Deployment of the solution</td><td><a href="./createviai.md">Creating VIAI Assets >>></td></tr>
 </table>
-
-
