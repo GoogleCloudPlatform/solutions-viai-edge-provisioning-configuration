@@ -1,3 +1,5 @@
+Adding some changes for testing
+
 # Visual Inspection AI (VIAI) Edge Solution
 
 ## Required Roles to run Terraform
