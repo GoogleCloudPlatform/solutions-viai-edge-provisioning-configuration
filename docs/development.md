@@ -2,6 +2,15 @@
 
 This document explains how to develop VIAI Edge.
 
+## Creating pull requests
+
+When creating pull requests, maintainers are required to work in a branch of
+this repository. If a maintainer creates a pull request against any branch of
+this repository from a fork, a
+[required workflow will return an error](../.github/workflows/check-pr-origin.yaml).
+
+Contributors that are not maintainers can work in their own forks.
+
 ## Requirements
 
 To setup a development environment you need:
