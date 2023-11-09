@@ -10,10 +10,13 @@ jobs:
         id: check-origin
         with:
           script: |
+            const repoName = context.payload.repository.full_name;
+            console.log(`Repository full name: ${repoName}`);
+
             const pr = context.payload.pull_request;
-            const baseRef = pr.base.ref;
-            const repoName = pr.base.repo.full_name;
-            const isFork = (repoName !== context.repo.owner + '/' + context.repo.repo);
+            const prRepoName = pr.base.repo.full_name;
+            console.log(`PR base repository full name: ${prRepoName}`);
+            const isFork = (prRepoName !== repoName);
             core.setOutput('isFork', isFork);
 
       - name: Get user permissions
