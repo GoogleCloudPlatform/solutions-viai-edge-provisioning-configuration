@@ -10,9 +10,10 @@ jobs:
         id: check-origin
         with:
           script: |
+            console.log(`Context payload: ${context.payload}`)
             const pr = context.payload.pull_request;
-            const baseRef = pr.base.ref;
             const repoName = pr.base.repo.full_name;
+            console.log(`PR base repository full name: ${repoName}`);
             const isFork = (repoName !== context.repo.owner + '/' + context.repo.repo);
             core.setOutput('isFork', isFork);
 
