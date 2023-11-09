@@ -23,7 +23,7 @@ jobs:
             const username = context.payload.pull_request.user.login;
             const permissions = await github.rest.repos.getCollaboratorPermissionLevel({
               owner: context.repo.owner,
-              repo: context.repo.name,
+              repo: context.repo.repo,
               username: username
             });
             const hasPushAccess = permissions.data.permission == 'admin'
