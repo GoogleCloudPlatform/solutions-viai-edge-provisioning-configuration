@@ -37,15 +37,16 @@ If this is the first time you use this solution, it is recommended to use Google
 
 __Option 2 - Exporting the VIAI ML model to Artifact Registry__
 
-To export a trained VIAI model container with GPU accelration to Google Cloud Artifiact Registry, follow the next steps:
+To export a trained VIAI model container with GPU acceleration to Google Cloud Artifiact Registry, follow the next steps:
 
 1. In the Google Cloud Console, go to Visual Inspection AI -> Models -> expand the model you trained in the previous sections.
-Take note of the part of the URL highlighted, set an environment variable with that value.
+
+Take note of the part of the URL highlighted, and in the _setup machine_ (your Linux or macOS), set an environment variable with that value.
 
 ![Solution ID URL](./images/export_to_artifact_registry_step_1.png)
 
 ```bash
-export SOLUTION NUMBER=<your solution number>
+export SOLUTION_NUMBER=<your solution number>
 ```
 
 2. Generate a token and export it as an environment variable.
@@ -58,13 +59,16 @@ gcloud auth print-access-token
 export ACCESS_TOKEN=<your access token>
 ```
 
-3. Review the value of `DISPLAY_NAME` and prepare the rest of the environment variables.
+3. Review the value of `DISPLAY_NAME`, `DEFAULT_PROJECT` and `DEFAULT_REGION` and prepare the rest of the environment variables.
 
 ```bash
 export DISPLAY_NAME=<your model name>
+export DEFAULT_PROJECT=<your gcp project>
+export DEFAULT_REGION=<your gcp region>
+
+export VIAI_REGION=us-central1
 
 export PROJECT_NUMBER=$(gcloud projects list --filter="$DEFAULT_PROJECT" --format="value(PROJECT_NUMBER)")
-export VIAI_REGION=europe-west4
 
 export ARTIFACT_REGISTRY_URL="${DEFAULT_REGION}-docker.pkg.dev/${DEFAULT_PROJECT}/viai-models/${DISPLAY_NAME}:gpu-20221014003"
 
@@ -73,13 +77,15 @@ export SOLUTION_ARTIFACTS_URL=https://${VIAI_REGION}-visualinspection.googleapis
 
 4. Prepare the API call to upload the model to Artifact Registry.
 
-Note that you will need to define an expiration time for the solution artifact. This is done specifying an epoch value for `seconds`, in the example below `1668386001` translates to Nov 14, 2022. Change that value as needed. Keep in mind that you might incur in additional charges. You can see an estimation on the [Artifacts Registry pricing page](https://cloud.google.com/artifact-registry/pricing).
+Note that you will need to define an expiration time for the solution artifact. (Keep in mind that you might incur in additional charges, You can see an estimation on the [Artifacts Registry pricing page](https://cloud.google.com/artifact-registry/pricing)).
+
+This is done specifying an epoch value for `seconds`, in the example below `1668386001` translates to Nov 14, 2022. Change that value as needed [using a converter](https://www.epochconverter.com/).
 
 ```bash
-rm /tmp/body.json
-
-cat <<EOF >> /tmp/body.json
-{"display_name": "${DISPLAY_NAME}", "enable_aiplatform_model_upload": false, "export_type": "GPU_CONTAINER", "container_export_location": {"output_uri": "${ARTIFACT_REGISTRY_URL}"}, "expire_time": {"seconds": 1668386001}, "camera_count": 1, "purpose": "deployment"}
+cat <<EOF > /tmp/body.json
+{"display_name": "${DISPLAY_NAME}", "enable_aiplatform_model_upload": false, 
+"export_type": "GPU_CONTAINER", "container_export_location": {"output_uri": "${ARTIFACT_REGISTRY_URL}"}, 
+"expire_time": {"seconds": 1668386001}, "camera_count": 1, "purpose": "deployment"}
 EOF
 ```
 

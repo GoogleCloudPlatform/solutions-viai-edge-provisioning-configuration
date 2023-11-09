@@ -19,7 +19,7 @@ Follow the steps below to create the application assets:
 
 __Build the application and push the image to your container registry.__
 
-In the  _setup machine_ (your Linux or macOS), review the env variables and update as needed:
+In the _setup machine_ (your Linux or macOS), review the env variables and update as needed:
 
 _Note:_ you should use the same shell session in the _setup machine_ that you used to create the Cloud assets in the previous step. If for any reason
 you have closed the terminal, make sure that you export again the env variables from the [previous step](./provisiongcp.md) before continuing.
@@ -68,7 +68,6 @@ Where:
 | us-central1                 | gcr.io   |
 | europe-west4                | eu.gcr.io |
 
-
 * `CONTAINER_REPO_USER` Required if `REPO_TYPE` is `Private`,  the username of private container registry.
 * `CONTAINER_REPO_PASSWORD` Required if `REPO_TYPE` is `Private`,  the password  of private container registry.
 * `CONTAINER_REPO_REG_NAME`
@@ -81,7 +80,6 @@ Where:
 * `K8S_RUNTIME` Must be `anthos`.
 * `MEMBERSHIP` Anthos membership name. This is the name that will be used in Anthos console to represent the edge server.
 * `VIAI_SVC_ACCOUNT_KEY_PATH` VIAI service account key, The Terraform script in the previous step downloaded the service account key to `./tmp/viai-camera-integration-client_service_account_key-service-account-key.json` folder.
-
 
 After the script completes, you shoud see an output similar to this.<br>
 
@@ -97,6 +95,7 @@ __Important:__ Take note of the _output folder_ where the assets have been gener
 
   VIAI application assets have been generated at: /tmp/tmp.39xMkl1xDm
 ```
+
 In the example above, _output folder_ would be `/tmp/tmp.39xMkl1xDm`.
 
 The _output folder_ has the following structure:
@@ -142,7 +141,6 @@ This is an example table for IP addresses allocation:
 | LB_CP_VIP | The destination IP address to be used for traffic sent <br> to the Kubernetes control plane. <br> These IPs must NOT be reachable during Anthos setup. <br> Must be in the same subnet as CP_VIP. | 192.168.1.22 |
 | INGRESS_VIP | The IP address to be used for Services behind the <br> load balancer for ingress traffic. <br> This IP must NOT be reachable during Anthos setup. <br> Must be the first IP address of LB_ADDRESS_RANGE. <br> Must be in the same subnet as CP_VIP. | 192.168.1.23 |
 | LB_ADDRESS_RANGE | One IP range of contiguous IP addresses  (minimum 2 IPs but 4 IPs is recommended) <br> These IPs must NOT be reachable during Anthos setup. | 192.168.1.23-192.168.1.26 |
-
 
 <br>
 
@@ -207,11 +205,11 @@ Where:
 You can also use the `-h` flag to display all the possible options available.
 
 This script:
+
 * Checks if the specified runtime folder exists. The path to the specific Kubernetes runtime should be `“${VIAI_PROVISIONING_FOLDER}"/edge-server/<RUNTIME>` (runtime is `anthos`).
 * Passes input arguments to the `generate-script.sh` script in the runtime folder to generate additional required scripts to set up the edge server. This includes:
   * Generate scripts to install required packages, such as the NVIDIA GPU driver, gcloud command-line tool, docker, etc.
   * Update template files with the specified environment variables.
-
 
 After the script runs, the console will show details about the asset creation. All assets created are stored in the `$OUTPUT_PATH` folder.
 
