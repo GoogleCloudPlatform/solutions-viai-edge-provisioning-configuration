@@ -10,6 +10,7 @@ jobs:
         id: check-origin
         with:
           script: |
+            console.debug(context.payload);
             const repoName = context.payload.repository.full_name;
             console.log(`Repository full name: ${repoName}`);
 
