@@ -19,6 +19,7 @@ __Preparing to collect the training images__
 This step is highly use-case specific. You should create an apropriate environment where you can use the camera connected to the edge server to take images of both normal, and abnormal situations for the products to be inspected.
 
 Here are some general principles:
+
 * Setup a controlled test environment which minimizes external influences such as ambient light affecting the camera exposure.
 * Place the camera in its intended position. Take single shots to verify that the camera can fully see the objects to be inspected and not much extra space beyond them, to maximize the number of pixels covering the objects.
 * Adjust the camera exposure, focus, focal length etc parameters and lock them in place, to avoid auto-adjustments changing the settings between shots.
@@ -56,7 +57,7 @@ If you need to change the objects, you can change the `--sleep` paramater or use
 using `interactive` mode.
 
 Make sure you change the parameters (camera-id, camera settings, address... etc) based on your environment. Those parameters
-can be retrieved following [these instructions](./connectingcameras.md) (depending on which camera type you are using). 
+can be retrieved following [these instructions](./connectingcameras.md) (depending on which camera type you are using).
 
 * Genicam example
 
@@ -192,8 +193,6 @@ gs://viai-us-model-training-data-<your_id>/model1/normal/
 <br>
 
 At this point the training dataset is ready to be used by VIAI. You can continue to the section to [train your ML model in VIAI](./trainviai.md)
-
-
 
 <br>
 

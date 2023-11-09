@@ -98,11 +98,11 @@ The solution supports three deployment options:
 * You have an edge server that you wish to install Visual Inspection AI Edge applications on.
 * __Note:__ During the deployment of the solution, the boot disk of the server will be erased.
 
-1. Existing Anthos Bare Metal clusters.</br>
+2. Existing Anthos Bare Metal clusters.</br>
 
 * You already have an Anthos Bare Metal cluster configured and you just want to install Visual Inspection AI Edge on the existing Anthos Bare Metal cluster.
 
-1. Sandbox GCE instance.</br>
+3. Sandbox GCE instance.</br>
 
 * You want to explore the Visual Inspection AI Edge solution and do not wish to set up the solution on a physical server. Instead, the solution will create a GCE instance as the sandbox environment so you can test or demo the solution.
 

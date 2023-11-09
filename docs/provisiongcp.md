@@ -33,7 +33,7 @@ mkdir tmp
 export VIAI_PROVISIONING_FOLDER=$(pwd)
 ```
 
-1. Initialize the environment variables
+2. Initialize the environment variables
 
 ```bash
 export DEFAULT_PROJECT=<your-project-id>
@@ -51,7 +51,7 @@ Where:
 * `VIAI_STORAGE_BUCKET_LOCATION` is the location where to create the Cloud Storage buckets.
 * `GOOGLE_CLOUD_DEFAULT_USER_EMAIL` is the user email of Anthos administrator. This user will be assigned required roles to configure Anthos Bare Metal.
 
-1. Ensure that you have the Docker daemon running
+3. Ensure that you have the Docker daemon running
 
 ```bash
 docker run hello-world
@@ -59,7 +59,7 @@ docker run hello-world
 
 If the command finishes successfully, you can proceed with the next step. Otherwise, make sure you [troubleshoot Docker](https://docs.docker.com/config/daemon/troubleshoot/) before continuing.
 
-1. Provision Google Cloud resources in your project.
+4. Provision Google Cloud resources in your project.
 
 ```bash
 scripts/provisioning-terraform.sh \

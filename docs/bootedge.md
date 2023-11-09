@@ -8,7 +8,7 @@ __Connecting the physical server__
 
 1. Connect the local LAN Ethernet cable to the server’s lowest numbered ethernet port.
 2. Connect a monitor to the server’s lowest numbered HDMI port
-  * Optionally, connect a serial console to the serial console port (refer to the server vendor manual for specific instructions and cables, serial terminal requirements)
+  Optionally, connect a serial console to the serial console port (refer to the server vendor manual for specific instructions and cables, serial terminal requirements)
 3. Connect a USB keyboard to one of the USB ports on the server.
 4. Plug the OS installer USB flash drive into the server.
 5. Plug the installer configuration data USB flash drive into the server.
@@ -114,7 +114,6 @@ default-token-p8pt5   kubernetes.io/service-account-token   3      1h
 pubsubcred            kubernetes.io/dockerconfigjson        1      1h
 regcred               kubernetes.io/dockerconfigjson        1      1h
 ```
-
 
 <br>
 

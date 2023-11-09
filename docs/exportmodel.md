@@ -2,12 +2,12 @@
 
 <br>
 
-After you trained a model, to run the model on the edge server and get inference results, the next step is to create the solution artifacts. You can use the Google Cloud Console for Visual Inspection AI service, or command-line scripts to create a solution artifact.
+After you trained a model, to run the model on the edge server and get inference results, the next step is to create the 'solution artifacts'. You can use the Google Cloud Console for Visual Inspection AI service, or command-line scripts to create a solution artifact.
 
 <br>
 
-__Note on model acceleration on the edge server:__ When you create the solution artifact, you can choose if the VIAI service compiles the model for x86 CPU, or NVIDIA GPU acceleration. If your server has a compatible GPU model, and runs only 1 VIAI model, you should export the model for GPU acceleration.
-If your server will run multiple VIAI models, or does not have a suitable GPU card, you can export the model for x86 CPU acceleration. Please refer to the chapter <<INSERT LINK>> Using multiple cameras, with dedicated ML models, triggered simultaneously for more information on how to compile ML models for CPU or GPU, and run multiple models on the same server simultaneously.
+_Note on model acceleration on the edge server:_ When you create the solution artifact, you can choose if the VIAI service compiles the model for x86 CPU, or NVIDIA GPU acceleration. If your server has a compatible GPU model, and runs only one VIAI model, you should export the model for GPU acceleration.
+If your server will run multiple VIAI models, or does not have a suitable GPU card, you can export the model for x86 CPU acceleration. Please refer to the section ['Using multiple cameras'](./usingmultiplecameras.md), with dedicated ML models triggered simultaneously for more information on how to compile ML models for CPU or GPU, and run multiple models on the same server simultaneously.
 
 <br>
 
@@ -115,12 +115,9 @@ Exporting the model in Deployment mode means that you want to deploy this model 
 
 ![Artifact Registry cost](./images/artifact_registry_cost.png)
 
-
 <br>
 
 At this point the ML has been exported. You can continue to the next section to [deploy your ML model to the edge server](./modeltoedge.md)
-
-
 
 <br>
 
@@ -129,7 +126,3 @@ ___
 <table width="100%">
 <tr><td><a href="./modeltoedge.md">Deploy your ML model to the edge server >>></td></tr>
 </table>
-
-
-
-
