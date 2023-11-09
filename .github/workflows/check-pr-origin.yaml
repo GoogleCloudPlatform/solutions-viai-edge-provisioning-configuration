@@ -10,7 +10,7 @@ jobs:
         id: check-origin
         with:
           script: |
-            console.log(`Context payload: ${context.payload}`)
+            console.log(context.payload)
             const pr = context.payload.pull_request;
             const repoName = pr.base.repo.full_name;
             console.log(`PR base repository full name: ${repoName}`);
