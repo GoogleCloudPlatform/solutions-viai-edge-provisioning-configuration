@@ -83,8 +83,8 @@ This is done specifying an epoch value for `seconds`, in the example below `1668
 
 ```bash
 cat <<EOF > /tmp/body.json
-{"display_name": "${DISPLAY_NAME}", "enable_aiplatform_model_upload": false, 
-"export_type": "GPU_CONTAINER", "container_export_location": {"output_uri": "${ARTIFACT_REGISTRY_URL}"}, 
+{"display_name": "${DISPLAY_NAME}", "enable_aiplatform_model_upload": false,
+"export_type": "GPU_CONTAINER", "container_export_location": {"output_uri": "${ARTIFACT_REGISTRY_URL}"},
 "expire_time": {"seconds": 1668386001}, "camera_count": 1, "purpose": "deployment"}
 EOF
 ```
@@ -117,7 +117,7 @@ Container is valid until: 2022-11-04T00:20:25+00:00
 
 __Cost__
 
-Exporting the model in Deployment mode means that you want to deploy this model to a production environment and start serving production images. This will incur service charges. In the Solutions Artifacts creation console you can see charges for different configurations.
+Exporting the model in 'Deployment' mode means that you want to deploy this model to a production environment and start serving production images. This will incur service charges. In the Solutions Artifacts creation console you can see charges for different configurations.
 
 ![Artifact Registry cost](./images/artifact_registry_cost.png)
 

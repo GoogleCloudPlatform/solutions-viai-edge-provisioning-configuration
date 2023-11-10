@@ -4,7 +4,7 @@
 
 After you export the model container, the next step is to deploy the model container to the edge server.
 
-If this is the first time you use the solution, we suggest you to manually deploy the model container to get you familiar with what technologies and components are behind the scenes.
+If this is the first time you use the solution, we suggest you to manually deploy the model container to get familiar with what technologies and components are behind the scenes.
 
 There are other [automatic deployment options](./automaticdeployment.md) available, you can set up [Anthos Config Sync](./anthosconfigsync.md) or [Cloud Deploy](./clouddeploy.md).
 
@@ -12,10 +12,15 @@ There are other [automatic deployment options](./automaticdeployment.md) availab
 
 __Manual Deploy__
 
-1. Clone this repository and switch to the working folder
+1. In the _setup machine_ (your Linux or macOS), run the following commands to deploy the container with the model and an associated service.
+
+You might have to declare again the `VIAI_PROVISION_FOLDER` enviroment variable, pointing at where the VIAI Edge repository was cloned.
+
+Choose a name for your model, which will be used in the Kubernetes deployment and export it as `SERVICE NAME`.
 
 ```bash
-cd ${VIAI_PROVISION_FOLDER}/setup/kubernetes/viai-model
+cd ${VIAI_PROVISION_FOLDER}/kubernetes/viai-model
+export SERVICE_NAME=<your model name>
 ```
 
 2. Update `kubernetes/viai-model/viai-model.yaml.tmpl` with the model container URI from the [previous section](./exportmodel.md)
@@ -42,7 +47,7 @@ spec:
         imagePullSecrets:
             - name: regcred
         containers:
-        - image: <your-model-container-uri>
+        - image: viai-inference-module
             imagePullPolicy: Always
             name: viai-inference-module
             ports:
@@ -64,7 +69,7 @@ gcloud container hub memberships get-credentials ${MEMBERSHIP}
 
 Where:
 
-* `MEMBERSHIP` was defined in the previous sections and contains the name of the ABM cluster where you want to deploy the model container.
+* `MEMBERSHIP` was defined in the previous sections and contains the name of the ABM cluster where you want to deploy the model container. The default value is `anthos-server`.
 
 The output should be similar to this:
 
@@ -75,19 +80,20 @@ A new kubeconfig entry "connectgateway_project_id_global_anthos-server-xyz" has 
 4. Deploy the model
 
 ```bash
-kubectl apply -f ./viai-model.yaml
+envsubst < ./viai-model.yaml.tmpl | kubectl apply -f -
 ```
 
 5. Check that the deployment pods are being started in the edge server
 
-If haven't done before, export the namespace (default is `viai-edge`)
+If haven't done before, export the `NAMESPACE` variable (default value is `viai-edge`).
+
 ```bash
 export NAMESPACE=<your namespace>
 
 kubectl get pods -n $NAMESPACE
 ```
 
-When the deployment pod is being deployed, it will appear in the output like this:
+It might take a few minutes for the container to be pulled from the registry. When the deployment pod is ready, it will appear in the output like this:
 
 ```text
 mledge-deployment-7bf7889c8f-bqxld                    1/1     Running     1 (1m ago)   2m
@@ -99,7 +105,7 @@ mledge-deployment-7bf7889c8f-bqxld                    1/1     Running     1 (1m 
 kubectl get deployments -n $NAMESPACE
 ```
 
-The output should be similar to:
+The output should be similar to (the name of the deployment will be your `SERVICE_NAME`):
 
 ```text
 NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
@@ -110,7 +116,7 @@ viai-model-deployment   1/1     1            1           40m
 7. Check that the inference service is present
 
 ```bash
-kubectl get service viai-model -n $NAMESPACE
+kubectl get service ${SERVICE_NAME} -n $NAMESPACE
 ```
 
 The output should be similar to:
@@ -127,27 +133,6 @@ Where:
 
 Take note of these values, since you'll need them later. This is the address where the ML model service is available.
 
-8. Export the inference URL to an environment variabla
-
-```bash
-export INFERENCE_URL="http://$(kubectl get services viai-model -n $NAMESPACE -o jsonpath='{.spec.clusterIP}'):8602/v1/visualInspection:predict"
-```
-
-9. Test the model by sending one of your training images taken with earlier to the service.
-
-Replace `image.png` with the full path to a test image
-
-```bash
-curl $INFERENCE_URL -X POST -d "{\"image_bytes\": \"$(base64 -w0 image.png)\"}"
-```
-
-If successful, the model should return a JSON output similar to the following.
-
-```text
-{"predictionResult":{"annotationsGroups":[{"annotationSet":{"name":"projects/199334883686/locations/us-central1/datasets/1648497783524556800/annotationSets/5668840060254945280","displayName":"Predicted Classification Labels","classificationLabel":{},"createTime":"2022-02-04T16:23:34.994263Z","updateTime":"2022-02-04T16:23:35.058343Z"},"annotations":[{"name":"localAnnotations/0","annotationSpecId":"1583825059334586368","annotationSetId":"5668840060254945280","classificationLabel":{"confidenceScore":0.0598243},"source":{"type":"MACHINE_PRODUCED","sourceModel":"projects/199334883686/locations/us-central1/solutions/5917483619760209920/modules/463272627293650944/models/8522710451077775360"}}]}]},"predictionLatency":"0.125581514s"}
-```
-
-This inference result is for an Anomaly classification model, with a ‘faulty/abnormal object’ score of 0.06 for the image sent to the model. The inference latency was 0.13ms.
 
 <br>
 
@@ -155,12 +140,9 @@ __Congratulations!!__
 
 You have successfuly deployed your ML model and the VIAI Edge solution is ready to use.
 
-
 <br>
 
 At this point the ML model has been deployed successfuly to the edge server. You can continue to the next section to check [different ways to use the VIAI Edge solution](./useviai.md)
-
-
 
 <br>
 
@@ -169,4 +151,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">Use the VIAI Edge solution >>></td></tr>
 </table>
-
