@@ -1,6 +1,8 @@
 ---
 name: Check PR origin for users with push access to the repository
-on: [pull_request]
+on:
+  merge_group: null
+  pull_request: null
 jobs:
   check-origin:
     runs-on: ubuntu-latest
