@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the PR comes from a fork
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         id: check-origin
         with:
           script: |
@@ -20,7 +20,7 @@ jobs:
             core.setOutput('isFork', isFork);
 
       - name: Get user permissions
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         id: get-permissions
         with:
           script: |
