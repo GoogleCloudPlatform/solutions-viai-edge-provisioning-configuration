@@ -37,6 +37,7 @@ python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/
 ```
 
 Where:
+
 * `ML_HOST` is the name of your service name.
 * `ML_PORT` is the port of your service, `8602` by default.
 
@@ -54,10 +55,11 @@ python3 camera_client.py --protocol usb --address ${ADDRESS} \
 ```
 
 Where:
+
 * `ML_HOST` is the name of your service name.
 * `ML_PORT` is the port of your service, `8602` by default.
 * `ADDRESS` is the address of the camera, usually `/dev/video0`. Check [this page](./connectingusb.md) to find your camera address.
-* `DEVICE_ID` is the device id of the camera, usually `cam1`. Check [this page](./connectingusb.md) to find your camera device_id.
+* `DEVICE_ID` is the device ID of the camera, usually `cam1`. Check [this page](./connectingusb.md) to find your camera device_id.
 
 The app should output the ML model's inference results, which should look similar to this:
 
@@ -69,7 +71,6 @@ The app should output the ML model's inference results, which should look simila
 
 In the output you can see the result as `annotationSpecDisplayName` (which is 'defect' in this example) and the `confidenceScore` and `predictionLatency` among others.
 
-
 </br>
 
 ___
@@ -77,4 +78,3 @@ ___
 <table width="100%">
 <tr><td><a href="./useviai.md">^^^ Using Visual Inspection AI Edge</td><td><a href="./usingbigquery.md">Streaming inference results to BigQuery >>></td></tr>
 </table>
-

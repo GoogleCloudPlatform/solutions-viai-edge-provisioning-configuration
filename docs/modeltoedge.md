@@ -133,7 +133,6 @@ Where:
 
 Take note of these values, since you'll need them later. This is the address where the ML model service is available.
 
-
 <br>
 
 __Congratulations!!__
