@@ -11,20 +11,16 @@ on: # yamllint disable-line rule:truthy
 
 jobs:
   ci:
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
-
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Init
-        working-directory: terraform
-        # Do not initialize backend
-        run: terraform init -backend=false -input=false
-
-      - name: Terraform validate
-        working-directory: terraform
-        run: terraform validate
+      - name: Validate Terraform descriptors using the validation script
+        run: |
+          tests/validate-terraform.sh
 ...
