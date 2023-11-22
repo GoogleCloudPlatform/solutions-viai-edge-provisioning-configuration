@@ -39,6 +39,10 @@ updates:
     package-ecosystem: "docker"
     schedule:
       interval: "daily"
+  - directory: "/docker/yq"
+    package-ecosystem: "docker"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "pip"
     directory: "/terraform/files/gcf-pubsub-to-bq"
     schedule:
