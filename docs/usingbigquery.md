@@ -19,6 +19,10 @@ To use the inference results cloud backend, add the following flags to the camer
 * `--project_id` the GCP project ID where the backend was deployed
 * `--credentials` pointing to the service account JSON key which has been authorized to publish messages to Pub/Sub
 
+_Note:_ You will need to manually generate a service account in the `project_id` with permissions to publish into Pub/Sub.
+The exported JSON key should be accessible by the viai-camera-integration-0 container. You can store it in the host OS path
+that is mapped to `/var/lib/viai/camera-config`, for example.
+
 To run the camera client with the Pub/Sub streaming option, open a shell in the camera integration container:
 
 (`NAMESPACE` is the namespace where your camera container is running, by default `viai-edge`)
@@ -59,7 +63,7 @@ Where:
 * `ML_HOST` is the service name you used when you [deployed the model](./modeltoedge.md) in the edge server.
 * `ML_PORT` is the port of your service, `8602` by default.
 * `ADDRESS` is the address of the camera, usually /dev/video0. Check [this page](./connectingusb.md) to find your camera address.
-* `DEVICE_ID` is the device id of the camera, usually `cam1`. Check [this page](./connectingusb.md) to find your camera device_id.
+* `DEVICE_ID` is the device ID of the camera, usually `cam1`. Check [this page](./connectingusb.md) to find your camera device_id.
 
 The command output should now contain the following lines, showing the inference results transmission to Pub/Sub:
 
