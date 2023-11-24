@@ -7,7 +7,7 @@ nav_order: 1
 
 ## Deployment documentation
 
-This website contains the documentation for the Visual Inspection AI Edge solution.
+This web site contains the documentation for the Visual Inspection AI Edge solution.
 
 It is divided in several sections to guide you through the installation process.
 

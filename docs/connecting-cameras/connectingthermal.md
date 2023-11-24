@@ -34,13 +34,13 @@ The VIAI Edge client application supports writing the raw 14-bit IR sensor value
 
 ```python
 p = Struct(
-        'device_id' / PascalString(VarInt, "utf-8"),
-        'ts' / PascalString(VarInt, "utf-8"),
-        'temp_format' / PascalString(VarInt, "utf-8"),
-        'temp_avg' / Half,
-        'temp_min' / Half,
-        'temp_max' / Half,
-        'temp_array' / GreedyRange(Short))
+    'device_id' / PascalString(VarInt, "utf-8"),
+    'ts' / PascalString(VarInt, "utf-8"),
+    'temp_format' / PascalString(VarInt, "utf-8"),
+    'temp_avg' / Half,
+    'temp_min' / Half,
+    'temp_max' / Half,
+    'temp_array' / GreedyRange(Short))
 ```
 
 The file naming convention consists of the `device_id`, plus a datetime stamp (milliseconds since epoch) so that the camera, and the creation time of the file can be easily detected.
@@ -52,25 +52,25 @@ The client contains a python encoder function that can write the raw IR data to 
 
 1. In the edge server, open a shell to the camera utility container
 
-        ```bash
-        kubectl exec -it viai-camera-integration -- /bin/bash
-        ```
+    ```bash
+    kubectl exec -it viai-camera-integration -- /bin/bash
+    ```
 
 2. To acquire one IR sensor array dump and write it to a binary file in the `/var/lib/viai/camera-data/` output folder, run:
 
-        ```bash
-        python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/<your-camera-gentl-file> \
+    ```bash
+    python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/<your-camera-gentl-file> \
             --cfg_write --cfg_write_file <your-camera-required-settings>.cfg --device_id <camera-id> --raw_write \
             --mode single --raw_write_path /var/lib/viai/camera-data/
-        ```
+    ```
 
 3. Alternatively, to start continuous writing of sensor data to disk, execute the client in continuous mode, without any delay between the loops:
 
-        ```bash
-        python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/<your-camera-gentl-file> \
+    ```bash
+    python3 camera_client.py --protocol genicam --gentl /var/lib/viai/camera-config/<your-camera-gentl-file> \
             --cfg_write --cfg_write_file <your-camera-required-settings>.cfg --device_id <camera-id> --raw_write \
             --raw_write_path /var/lib/viai/camera-data/ --mode continuous --sleep 0
-        ```
+    ```
 
 You can change the destination directory with the `--raw_write_path` parameter.
 

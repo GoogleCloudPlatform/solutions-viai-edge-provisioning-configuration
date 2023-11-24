@@ -105,7 +105,7 @@ __Configure Anthos Config Sync__
 
     It should be in this format:  `https://source.developers.google.com/p/<PROJECT_ID>/r/acm-repo`
 
-    ![Enter repo URL]({% link images/selectrepourl.png %})
+    ![Enter repository URL]({% link images/selectrepourl.png %})
 
 9. Select `Workload Identity` in the 'Authentication type' dropdown and add the service account you previously created as 'GCP Service Account Email'
 
