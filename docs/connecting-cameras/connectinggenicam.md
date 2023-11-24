@@ -77,7 +77,7 @@ The command should output similar to this, where the shared volume path is the a
 Name:            pvc-826b7dce-0de9-48a7-bfea-fbe20237b779
 Labels:          <none>
 Annotations:     hostPathProvisionerIdentity: localhost
-                 pv.kubernetes.io/provisioned-by: microk8s.io/hostpath
+                pv.kubernetes.io/provisioned-by: microk8s.io/hostpath
 Finalizers:      [kubernetes.io/pv-protection]
 StorageClass:    microk8s-hostpath
 Status:          Bound
