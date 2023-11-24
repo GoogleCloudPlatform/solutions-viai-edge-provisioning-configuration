@@ -2,7 +2,7 @@
 
 ## Deployment documentation
 
-Find the deployment documentation in the [VIAI Edge documentation web site](https://GoogleCloudPlatform.github.io/solutions-viai-edge-provisioning-configuration)
+Find the deployment documentation in the [VIAI Edge documentation site](https://GoogleCloudPlatform.github.io/solutions-viai-edge-provisioning-configuration)
 
 ## Contributing
 
