@@ -3,9 +3,7 @@ Add new installation media type
 
 1. Create a new folder with media type name under `media` folder, for example, `FTP`.
 
-
 2. Create a folder of Kubernetes runtime under the newly created folder.
-
 
 3. Create `generate-media-file.sh` under media folder.
 

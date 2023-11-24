@@ -59,7 +59,3 @@ __Scan for ONVIF cameras__
     The example above has discovered two cameras, which can be used in the next section.
 
 At this point, the camera is connected and ready to use. You can start to [Collect images for training]({% link preparing-model/collectimages.md %}) in the next section.
-
-
-
-

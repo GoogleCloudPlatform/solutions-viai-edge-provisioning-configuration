@@ -3,9 +3,7 @@ Add new Kubernetes runtime
 
 1. Create a new folder with Kubernetes runtime name under `edge-server` folder, for example, `k3s`.
 
-
 2. Create at least four `.sh` files in the newly created folder.
-
 
 - `generate-script.sh`
 
