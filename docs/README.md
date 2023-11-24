@@ -2,9 +2,8 @@
 
 ## Deployment documentation
 
-### Table of Contents
+Find the deployment documentation in the [VIAI Edge documentation website](https://GoogleCloudPlatform.github.io/solutions-viai-edge-provisioning-configuration)
 
-* [Terminology](./terminology.md)
-* [Pre-requisites](./prerequisites.md)
-* [Deployment of the solution](./deployment.md)
+## Contributing
 
+Guidelines can be found [here]({% link development.md %})
