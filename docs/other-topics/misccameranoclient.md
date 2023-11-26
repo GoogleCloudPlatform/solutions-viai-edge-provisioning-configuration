@@ -14,6 +14,9 @@ cameras, with the VIAI inference container and an optional GCP backend.
 However, if the camera integration app does not meet the specific customer
 requirements for example for performance (FPS, bandwidth, latency) or features (specific camera protocol or ML inference results handling) - the camera and ML container can be used without the app.
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 1. Use the existing third-party camera integration to acquire images from the camera.
 
 2. Transfer the images to GCS for VIAI model training. You can still use the rsync examples from this documentation.

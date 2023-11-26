@@ -25,9 +25,12 @@ Follow the steps below to create the application assets:
 
 __Build the application and push the image to your container registry.__
 
-In the _setup machine_ (your Linux or macOS), review the env variables and update as needed:
+Run on Setup Workstation
+{: .label .label-blue}
 
-_Note:_ you should use the same shell session in the _setup machine_ that you used to create the Cloud assets in the previous step. If for any reason
+In the _setup workstation_ (your Linux or macOS), review the env variables and update as needed:
+
+_Note:_ you should use the same shell session in the _setup workstation_ that you used to create the Cloud assets in the previous step. If for any reason
 you have closed the terminal, make sure that you export again the env variables from the [previous step]({% link deployment/provisiongcp.md %}) before continuing.
 
 ```bash
@@ -163,7 +166,7 @@ _Note:_ If you used the `-x` flag in the [previous step]({% link deployment/prov
 
 Once you have allocated the required IP addresses, run the scripts below to generate the Kubernetes set up assets.
 
-_Note:_ you should use the same shell session in your _setup machine_ that you used to create the Cloud assets in the previous step and the VIAI application assets above.
+_Note:_ you should use the same shell session in your _setup workstation_ that you used to create the Cloud assets in the previous step and the VIAI application assets above.
 If for any reason you have closed the terminal, make sure that you export again the env variables from the [previous step]({% link deployment/provisiongcp.md %}) and from above before continuing.
 
 Review and modify the environment variables for your particular deployment:
@@ -177,6 +180,9 @@ export LB_ADDRESS_RANGE=192.168.1.23-192.168.1.27
 ```
 
 Then, run:
+
+Run on Setup Workstation
+{: .label .label-blue}
 
 ```bash
 ./scripts/1-generate-edge-server-assets.sh \

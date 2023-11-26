@@ -12,6 +12,9 @@ This section is a guidance to use the VIAI Edge solution running the model local
 
 To acquire live images from the camera and feed them to the ML container to obtain an inference, run the following steps:
 
+Run on Edge Server
+{: .label .label-green}
+
 1. If not done earlier, export the 'NAMESPACE` where the VIAI solution is deployed.
 
     ```bash

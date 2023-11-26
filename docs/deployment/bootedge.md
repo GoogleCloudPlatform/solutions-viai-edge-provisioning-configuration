@@ -8,8 +8,6 @@ nav_order: 5
 
 ## Booting up the physical server for the first time
 
-<br>
-
 __Connecting the physical server__
 
 1. Connect the local LAN Ethernet cable to the server’s lowest numbered ethernet port.
@@ -26,6 +24,9 @@ __Connecting the physical server__
 __Booting up for the first time__
 
 *Warning:* This procedure will wipe all the data that is currently in the server.
+
+Run on Edge Server
+{: .label .label-green}
 
 1. Power on the server.
 
@@ -90,6 +91,9 @@ __Booting up for the first time__
 __Verifying the server installation status__
 
 After the automated server installation completes, execute the following steps to check that the drivers and containerized applications are working properly.
+
+Run on Edge Server
+{: .label .label-green}
 
 On the *edge server*, verify that 2 secrets have been added:
 

@@ -23,6 +23,9 @@ Install and configure your IP camera using its management tools and ensure that.
 
 __Scan for ONVIF cameras__
 
+Run on Edge Server
+{: .label .label-green}
+
 1. Open a shell to the camera utility container
 
         ```bash

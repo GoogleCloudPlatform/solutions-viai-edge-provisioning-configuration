@@ -21,6 +21,9 @@ Please refer to the earlier chapter ‘[Connecting to the camera using its Genic
 
 When you have transferred an image, you can use it as the source 'camera' following these steps:
 
+Run on Edge Server
+{: .label .label-green}
+
 1. Open a shell to the camera utility container
 
     ```bash

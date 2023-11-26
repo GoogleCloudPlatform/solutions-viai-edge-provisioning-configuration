@@ -24,6 +24,9 @@ Note: According to the NVIDIA documentation, time-slicing is NOT recommended for
 
 __Enabling time-slicing on th edge server__
 
+Run on Edge Server
+{: .label .label-green}
+
 1. Install Helm in the edge server
 
     ```bash

@@ -22,6 +22,9 @@ Where:
 
 __Logging in to the edge server__
 
+Run on Edge Server
+{: .label .label-green}
+
 The default viai-admin user is assigned to the sudo group. Login to the edge server and run:
 
 ```bash

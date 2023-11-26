@@ -12,6 +12,9 @@ nav_order: 6
 
 If your edge server will connect to multiple cameras, you’ll need multiple camera application PODs. You can use optional arguments to generate Kubernetes deployment for multiple cameras.
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 ```bash
 ./scripts/0-generate-viai-application-assets.sh \
     -M "${CONTAINER_BUILD_METHOD}" \

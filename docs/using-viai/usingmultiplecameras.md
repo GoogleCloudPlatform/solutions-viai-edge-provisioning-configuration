@@ -35,6 +35,9 @@ Follow the steps below to deploy a multi-cam setup:
 
 2. Deploy the second camera client pod
 
+    Run on Setup Workstation
+    {: .label .label-blue}
+
     * Find the first camera client’s YAML file `viai-camera-integration.yaml`. It should be located in the `$OUTPUT` folder, after you have originally executed the script `​​0-generate-viai-application-assets.sh`.
     The script creates the camera client pod’s YAML file with your system’s specific configurations. If you do not have that file or folder any more, you can re-run the script `0-generate-viai-application-assets.sh` using the same values as before. Refer to chapter [Generating Visual Inspection AI Edge application assets]({% link deployment/createviai.md %}) in that case.
 
@@ -96,6 +99,9 @@ Follow the steps below to deploy a multi-cam setup:
 
     * Deploy the second camera client
 
+    Run on Edge Server
+    {: .label .label-green}
+
     ```bash
     kubectl apply -f viai-camera-integration2.yaml
     ```
@@ -130,6 +136,9 @@ Follow the steps below to deploy a multi-cam setup:
     At this stage, you should have now 2 camera client pods running, as well as 2 ML model deployments and services running
 
 4. Run both camera clients and trigger all cameras’ inspection simultaneously
+
+    Run on Edge Server
+    {: .label .label-green}
 
     * Check that you have 2 camera clients and 2 ML models running
 

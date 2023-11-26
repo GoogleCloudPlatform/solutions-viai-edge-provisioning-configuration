@@ -8,7 +8,8 @@ nav_order: 2
 
 ## Customizing the application
 
-<br>
+Run on Setup Workstation
+{: .label .label-blue}
 
 __StorageClassName__
 

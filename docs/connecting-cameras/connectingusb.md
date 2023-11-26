@@ -22,6 +22,9 @@ The scanning will produce warnings when incompatible devices are scanned - you c
 
 __Scan for USB cameras__
 
+Run on Edge Server
+{: .label .label-green}
+
 1. On the *edge server*, use the `v2l4` tool to check if the camera is connected and is detected.
 
     ```bash
@@ -69,6 +72,9 @@ Optionally, you can continue reading to understand how to manage the configurati
 __Managing the configuration of USB cameras__
 
 The VIAI Edge utility supports reading and writing camera runtime configurations for Genicam and USB cameras.
+
+Run on Edge Server
+{: .label .label-green}
 
 On the *edge server* do the following:
 

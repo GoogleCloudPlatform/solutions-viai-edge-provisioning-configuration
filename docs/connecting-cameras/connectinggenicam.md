@@ -14,6 +14,9 @@ This method is for cameras that support the [Genicam standard](https://www.emva.
 
 Follow these steps:
 
+Run on Edge Server
+{: .label .label-green}
+
 Ensure that the Genicam camera is connected to the same subnet as your host computer, using a gigabit ethernet PoE (Power over Ethernet) cable.
 
 Print the supported command-line switches:
@@ -111,6 +114,9 @@ Once you have the file, you need to transfer it to the shared volume `viai-camer
 
 Transfer the GenTL producer file to the shared volume with the following steps:
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 1. From youur laptop or where you have the GenTL producer file for your camera, transfer the file to the *edge server* host OS, to the viai-admin user’s home directory
 
     ```bash
@@ -155,6 +161,9 @@ Now that you have the GenTL producer file, you can scan for Genicam-based camera
 
 1. Connect your camera to the same LAN segment as the server, using its Power over Ethernet (PoE) cable with a LAN cable from the same switch as the server. Ensure that the camera is powered on.
 
+Run on Edge Server
+{: .label .label-green}
+
 2. Inside the container shell (if you exited the container shell, you can reconnect using the command in Step 4 in the previous section), run the following command to try scan for camera(s) that are compatible with the Genicam GenTL producer file that you are using
 
     ```bash
@@ -181,6 +190,9 @@ In this section you will connect to the camera, read its current runtime configu
 Here, replace the value of `--device_id` with an arbitrary label that you wish to give this camera. For example: `site1_cam1`.
 
 The label will be used in the data filenames written from that camera. And point the `--gen_tl` parameter’s value to the `.cti` file that you transferred to the shared volume in the previous sections. The mode switch `--mode none` instructs the utility not to take any images with the camera.
+
+Run on Edge Server
+{: .label .label-green}
 
 1. Query the camera configurations and output them to a file (replace the `device_id` and `getnl` path with your own values)
 
@@ -222,6 +234,9 @@ Optionally, you can continue reading to understand how to manage the configurati
 __Managing the configuration of Genicam cameras__
 
 The VIAI Edge utility supports reading and writing camera runtime configurations for Genicam and USB cameras.
+
+Run on Edge Server
+{: .label .label-green}
 
 * Query the camera's current runtime configurations and output them to an editable text file (replace `device_id` and `gentl` path with your own values)
 

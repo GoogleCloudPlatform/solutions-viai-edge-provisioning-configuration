@@ -19,7 +19,10 @@ Once you are familiar with the manual deployment, you can theck the other [autom
 
 __Manual Deploy__
 
-1. In the *setup machine* (your Linux or macOS), run the following commands to deploy the container with the model and an associated service.
+Run on Setup Workstation
+{: .label .label-blue}
+
+1. In the *setup workstation* (your Linux or macOS), run the following commands to deploy the container with the model and an associated service.
 
     You might have to declare again the `VIAI_PROVISION_FOLDER` enviroment variable, pointing at where the VIAI Edge repository was cloned.
 

@@ -14,6 +14,9 @@ To access the camera integration utility’s container, you can execute a contai
 
 This way you can access the container environment directly.
 
+Run on Edge Server
+{: .label .label-green}
+
 ```bash
 kubectl exec -it viai-camera-integration -- /bin/bash
 ```

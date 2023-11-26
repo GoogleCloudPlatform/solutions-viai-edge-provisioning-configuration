@@ -35,6 +35,9 @@ __Prerequisites__
 
 __Configure Anthos Config Sync__
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 1. Grant `viai-acm-repo-reader` service account the role `iam.workloadIdentiyUSer`
 
     ```bash
@@ -147,6 +150,9 @@ with the container image name.
 
 For example, if the Visual Inspection AI trained model container image is stored at `gcr.io/my-project/my-viai-model:version-001`. The SERVICE_NAME should be `my-viai-model`
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 * Update Skaffold and Kubernetes manifest files, compress as .tat.gz file and upload to Cloud Storage Bucket
 
   ```bash
@@ -165,6 +171,9 @@ For example, if the Visual Inspection AI trained model container image is stored
 __Customize the Workflow__
 
 The deployment pipeline creates a Cloud Workflow to invoke and kick-off a Cloud Deploy delivery pipeline.
+
+Run on Setup Workstation
+{: .label .label-blue}
 
 The Cloud Workflow definition is in `terraform/model-deployment-pipeline/main.tf`
 
@@ -201,6 +210,9 @@ resource "google_clouddeploy_target" "dev" {
 <br>
 
 __Update the deployment pipeline__
+
+Run on Setup Workstation
+{: .label .label-blue}
 
 When you [provision the Google Cloud resources]({% link deployment/provisiongcp.md %}), add
 `-e ${ANTHOS-MEMBERSHIP-NAME}` and execute the `provision-terraform.sh script`.

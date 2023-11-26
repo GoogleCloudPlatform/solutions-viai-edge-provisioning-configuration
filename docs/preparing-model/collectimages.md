@@ -39,6 +39,9 @@ __Collecting and uploading training images__
 
 Use the following commands to collect at least 100 examples of ‘normal’ images and at least a few dozen examples of ‘defective’ images. Training the model with more examples may lead to better results. The quality of these images will have a dramatic effect in the accuracy of the ML model. Take your time to generate the best training dataset possible.
 
+Run on Edge Server
+{: .label .label-green}
+
 1. In the *edge server*, create a folder called, for example, `model1` with two sub-folders called `normal` and `defect`:
 
     ```bash
@@ -152,6 +155,9 @@ Note: if you specify both image crop, and image resize arguments, crop takes pla
 __Upload the training images to Google Cloud__
 
 Upload the two folders of training images to Google Cloud Storage using the following commands:
+
+Run on Edge Server
+{: .label .label-green}
 
 1. Open a shell to the camera utility container if you exited it after the previous steps
 

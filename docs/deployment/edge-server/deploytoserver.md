@@ -15,7 +15,10 @@ __Downloading the OS images and writing them to USB drives__
 
 _Warning:_ This procedure will wipe all the data that is currently in both USB drives.
 
-The following steps should be run on the _setup machine_ (your Linux or macOS):
+Run on Setup Workstation
+{: .label .label-blue}
+
+The following steps should be run on the _setup workstation_ (your Linux or macOS):
 
 1. Switch to the current project:
 
@@ -23,7 +26,7 @@ The following steps should be run on the _setup machine_ (your Linux or macOS):
     gcloud config set project $DEFAULT_PROJECT
     ```
 
-2. Plug the 4GB (min) flash drive into the setup machine.
+2. Plug the 4GB (min) flash drive into the setup workstation.
 
 3. Download the OS installer ISO image:
 
@@ -43,7 +46,7 @@ The following steps should be run on the _setup machine_ (your Linux or macOS):
 
 4. Write the OS installer image file on the larger (min 4GB USB drive)
 
-    You can use an image flash app like [Balena Etcher](https://etcher.balena.io/) or any of the following options, depending on the OS of the setup machine:
+    You can use an image flash app like [Balena Etcher](https://etcher.balena.io/) or any of the following options, depending on the OS of the setup workstation:
 
     __On Linux__
 
@@ -83,6 +86,9 @@ This step will generate a cloud-init CIDATA ISO file which will then be flashed 
 The server will boot later from the two USB drives; one will contain the operating system installation image (prepared in the steps before), and the second, generated in this step, will contain cloud-init deployment automation files.
 
 Run this commands to create the .ISO file:
+
+Run on Setup Workstation
+{: .label .label-blue}
 
 ```bash
 export MEDIA_TYPE="USB"

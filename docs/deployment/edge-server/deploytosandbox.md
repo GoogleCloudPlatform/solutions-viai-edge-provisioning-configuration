@@ -15,13 +15,14 @@ If you used the `-x` flag when you run the `provision-terraform.sh` script in th
 
 You still need to manually setup Antos and install the Visual Inspection AI applications.
 
-<br>
+Run on Setup Workstation
+{: .label .label-blue}
 
 __Deploy Visual Inspection AI Edge solution to the GCE sandbox__
 
 1. Prepare the files generated in the [previous step]({% link deployment/createviai.md %}).
 
-    In the same machine where you run the `./scripts/0-generate-viai-application-assets.sh` script, run:
+    In the setup workstation where you run the `./scripts/0-generate-viai-application-assets.sh` script, run:
 
     ```bash
     cd ${OUTPUT_FOLDER}

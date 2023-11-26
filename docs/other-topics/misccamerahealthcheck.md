@@ -15,6 +15,9 @@ In practice, the utility requests a frame from the camera. If the operation is s
 To execute the healthcheck, just add the command-line argument `--health_check` to
 the utility. You will also need to pass valid arguments for the target camera, i.e camera protocol and address.
 
+Run on Edge Server
+{: .label .label-green}
+
 Example command:
 
 ```bash

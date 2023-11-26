@@ -31,6 +31,9 @@ that is mapped to `/var/lib/viai/camera-config`, for example.
 
 To run the camera client with the Pub/Sub streaming option, open a shell in the camera integration container:
 
+Run on Edge Server
+{: .label .label-green}
+
 (`NAMESPACE` is the namespace where your camera container is running, by default `viai-edge`)
 
 ```bash

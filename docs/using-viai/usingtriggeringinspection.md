@@ -16,6 +16,9 @@ Another use case is to have an external physical system with push buttons, to le
 
 The utility listens for MQTT commands in topic: `viai/commands`. It publishes MQTT results on the topic: `viai/results`. Currently, the following MQTT payload commands have been implemented: `get_frame`, `exit` and `quit` (both exit and quit close the utility gracefully).
 
+Run on Edge Server
+{: .label .label-green}
+
 1. Start the utility in daemon mode, with both listening for commands over MQTT, as well as publishing the ML inference results in another MQTT topic:
 
     ```bash

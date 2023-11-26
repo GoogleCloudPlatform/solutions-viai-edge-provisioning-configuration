@@ -45,9 +45,12 @@ __Option 2 - Exporting the VIAI ML model to Artifact Registry__
 
 To export a trained VIAI model container with GPU acceleration to Google Cloud Artifiact Registry, follow the next steps:
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 1. In the Google Cloud Console, go to Visual Inspection AI -> Models -> expand the model you trained in the previous sections.
 
-    Take note of the part of the URL highlighted, and in the *setup machine* (your Linux or macOS), set an environment variable with that value.
+    Take note of the part of the URL highlighted, and in the *setup workstation* (your Linux or macOS), set an environment variable with that value.
 
     ![Solution ID URL]({% link images/export_to_artifact_registry_step_1.png %})
 

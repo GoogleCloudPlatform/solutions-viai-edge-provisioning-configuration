@@ -19,6 +19,9 @@ The client application also supports batch processing, as a handy way to test tr
 
 The following steps will run batch mode inference against a set of images.
 
+Run on Edge Server
+{: .label .label-green}
+
 1. Log in to the VIAI Edge server as user `viai-admin`
 
 2. Check which physical volumes are mounted to the camera application
@@ -49,6 +52,9 @@ The following steps will run batch mode inference against a set of images.
 
 6. (Reccomended) On another host, start receiving ML inference results, by subscribing to an MQTT topic
 
+    Run on Setup Workstation
+    {: .label .label-blue}
+
     ```bash
     mosquitto_sub -h 192.168.1.24 -t viai/results
     ```
@@ -62,6 +68,9 @@ The following steps will run batch mode inference against a set of images.
     ```
 
 7. Start batch processing all images in the dataset, and forwarding the inference results to MQTT
+
+    Run on Edge Server
+    {: .label .label-green}
 
     ```bash
     python3 camera_client.py --protocol file --address /var/lib/viai/camera-data/good/ --device_id good_batch --ml \

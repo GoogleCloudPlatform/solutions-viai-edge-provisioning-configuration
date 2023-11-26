@@ -10,6 +10,9 @@ After testing the solution, you might want to clean up the cloud resources to av
 
 1. Using the Cloud Console, unregister the Anthos attached cluster in the Anthos console
 
+Run on Setup Workstation
+{: .label .label-blue}
+
 2. Remove the rest of the cloud resorces, deployed for VIAI Edge
 
     ```bash

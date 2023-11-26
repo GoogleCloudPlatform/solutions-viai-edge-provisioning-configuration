@@ -50,6 +50,9 @@ This data can be then streamed via [Cloud Pub/Sub](https://cloud.google.com/pubs
 
 The client contains a python encoder function that can write the raw IR data to the binary file format and a python decoder that can be used to read the binary files and store the IR array raw data back in Python numpy arrays.
 
+Run on Edge Server
+{: .label .label-green}
+
 1. In the edge server, open a shell to the camera utility container
 
     ```bash

@@ -14,6 +14,9 @@ To help you troubleshoot issues, you can generate inspection reports populated w
 
 You may be asked to generate such reports when asking for support.
 
+Run on Edge Server
+{: .label .label-green}
+
 On the edge server:
 
 1. Generate the VIAI inspection report:

@@ -12,6 +12,9 @@ parent: Troubleshooting
 
 Visual Inspection AI requires a supported NVIDIA GPU model to run. Check the status of the NVIDIA card and drivers.
 
+Run on Edge Server
+{: .label .label-green}
+
 1. Run the following command to check the Ubuntu drivers’ status for NVIDIA:
 
     ```bash

@@ -19,6 +19,9 @@ To start publishing ML inference results to the VIAI Edge server-local MQTT topi
 
 To start live inference and publishing the inference results to a local MQTT topic, execute the following command and change the addresses to match your system:
 
+Run on Edge Server
+{: .label .label-green}
+
 ```bash
 export ML_HOST=viai-model
 export MQTT_HOST=mosquitto
