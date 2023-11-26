@@ -19,7 +19,7 @@ __Edge server hardware__
   * HDMI monitor or Serial console.
   * USB keyboard.
 
-__Setup machine__
+__Setup workstation__
 
 * Linux or macOS system to prepare the installation media, edge server configuration and Google Cloud assets.
 * An USB flash drive of at least 4 GB for the OS installer.

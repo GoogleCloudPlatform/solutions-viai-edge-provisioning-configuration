@@ -28,7 +28,10 @@ __europe-west4__ regions.
 
 *Note:* If you are planning to deploy the VIAI Edge solution in sandbox, add the `-x` flag at the end of the following command. The script will provision a GCE instance with a T4 GPU to be used as a sandbox. See instructions below.
 
-In the *setup machine* (your Linux or macOS), execute the following tasks:
+Run on Setup Worksation
+{: .label .label-blue}
+
+In the *setup workstation* (your Linux or macOS), execute the following tasks:
 
 1. Clone the VIAI Edge cloud project and switch to the source folder:
 
