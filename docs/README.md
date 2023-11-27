@@ -6,4 +6,5 @@ Find the deployment documentation in the [VIAI Edge documentation site](https://
 
 ## Contributing
 
-Guidelines can be found [here]({% link development.md %})
+Guidelines about development environment setup, conventions, standards,
+and processescan be found [here](./development.md)

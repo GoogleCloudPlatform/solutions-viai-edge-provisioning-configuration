@@ -1,4 +1,4 @@
-# Develop VIAI Edge
+# Developing VIAI Edge
 
 This document explains how to develop VIAI Edge.
 
