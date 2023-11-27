@@ -12,7 +12,7 @@ Browse the [VIAI site](https://cloud.google.com/solutions/visual-inspection-ai) 
 
 If you are interested in deploying the solution, contact your Google Cloud [sales representative](https://cloud.google.com/contact/) or [Google Cloud partner](https://cloud.google.com/solutions/visual-inspection-ai#section-10).
 
-You can take a look at the [deployment manual](./docs/index.md) to understand the requirements and steps to deploy the solution.
+You can take a look at the [deployment manual](https://googlecloudplatform.github.io/solutions-viai-edge-provisioning-configuration/) to understand the requirements and steps to deploy the solution.
 
 ## Contributing
 
