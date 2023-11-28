@@ -67,12 +67,12 @@ tests/build-container-images.sh
 
 ### Render the documentation as static HTML using Jekyll locally
 
-This repository uses Jekyll and Github actions to render the markdown documentation
+This repository uses Jekyll and GitHub actions to render the Markdown documentation
 under the `/docs` folder as static HTML.
 
-The configuration for the Jekyll website is at `docs/_config.yml` and the `docs/Gemfile` files.
+The configuration for the Jekyll site is at `docs/_config.yml` and the `docs/Gemfile` files.
 
-The configuration for the associated Github actions is at `.github/workflows/pages.yml`.
+The configuration for the associated GitHub actions is at `.github/workflows/pages.yml`.
 
-You can test the reder before pushing to Github by [installing Jekyll](https://jekyllrb.com/docs/installation/) on your
+You can test the reder before pushing to GitHub by [installing Jekyll](https://jekyllrb.com/docs/installation/) on your
 worksation and following [these instructions](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll#building-your-site-locally).
