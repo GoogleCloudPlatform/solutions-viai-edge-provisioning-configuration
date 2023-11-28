@@ -65,7 +65,7 @@ To run build container images locally, do the following:
 tests/build-container-images.sh
 ```
 
-### Render the documentation as static HTML using Jekyll locally
+## Render the documentation as static HTML using Jekyll locally
 
 This repository uses Jekyll and GitHub actions to render the Markdown documentation
 under the `/docs` folder as static HTML.
