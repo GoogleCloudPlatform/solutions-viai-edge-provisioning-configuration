@@ -23,7 +23,7 @@ __Provisioning resources in the Google Cloud project__
 <br>
 
 Before you provision cloud resources, you must take into account the Google Cloud resources locations.
-At the time of writing this document, Visual Inspection AI is only available in __us-central__ and
+At the time of writing this document, Visual Inspection AI is only available in __us-central1__ and
 __europe-west4__ regions.
 
 *Note:* If you are planning to deploy the VIAI Edge solution in sandbox, add the `-x` flag at the end of the following command. The script will provision a GCE instance with a T4 GPU to be used as a sandbox. See instructions below.
