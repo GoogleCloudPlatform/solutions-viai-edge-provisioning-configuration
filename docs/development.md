@@ -64,3 +64,29 @@ To run build container images locally, do the following:
 ```shell
 tests/build-container-images.sh
 ```
+
+## Cloud infrastructure validation
+
+This project provisions [Google Cloud](https://cloud.google.com) resources using
+[Terraform](https://www.terraform.io/).
+
+[A GitHub Actions workflow](../.github/workflows/validate-terraform.yml)
+runs basic validation checks on all Terraform descriptors as part of the build
+process. These validation checks currently include:
+
+- Terraform providers installation
+- Terraform modules installation
+- Running the [`terraform validate` command](https://developer.hashicorp.com/terraform/cli/commands/validate)
+
+### Validate cloud infrastructure descriptors validation checks from the command-line
+
+To run cloud infrastructure validation checks from the command-line, do the
+following:
+
+1. Open a POSIX-compliant shell.
+2. Change your working directory to the root directory of this repository.
+3. Run the cloud infrastructure validation process:
+
+```shell
+tests/validate-terraform.sh
+```
