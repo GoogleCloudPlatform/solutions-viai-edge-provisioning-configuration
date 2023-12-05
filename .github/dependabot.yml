@@ -51,4 +51,8 @@ updates:
     directory: "/docs"
     schedule:
       interval: "daily"
+  - directory: "/docker/documentation-site-builder"
+    package-ecosystem: "docker"
+    schedule:
+      interval: "daily"
 ...

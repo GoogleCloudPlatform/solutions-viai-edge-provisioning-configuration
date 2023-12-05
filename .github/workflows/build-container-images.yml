@@ -49,6 +49,7 @@ jobs:
       matrix:
         container-image-context-directory:
           - copy-images
+          - documentation-site-builder
           - os-image-builder
           - private-repo
           - terraform

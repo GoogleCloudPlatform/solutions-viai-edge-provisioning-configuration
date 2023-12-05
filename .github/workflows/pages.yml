@@ -65,3 +65,18 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+
+  # Local build job
+  build-documentation-site-script:
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build container images from script
+        run: |
+          tests/build-documentation-site.sh
