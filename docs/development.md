@@ -1,4 +1,4 @@
-# Developing VIAI Edge
+# Develop VIAI Edge
 
 This document explains how to develop VIAI Edge.
 
@@ -74,5 +74,5 @@ The configuration for the Jekyll site is at `docs/_config.yml` and the `docs/Gem
 
 The configuration for the associated GitHub actions is at `.github/workflows/pages.yml`.
 
-You can test the reder before pushing to GitHub by [installing Jekyll](https://jekyllrb.com/docs/installation/) on your
+You can test the render before pushing to GitHub by [installing Jekyll](https://jekyllrb.com/docs/installation/) on your
 worksation and following [these instructions](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll#building-your-site-locally).

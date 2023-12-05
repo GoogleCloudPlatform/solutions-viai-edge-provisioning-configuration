@@ -19,8 +19,8 @@
 # Rules by id #
 ###############
 
-# These rules have been added to make sure that 
-# the static HTML documentation pages are 
+# These rules have been added to make sure that
+# the static HTML documentation pages are
 # rendered correclty by Jekyll
 
 MD013: false
