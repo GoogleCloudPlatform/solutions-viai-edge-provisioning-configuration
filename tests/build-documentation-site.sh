@@ -20,8 +20,11 @@ set -o nounset
 # shellcheck disable=SC1091,SC1094
 . ./scripts/common.sh
 
-# Exit with an error so we remember to implement logic here
-exit 1
+echo "Building Jekyll"
 
-# docker build -t build-jekyll:4.3.2 -f docker/documentation-site-builder/Dockerfile .
+docker build -t jekyll:4.3.2 -f docker/documentation-site-builder/Dockerfile .
 
+echo "Rendering documentation site"
+echo "Open your browser at http://127.0.0.1:4000/docs/ to review the documentation locally"
+
+docker run -p 4000:4000 jekyll:4.3.2

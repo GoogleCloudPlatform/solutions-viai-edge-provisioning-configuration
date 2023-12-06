@@ -85,3 +85,6 @@ To test the render before pushing to GitHub, do the following:
 ```bash
     ./tests/build-documentation-site.sh
 ```
+
+4. On a browser, open [127.0.0.1:4000/docs/](http://127.0.0.1:4000/docs) to review
+the rendered site locally.

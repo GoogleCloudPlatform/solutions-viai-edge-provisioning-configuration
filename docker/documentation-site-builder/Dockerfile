@@ -7,14 +7,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the docs repo folder to the container
 WORKDIR /docs
 
-COPY docs/ /docs/
+# First copy the Gemfile
+COPY docs/Gemfile /docs/
+COPY docs/Gemfile.lock /docs/
 
 RUN gem update --system && gem install jekyll && gem install just-the-docs && gem cleanup
+
+# Copying the docs last, to maximize docker cache 
+COPY docs/ /docs/
 
 EXPOSE 4000
 
 # CMD [ "bundle", "exec", "jekyll", "serve", "--force_polling", "-H", "0.0.0.0", "-P", "4000" ]
-CMD ["bundle", "exec", "jekyll", "serve"]
+CMD ["bundle", "exec", "jekyll", "serve", "-H" , "0.0.0.0", "-P", "4000" ]
