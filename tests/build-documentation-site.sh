@@ -22,3 +22,6 @@ set -o nounset
 
 # Exit with an error so we remember to implement logic here
 exit 1
+
+# docker build -t build-jekyll:4.3.2 -f docker/documentation-site-builder/Dockerfile .
+
