@@ -13,7 +13,7 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   build-container-images:
     env:
-      CONTAINER_IMAGE_ID: "${{ github.repository }}-${{ matrix.container-image-context-directory }}"
+      CONTAINER_IMAGE_ID: "${{ github.repository }}-${{ matrix.container-images.name }}"
     permissions:
       contents: read
     runs-on: ubuntu-22.04
@@ -36,23 +36,34 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-      - name: Build the ${{ matrix.container-image-context-directory }} container image
+      - name: Build the ${{ matrix.container-images.name }} container image
         uses: docker/build-push-action@v5
         with:
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          context: docker/${{ matrix.container-image-context-directory }}
+          context: ${{ matrix.container-images.context-directory }}
+          file: ${{ matrix.container-images.file }}
           labels: ${{ steps.meta.outputs.labels }}
           load: true
           tags: ${{ steps.meta.outputs.tags }}
     strategy:
       matrix:
-        container-image-context-directory:
-          - copy-images
-          - os-image-builder
-          - private-repo
-          - terraform
-          - yq
+        container-images:
+          - name: copy-images
+            context-directory: docker/copy-images
+            file: docker/copy-images/Dockerfile
+          - name: os-image-builder
+            context-directory: docker/os-image-builder
+            file: docker/os-image-builder/Dockerfile
+          - name: private-repo
+            context-directory: docker/private-repo
+            file: docker/private-repo/Dockerfile
+          - name: terraform
+            context-directory: docker/terraform
+            file: docker/terraform/Dockerfile
+          - name: yq
+            context-directory: docker/yq
+            file: docker/yq/Dockerfile
   build-container-images-script:
     permissions:
       contents: read
