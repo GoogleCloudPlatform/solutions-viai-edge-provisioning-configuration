@@ -64,6 +64,9 @@ jobs:
           - name: yq
             context-directory: docker/yq
             file: docker/yq/Dockerfile
+          - name: jekyll-documentation
+            context-directory: docs
+            file: docker/documentation-site-builder/Dockerfile
   build-container-images-script:
     permissions:
       contents: read
