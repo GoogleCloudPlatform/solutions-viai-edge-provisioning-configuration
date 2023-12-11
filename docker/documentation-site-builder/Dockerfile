@@ -13,12 +13,13 @@ WORKDIR /docs
 COPY docs/Gemfile /docs/
 COPY docs/Gemfile.lock /docs/
 
-RUN gem update --system && gem install jekyll && gem install just-the-docs && gem cleanup
+# Installing the Gems for Jeckyll and just-the-docs
+RUN bundle install
 
 # Copying the docs last, to maximize docker cache 
 COPY docs/ /docs/
 
 EXPOSE 4000
 
-# CMD [ "bundle", "exec", "jekyll", "serve", "--force_polling", "-H", "0.0.0.0", "-P", "4000" ]
-CMD ["bundle", "exec", "jekyll", "serve", "-H" , "0.0.0.0", "-P", "4000" ]
+ENTRYPOINT [ "bundle", "exec", "jekyll"]
+CMD ["serve", "-H" , "0.0.0.0", "-P", "4000" ]

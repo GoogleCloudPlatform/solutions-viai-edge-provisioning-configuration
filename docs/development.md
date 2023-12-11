@@ -80,11 +80,17 @@ To test the render before pushing to GitHub, do the following:
 
 1. Open a POSIX-copmpliant shell.
 2. Change your working directory to the root directory of this repository.
-3. Run Jekyll on a docker container:
+3. Build Jekyll docker container:
 
 ```bash
     ./tests/build-documentation-site.sh
 ```
 
-4. On a browser, open [127.0.0.1:4000/docs/](http://127.0.0.1:4000/docs) to review
+4. Launch Jekyll to render and serve the docs site:
+
+```bash
+    docker run -p 4000:4000 viai-edge-documentation-site:latest
+```
+
+5. On a browser, open [127.0.0.1:4000/docs/](http://127.0.0.1:4000/docs) to review
 the rendered site locally.

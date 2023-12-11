@@ -22,9 +22,4 @@ set -o nounset
 
 echo "Building Jekyll"
 
-docker build -t jekyll:4.3.2 -f docker/documentation-site-builder/Dockerfile .
-
-echo "Rendering documentation site"
-echo "Open your browser at http://127.0.0.1:4000/docs/ to review the documentation locally"
-
-docker run -p 4000:4000 jekyll:4.3.2
+docker build -t viai-edge-documentation-site:latest -f docker/documentation-site-builder/Dockerfile .
