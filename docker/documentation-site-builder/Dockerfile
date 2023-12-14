@@ -11,6 +11,7 @@ WORKDIR /docs
 
 # First copy the Gemfile
 COPY docs/Gemfile /docs/
+COPY docs/Gemfile.lock /docs/
 
 # Installing the Gems for Jeckyll and just-the-docs
 RUN bundle install
