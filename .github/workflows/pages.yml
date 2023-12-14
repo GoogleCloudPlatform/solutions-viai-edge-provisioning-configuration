@@ -2,12 +2,12 @@
 name: Deploy Jekyll site to Pages
 
 on:
+  pull_request:
+    branches:
+      - "main"
   push:
     branches:
       - "main"
-      - "markdown-documentation"
-    paths:
-      - "docs/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -49,6 +49,7 @@ jobs:
         env:
           JEKYLL_ENV: production
       - name: Upload artifact
+        if: ${{ github.event_name == 'push' && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' && github.branch == 'default'}}
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v1
         with:
@@ -56,6 +57,7 @@ jobs:
 
   # Deployment job
   deploy:
+    if: ${{ github.event_name == 'push' && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' && github.branch == 'default'}}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
