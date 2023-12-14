@@ -65,6 +65,36 @@ To run build container images locally, do the following:
 tests/build-container-images.sh
 ```
 
+## Render the documentation as static HTML using Jekyll locally
+
+This repository uses Jekyll and GitHub actions to render the Markdown documentation
+under the `/docs` folder as static HTML.
+
+The configuration for the Jekyll site is at [Jekyll config](../docs/_config.yml) and the [Gemfile](../docs/Gemfile).
+
+The configuration for the associated GitHub actions is at [GitHub Actions workflow](../.github/workflows/pages.yml).
+
+### Build the documentation locally
+
+To test the render before pushing to GitHub, do the following:
+
+1. Open a POSIX-copmpliant shell.
+2. Change your working directory to the root directory of this repository.
+3. Build Jekyll docker container:
+
+```bash
+    ./tests/build-documentation-site.sh
+```
+
+4. Launch Jekyll to render and serve the docs site:
+
+```bash
+    docker run -p 4000:4000 viai-edge-documentation-site:latest
+```
+
+5. On a browser, open [127.0.0.1:4000/docs/](http://127.0.0.1:4000/docs) to review
+the rendered site locally.
+
 ## Cloud infrastructure validation
 
 This project provisions [Google Cloud](https://cloud.google.com) resources using

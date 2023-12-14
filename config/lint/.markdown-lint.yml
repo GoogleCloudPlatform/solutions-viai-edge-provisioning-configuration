@@ -1,0 +1,31 @@
+---
+###########################
+###########################
+## Markdown Linter rules ##
+###########################
+###########################
+
+# Linter rules doc:
+# - https://github.com/DavidAnson/markdownlint
+#
+# Note:
+# To comment out a single error:
+#   <!-- markdownlint-disable -->
+#   any violations you want
+#   <!-- markdownlint-restore -->
+#
+
+###############
+# Rules by id #
+###############
+
+# These rules have been added to make sure that
+# the static HTML documentation pages are
+# rendered correclty by Jekyll
+
+MD013: false
+MD025: false
+MD029: false
+MD033: false
+MD034: false
+MD036: false

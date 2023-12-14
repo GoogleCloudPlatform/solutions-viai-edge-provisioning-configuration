@@ -1,0 +1,11 @@
+title: Visual Inspection AI Edge
+description: Deploy and serve Visual Inspection AI models on an edge server.
+theme: just-the-docs
+
+favicon_ico: "/images/googlecloud.ico"
+
+url: https://GoogleCloudPlatform.github.io/solutions-viai-edge-provisioning-configuration
+baseurl: /docs
+
+aux_links:
+  Template Repository: https://github.com/GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration

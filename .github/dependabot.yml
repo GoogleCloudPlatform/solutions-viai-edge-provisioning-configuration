@@ -47,4 +47,12 @@ updates:
     directory: "/terraform/files/gcf-pubsub-to-bq"
     schedule:
       interval: "daily"
+  - package-ecosystem: "bundler"
+    directory: "/docs"
+    schedule:
+      interval: "daily"
+  - directory: "/docker/documentation-site-builder"
+    package-ecosystem: "docker"
+    schedule:
+      interval: "daily"
 ...
