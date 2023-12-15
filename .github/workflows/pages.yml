@@ -14,11 +14,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
   # Build job
   build:
@@ -37,7 +32,6 @@ jobs:
           cache-version: 0 # Increment this number if you need to re-download cached gems
           working-directory: '${{ github.workspace }}/docs'
       - name: Setup Pages
-        if: ${{ github.event_name == 'push' && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' && github.ref_name == github.event.repository.default_branch}}
         id: pages
         uses: actions/configure-pages@v3
       - name: Build with Jekyll
@@ -46,7 +40,7 @@ jobs:
         env:
           JEKYLL_ENV: production
       - name: Upload artifact
-        if: ${{ github.event_name == 'push' && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' && github.ref_name == github.event.repository.default_branch}}
+        if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispach') && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' && github.ref_name == github.event.repository.default_branch}}
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v1
         with:
@@ -54,6 +48,10 @@ jobs:
 
   # Deployment job
   deploy:
+    # Allow one concurrent deployment
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
     if: ${{ github.event_name == 'push' && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' && github.ref_name == github.event.repository.default_branch}}
     environment:
       name: github-pages
