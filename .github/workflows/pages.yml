@@ -51,7 +51,6 @@ jobs:
     concurrency:
       group: "pages"
       cancel-in-progress: true
-    if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispach') && github.repository == 'GoogleCloudPlatform/solutions-viai-edge-provisioning-configuration' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
