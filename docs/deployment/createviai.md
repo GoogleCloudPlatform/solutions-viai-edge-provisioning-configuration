@@ -19,7 +19,7 @@ source repository.
 4. Creates image pull secrets and Pub/Sub credential secrets.
 5. Updates Kubernetes manifest files.
 
-_Note:_ The script pulls Visual Inspection AI Edge Application source code from the default source repository `https://source.developers.google.com/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration`. If you have another source repository, you must first authenticate to that source repository before running the following scripts.
+_Note:_ The script pulls Visual Inspection AI Edge Application source code from the default source repository `https://source.developers.google.com/p/cloud-ce-shared-csr/r/MARKKU-viai-edge-camera-integration`. As your technical contact at Google to provide you with access to that repository. If you have another source repository, check the steps below to learn how to use it instead. In any case, you must [authenticate first to that source repository](https://cloud.google.com/source-repositories/docs/authentication) before running the following scripts.
 
 Follow the steps below to create the application assets:
 
