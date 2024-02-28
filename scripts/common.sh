@@ -247,6 +247,14 @@ gcloud_auth() {
     gcloud auth login --update-adc
 }
 
+cleanup_gcloud_auth() {
+  if docker ps -a -f status=exited -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" ||
+    docker ps -a -f status=created -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"; then
+    echo "Cleaning the authentication information..."
+    docker rm --force --volumes "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"
+  fi
+}
+
 ensure_tf_backend() {
   GCP_CREDENTIALS_PATH="${1}"
   shift
@@ -301,6 +309,7 @@ is_tf_state_bucket_exists() {
 
   return $RET_CODE
 }
+
 gcloud_exec_cmds() {
   GCP_CREDENTIALS_PATH="${1}"
   shift
@@ -310,14 +319,6 @@ gcloud_exec_cmds() {
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     --volumes-from gcloud-config \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" $@
-}
-
-cleanup_gcloud_auth() {
-  if docker ps -a -f status=exited -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" ||
-    docker ps -a -f status=created -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"; then
-    echo "Cleaning the authentication information..."
-    docker rm --force --volumes "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"
-  fi
 }
 
 apply_kubernetes_menifest() {
