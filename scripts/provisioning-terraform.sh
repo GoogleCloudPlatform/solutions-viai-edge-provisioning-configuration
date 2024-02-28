@@ -250,6 +250,7 @@ run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAM
 if [ "${TERRAFORM_SUBCOMMAND}" = "destroy" ]; then
   # Destroy Cloud Resources
   destroy_tf_backend "${GOOGLE_APPLICATION_CREDENTIALS_PATH}"
+  rm -f "${TERRAFORM_TFVARS_PATH}"
 fi
 echo "Clean up ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}..."
 rm -rf "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"

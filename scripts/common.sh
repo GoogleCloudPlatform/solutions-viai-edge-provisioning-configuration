@@ -223,7 +223,7 @@ run_containerized_terraform() {
     -v /etc/localtime:/etc/localtime:ro \
     -v "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}":/packages \
     -w "/workspace/terraform" \
-    --volumes-from gcloud-config \
+    --volumes-from "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
     "${TERRAFORM_CONTAINER_IMAGE_ID}" "$@"
 }
 
