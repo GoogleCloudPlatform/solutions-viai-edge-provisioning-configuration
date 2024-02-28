@@ -18,6 +18,7 @@ set -o nounset
 set -o errexit
 
 # shellcheck disable=SC1094
+# shellcheck disable=SC1091
 . scripts/common.sh
 # Doesn't follow symlinks, but it's likely expected for most users
 SCRIPT_BASENAME="$(basename "${0}")"

@@ -19,6 +19,7 @@ set -o errexit
 
 echo "This script has been invoked with: $0 $*"
 
+# shellcheck disable=SC1091
 # shellcheck disable=SC1094
 . scripts/common.sh
 

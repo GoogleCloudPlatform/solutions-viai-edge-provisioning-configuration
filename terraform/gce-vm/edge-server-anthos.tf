@@ -64,12 +64,14 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
   }
 
   metadata_startup_script = <<EOL
+    # TODO: Need to verify that this startup script is generated with references. @junholee
+
     # Install required packages
 
     ${file("${path.module}/../../scripts/machine-install-prerequisites.sh")}
 
     # Configures vxlan on the host machine.
-
+    
     ${file("${path.module}/../../edge-server/anthos/node-setup-common.sh.tmpl")}
 
     # Default Control Plane VIP

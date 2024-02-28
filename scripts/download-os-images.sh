@@ -20,6 +20,7 @@ set -o errexit
 echo "This script has been invoked with: $0 $*"
 
 # shellcheck disable=SC1094
+# shellcheck disable=SC1091
 . scripts/common.sh
 
 download_file_if_necessary "${OS_INSTALLER_IMAGE_URL}" "${OS_INSTALLER_IMAGE_PATH}"

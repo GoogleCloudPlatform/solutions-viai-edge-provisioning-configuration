@@ -20,6 +20,7 @@ set -o errexit
 echo "This script has been invoked with: $0 $*"
 
 # shellcheck disable=SC1094
+# shellcheck disable=SC1091
 . scripts/common.sh
 
 # Doesn't follow symlinks, but it's likely expected for most users
