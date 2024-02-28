@@ -93,7 +93,7 @@ In the *setup workstation* (your Linux or macOS), execute the following tasks:
     -p "${DEFAULT_PROJECT}" \
     -r "${DEFAULT_REGION}" \
     -z "${DEFAULT_ZONE}" \
-    -m "${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}"
+    -m "${GOOGLE_CLOUD_DEFAULT_USER_EMAIL}" \
     -x
     ```
 

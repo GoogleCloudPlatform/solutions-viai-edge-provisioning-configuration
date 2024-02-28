@@ -66,6 +66,10 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
   metadata_startup_script = <<EOL
     # TODO: Need to verify that this startup script is generated with references. @junholee
 
+    # Update and upgrade APT reop
+    apt-get -y update
+    apt-get -y upgrade
+
     # Install required packages
 
     ${file("${path.module}/../../scripts/machine-install-prerequisites.sh")}
