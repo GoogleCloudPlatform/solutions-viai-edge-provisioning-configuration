@@ -64,42 +64,42 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
   }
 
   metadata_startup_script = <<EOL
-# TODO: Need to verify that this startup script is generated with references. @junholee
+    # TODO: Need to verify that this startup script is generated with references. @junholee
 
-# Update and upgrade APT reop
-export DEBIAN_FRONTEND=noninteractive
-apt-get -y update
-apt-get -y upgrade
+    # Update and upgrade APT reop
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get -y update
+    apt-get -y upgrade
+      
+    # Install required packages
+    ${file("${path.module}/../../scripts/machine-install-prerequisites.sh")}
 
-# Install required packages
-${file("${path.module}/../../scripts/machine-install-prerequisites.sh")}
+    # Configures vxlan on the host machine.
 
-# Configures vxlan on the host machine.
+    # Default Control Plane VIP
+    CONTROL_PLANE_VIP=192.168.200.170
 
-# Default Control Plane VIP
-CONTROL_PLANE_VIP=192.168.200.170
+    apt-get install -y network-manager
 
-apt-get install -y network-manager
+    LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
+    LOCAL_NIC=$(ip -br -4 a sh | grep "${LOCAL_IP}" | awk '{print $1}')
+    echo "** Local IP: ${LOCAL_IP}, NIC: ${LOCAL_NIC}"
 
-LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
-LOCAL_NIC=$(ip -br -4 a sh | grep "${LOCAL_IP}" | awk '{print $1}')
-echo "** Local IP: ${LOCAL_IP}, NIC: ${LOCAL_NIC}"
+    VXLAN_ID=104
+    VXLAN_NAME=vxlan104
 
-VXLAN_ID=104
-VXLAN_NAME=vxlan104
+    # Ubuntu sets almost all devices unmanaged by default, this causes vxlan fails to start
+    # So we add vxlan related devices to the configuration file and restart network manager
+    if [ ! -f "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf" ]; then
+    touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
+    else
+    sed -i 's/unmanaged-devices=*/unmanaged-devices=except:type:ethernet,except:type:vlan,except:type:vxlan,*/g' "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf"
+    fi
 
-# Ubuntu sets almost all devices unmanaged by default, this causes vxlan fails to start
-# So we add vxlan related devices to the configuration file and restart network manager
-if [ ! -f "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf" ]; then
-touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
-else
-sed -i 's/unmanaged-devices=*/unmanaged-devices=except:type:ethernet,except:type:vlan,except:type:vxlan,*/g' "/etc/NetworkManager/conf.d/10-globally-managed-devices.conf"
-fi
+    systemctl restart NetworkManager
 
-systemctl restart NetworkManager
-
-nmcli connection add type vxlan id "${VXLAN_ID}" remote "${LOCAL_IP}" ipv4.addresses "${CONTROL_PLANE_VIP}"/24 ipv4.method manual ifname "${VXLAN_NAME}" connection.id "${VXLAN_NAME}" vxlan.parent "${LOCAL_NIC}"
-nmcli conn up "${VXLAN_NAME}"
+    nmcli connection add type vxlan id "${VXLAN_ID}" remote "${LOCAL_IP}" ipv4.addresses "${CONTROL_PLANE_VIP}"/24 ipv4.method manual ifname "${VXLAN_NAME}" connection.id "${VXLAN_NAME}" vxlan.parent "${LOCAL_NIC}"
+    nmcli conn up "${VXLAN_NAME}"
   EOL
 
   depends_on = [
