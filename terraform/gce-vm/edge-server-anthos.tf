@@ -63,7 +63,7 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
     scopes = ["cloud-platform"]
   }
 
-  metadata_startup_script = file("startup-script.sh")
+  metadata_startup_script = file("${path.module}/startup-script.sh")
 
   depends_on = [
     google_compute_address.edge-server-anthos-static-internal-ip
