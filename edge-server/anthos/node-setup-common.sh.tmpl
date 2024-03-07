@@ -107,14 +107,22 @@ setup_baremetal() {
   print_separator
   echo "setup_baremetal..."
 
-  "$SETUP_DIR"/bmctl create cluster -c "$ANTHOS_MEMBERSHIP_NAME"
+  # Check current envirument is SANDBOX or not.
+  # "--force" option is required for SANBOX envirument because of /32 subnet.
+  if curl metadata.google.internal -i | grep "Metadata-Flavor: Google"; then
+    "$SETUP_DIR"/bmctl create cluster -c "$ANTHOS_MEMBERSHIP_NAME" --force
+  else
+    "$SETUP_DIR"/bmctl create cluster -c "$ANTHOS_MEMBERSHIP_NAME"
+  fi
 
   # The only reason this function is invoked, is the customer wants to setup Anthos on a empty machine.
   # In which case, we use `local-shared` as default storage for PVCs.
   # Otherwise, the customer must either update .yaml to specify storage class they want to use, Or
   # set a default storage class on the cluster.
   echo "Updating default storage class for Anthos"
-  kubectl patch storageclass local-shared -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig"
+  kubectl patch storageclass local-shared \
+    -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' \
+    --kubeconfig="$SETUP_DIR/bmctl-workspace/$ANTHOS_MEMBERSHIP_NAME/$ANTHOS_MEMBERSHIP_NAME-kubeconfig"
 }
 
 # To workaround IP address reservation challenges.
