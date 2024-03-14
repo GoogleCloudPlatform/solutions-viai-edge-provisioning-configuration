@@ -223,7 +223,7 @@ run_containerized_terraform() {
     -v /etc/localtime:/etc/localtime:ro \
     -v "${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}":/packages \
     -w "/workspace/terraform" \
-    --volumes-from gcloud-config \
+    --volumes-from "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
     "${TERRAFORM_CONTAINER_IMAGE_ID}" "$@"
 }
 
@@ -245,6 +245,14 @@ gcloud_auth() {
     --name "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" \
     gcloud auth login --update-adc
+}
+
+cleanup_gcloud_auth() {
+  if docker ps -a -f status=exited -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" ||
+    docker ps -a -f status=created -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"; then
+    echo "Cleaning the authentication information..."
+    docker rm --force --volumes "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"
+  fi
 }
 
 ensure_tf_backend() {
@@ -301,6 +309,7 @@ is_tf_state_bucket_exists() {
 
   return $RET_CODE
 }
+
 gcloud_exec_cmds() {
   GCP_CREDENTIALS_PATH="${1}"
   shift
@@ -310,14 +319,6 @@ gcloud_exec_cmds() {
     -e GCP_CREDENTIALS_PATH="${GCP_CREDENTIALS_PATH}" \
     --volumes-from gcloud-config \
     "${GCLOUD_CLI_CONTAINER_IMAGE_ID}" $@
-}
-
-cleanup_gcloud_auth() {
-  if docker ps -a -f status=exited -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" ||
-    docker ps -a -f status=created -f name="${GCLOUD_AUTHENTICATION_CONTAINER_NAME}" | grep -q "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"; then
-    echo "Cleaning the authentication information..."
-    docker rm --force --volumes "${GCLOUD_AUTHENTICATION_CONTAINER_NAME}"
-  fi
 }
 
 apply_kubernetes_menifest() {

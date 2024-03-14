@@ -63,21 +63,7 @@ resource "google_compute_instance" "edge-server-anthos-vm" {
     scopes = ["cloud-platform"]
   }
 
-  metadata_startup_script = <<EOL
-    # Install required packages
-
-    ${file("${path.module}/../../scripts/machine-install-prerequisites.sh")}
-
-    # Configures vxlan on the host machine.
-
-    ${file("${path.module}/../../edge-server/anthos/node-setup-common.sh.tmpl")}
-
-    # Default Control Plane VIP
-    CONTROL_PLANE_VIP=192.168.200.170
-
-    setup_vlan_control_plane
-
-  EOL
+  metadata_startup_script = file("${path.module}/startup-script.sh")
 
   depends_on = [
     google_compute_address.edge-server-anthos-static-internal-ip

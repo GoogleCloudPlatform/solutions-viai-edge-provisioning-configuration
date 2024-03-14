@@ -20,6 +20,7 @@ set -o errexit
 echo "This script has been invoked with: $0 $*"
 
 # shellcheck disable=SC1094
+# shellcheck disable=SC1091
 . scripts/common.sh
 
 # Doesn't follow symlinks, but it's likely expected for most users
@@ -159,7 +160,9 @@ check_optional_argument "${AUTHENTICATE_GOOGLE_CLOUD}" "${AUTHENTICATE_GOOGLE_CL
 check_optional_argument "${TERRAFORM_SUBCOMMAND}" "${TERRAFORM_SUBCOMMAND_DESCRIPTION}"
 check_optional_argument "${GENERATE_TFVARS_FILE}" "${GENERATE_TFVARS_FILE_DESCRIPTION}"
 
-gcloud_auth
+if [ "${AUTHENTICATE_GOOGLE_CLOUD}" = true ]; then
+  gcloud_auth
+fi
 
 CURRENT_WORKING_DIRECTORY="$(pwd)"
 TERRAFORM_ENVIRONMENT_DIR="${CURRENT_WORKING_DIRECTORY}/terraform"
@@ -247,6 +250,7 @@ run_containerized_terraform "${GOOGLE_APPLICATION_CREDENTIALS_PATH}" "${VIAI_CAM
 if [ "${TERRAFORM_SUBCOMMAND}" = "destroy" ]; then
   # Destroy Cloud Resources
   destroy_tf_backend "${GOOGLE_APPLICATION_CREDENTIALS_PATH}"
+  rm -f "${TERRAFORM_TFVARS_PATH}"
 fi
 echo "Clean up ${VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH}..."
 rm -rf "$VIAI_CAMERA_INTEGRATION_DIRECTORY_PATH"

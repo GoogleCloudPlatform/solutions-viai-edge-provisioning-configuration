@@ -18,6 +18,7 @@ set -o errexit
 set -o nounset
 
 # shellcheck disable=SC1094
+# shellcheck disable=SC1091
 . scripts/common.sh
 
 echo "Running containerized Terraform"
