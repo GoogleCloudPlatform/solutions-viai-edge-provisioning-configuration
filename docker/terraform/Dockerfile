@@ -1,1 +1,1 @@
-FROM hashicorp/terraform:1.6.5 as terraform
+FROM hashicorp/terraform:1.8.2 as terraform
